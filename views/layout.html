@@ -1,0 +1,58 @@
+<!--default layout page -->
+
+<html>
+    <head>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        
+         <!-- JavaScript at the bottom for fast page loading -->
+        <script src="/js/jquery-1.7.1.js" type="text/javascript" ></script>
+        <script src="/js/jquery-ui-1.8.17.custom.min.js" type="text/javascript"></script>
+        
+        <title>
+        <% if (typeof pageTitle != "undefined") { %>
+           <%= pageTitle %>
+        <% } else { %>
+            BeThereNYC - Coming Soon - Michelle Boisson
+        <% } %>
+        
+        </title>
+        <link href="/css/jquery-ui-1.8.17.custom.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+        <link href='http://fonts.googleapis.com/css?family=Exo' rel='stylesheet' type='text/css'/>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    </head>
+
+    <body>
+
+        <div id="container">
+                <%- body %>
+        </div>
+	<div id="footer">
+	    <h1 id="logo"><a href="#">BeThereNYC</a></h1>
+	    Hi! I'm the footer. By Michelle Boisson
+	</div>
+
+        <script>
+        function convertToSlug(Text)
+        {
+            return Text
+                .toLowerCase()
+                .replace(/[^\w ]+/g,'')
+                .replace(/ +/g,'-')
+                ;
+        }
+
+        jQuery(document).ready(function() {
+
+            jQuery('#eventName').change(function(e){
+                var currentTitle = jQuery(this).val();
+                jQuery("#urlslug").val(convertToSlug(currentTitle));
+
+            });
+
+        });
+        </script>       
+ 
+    </body>
+</html>

@@ -1,0 +1,44 @@
+
+		<div id="header">
+			<h1 id="logo"><a href="#"><img src="img/betherenyc_logo.png" alt="BeThereNYC" title="BeThereNYC"></a></h1>
+			<h2>free cheap here now</h2>
+		</div>
+		
+
+		<div id="maincontent" class="fullwidth">
+				<div id="signup">
+					<h2>Sign Up for Reminders</h2>
+					<input type="text" width="100%"/>
+                                        <button id="saveBtn">Go!</button>
+				</div>
+                                
+                                <div id="sidemenu" class="leftCol-1Third">
+                                    <!-- ul is a list container -->
+<h2>Recently Added</h2>
+<ul id="recentlyAdded">
+    <li><h3>Black History in Sports</h3>
+        <div class="hidden">Chelsea Recreation Center<br/>
+        Feb 6, 8:00am</div>
+    </li>
+</ul>
+                                </div>
+                                
+                                <div id="submitForm" class="rightCol-2Thirds">
+                                    <h1><%= name %></h1>
+                                    
+                                    <p><%= date %> &nbsp;, <%= time %> <br/>
+                                    <%= place %></p>
+				    
+				    <p><%= desc %>
+                                    
+                                    <form method="POST">
+                                        <button id="edit">Edit</button>
+                                    </form>
+                                    <a href="../"><button id="Done">Done!</button></a>  
+                                </div>
+
+
+                                
+                </div>
+				
+		</div>

@@ -13,7 +13,6 @@ require('./models').configureSchema(schema, mongoose);
 
 // Define your DB Model variables
 var Event = mongoose.model('Event');
-var Comment = mongoose.model('Comment');
 /************* END DATABASE CONFIGURATION *********/
 
 

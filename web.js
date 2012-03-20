@@ -124,8 +124,16 @@ app.post('/submit.html', function(request, response){
 app.get('/events/:urlslug', function(request, response){
     
      // Get the request blog post by urlslug
+     
+      // build the query
+    var query = Event.find({});
+    query.sort('date',-1); //sort by date in descending order
     
-    Event.findOne({urlslug:request.params.urlslug} ,function(err,event){
+    // run the query and display blog_main.html template if successful
+    query.exec({}, function(err, allPosts){
+        
+        
+         Event.findOne({urlslug:request.params.urlslug} ,function(err,event){
         if (err) {
             console.log('error');
             console.log(err);
@@ -133,11 +141,16 @@ app.get('/events/:urlslug', function(request, response){
             //response.send("uh oh, can't find that post");
         }
         
-        // use different layout for single entry view
-        //event.layout = 'layout.html';
+        // prepare template data
+        var templateData = {
+            event : event,
+            posts : allPosts
+        };
         
-        // found the blogpost
-        response.render('single-event.html', event);
+        // render the card_form template with the data above
+        response.render('single-event.html', templateData);
+        
+        });
     });
     
     

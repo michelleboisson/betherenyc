@@ -5,6 +5,8 @@ var app = express.createServer(express.logger());
 var mongoose = require('mongoose'); // include Mongoose MongoDB library
 var schema = mongoose.Schema; 
 
+var requestURL = require('request'); //gets data from outside
+
 /************ DATABASE CONFIGURATION **********/
 app.db = mongoose.connect(process.env.MONGOLAB_URI); //connect to the mongolabs database - local server uses .env file
 
@@ -160,6 +162,31 @@ app.get('/events/:urlslug', function(request, response){
 app.get('/maptest.html', function(request, response){
     response.render("maptest.html");
 });
+
+
+// return all event entries in json format
+app.get('/api/allevents', function(request, response){
+    
+    // define the fields you want to include in your json data
+    includeFields = ['name','desc','urlslug','date','time','place'];
+    
+    // query for all events
+    queryConditions = {}; //empty conditions - return everything
+    var query = Event.find( queryConditions, includeFields);
+
+    query.sort('date',-1); //sort by most recent
+    query.exec(function (err, eventPosts) {
+
+        // render the card_form template with the data above
+        jsonData = {
+          'status' : 'OK',
+          'events' : eventPosts
+        }
+
+        response.json(jsonData);
+    });
+});
+
 
 
 

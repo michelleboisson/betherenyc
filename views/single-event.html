@@ -33,15 +33,17 @@
                                 <div id="submitForm" class="rightCol-2Thirds">
                                     <h1><%= event.name %></h1>
                                     
-                                    <p><%= event.date %> &nbsp;, <%= event.time %> <br/>
+                                    <p><%= event.date %>&nbsp;, <%= event.time %> <br/>
                                     <%= event.place %></p>
 				    
-				    <p><%= event.desc %>
+				    <p><%= event.desc %></p>
                                     
                                    <!-- <form method="POST">
                                         <button id="edit">Edit</button>
                                     </form>
                                     <a href="../"><button id="Done">Done!</button></a>  -->
+				    
+				    <p><a href="/update/<%= event._id %>" id="update">update...</a></p>
                                 </div>
 
 

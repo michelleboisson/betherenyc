@@ -4,6 +4,7 @@
 
 
 * {margin: 0; padding: 0; }
+html, body { height: 100% }
 
 body {
     /*background: url('images/sky.jpeg') fixed no-repeat;*/
@@ -99,6 +100,7 @@ p { font-size: 1.3em; padding: 1em 0;}
     left:0;
     width: 400px;
     bottom: 20px;
+    z-index: 2;
 }
 #sidemenu {
     position: relative;
@@ -140,11 +142,8 @@ p { font-size: 1.3em; padding: 1em 0;}
 }
 
 #map {
-/*    position: relative;
-    top: 0;
-    bottom:0;
-    left:400;
-*/}
+    height: 100%;
+}
 
 #maincontent {
     clear: both;
@@ -214,12 +213,13 @@ p { font-size: 1.3em; padding: 1em 0;}
 }
 
 /*----------------- SUBMIT ------------*/
-#submitForm input{
+#submitForm input, textarea{
     padding: 4px;
     font-size:16px;  
     display: block;
     margin: 1em 0;
 }
+
 
 .hidden {
     display:none;

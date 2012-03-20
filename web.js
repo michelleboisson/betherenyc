@@ -97,11 +97,7 @@ app.post('/submit.html', function(request, response){
         date : request.body.eventDate,
         time: request.body.eventTime,
         place: request.body.eventPlace,
-        desc : request.body.eventDesc,
-        author : {
-            name : request.body.name,
-            email : request.body.email
-        }
+        desc : request.body.eventDesc
     };
 /*     newEvent = {
         name : request.body.eventName,
@@ -161,6 +157,86 @@ app.get('/events/:urlslug', function(request, response){
 
 app.get('/maptest.html', function(request, response){
     response.render("maptest.html");
+});
+
+app.get("/update/:eventId", function(request, response){
+    
+    // get the request blog post id
+    var requestedEventID = request.params.eventId;
+    
+    // find the requested document
+    Event.findById( requestedEventID, function(err, thisevent) {
+        
+        if (err) {
+            console.log(err);
+            response.send("an error occurred!");
+        }
+        
+        if (thisevent == null ) {
+            console.log('post not found');
+            response.send("uh oh, can't find that post");
+
+        } else {
+            
+            // prepare template data
+            // blogpost data & updated (was this entry updated ?update=true)
+            templateData = {
+                event : thisevent,
+                updated : request.query.update
+            };
+            
+            // found the blogpost
+            response.render('update-event.html', templateData);
+        }
+        
+    })
+    
+});
+
+app.post("/update", function(request, response){
+    
+    // update post body should have form element called blog_post_id
+    var postid = request.body.event_id;
+    console.log("postid: " +postid);
+
+    // we are looking for the BlogPost document where _id == postid
+    var condition = { _id : postid };
+    
+    // update these fields with new values
+    var updatedData = {
+        name : request.body.eventName,
+        date : request.body.eventDate,
+        time: request.body.eventTime,
+        place: request.body.eventPlace,
+        desc : request.body.eventDesc
+    };
+    
+    // we only want to update a single document
+    var options = { multi : false };
+    
+    // Perform the document update
+    // find the document with 'condition'
+    // include data to update with 'updatedData'
+    // extra options - this time we only want a single doc to update
+    // after updating run the callback function - return err and numAffected
+    
+    Event.update( condition, updatedData, options, function(err, numAffected){
+        
+        if (err) {
+            console.log('Update Error Occurred');
+            response.send('Update Error Occurred ' + err);
+
+        } else {
+            
+            console.log("update succeeded");
+            console.log(numAffected + " document(s) updated");
+            
+            //redirect the user to the update page - append ?update=true to URL
+            response.redirect('/update/' + postid + "?update=true");
+            
+        }
+    });
+    
 });
 
 

@@ -14,22 +14,33 @@
                                 
                                 <div id="sidemenu" class="leftCol-1Third">
                                     <!-- ul is a list container -->
-
                                 </div>
                                 
                                 <div id="submitForm" class="rightCol-2Thirds">
-                                    <h1>Add a New Event</h1>
-<!-- textbox #newTodo -->
-<form method="POST" name="EventForm">
-<input type="text" placeholder="Event Name" id="eventName" name="eventName" size="50" /><br/>
-<input type="text" class="input-medium" name="urlslug" id="urlslug" placeholder="url slug">
-<p class="help-block">The url slug for this event entry, the ending of the URL. ie 'http://localhost:5000/event/<b><u>the-best-event</u></b>'</p>
-<input type="text" placeholder="Date" id="eventDate" name="eventDate" size="50" />
-<input type="text" placeholder="Time" id="eventTime" name="eventTime" size="50" />
-<input type="text" placeholder="Place" id="eventPlace" name="eventPlace" size="50" />
 
-<textarea id="eventDesc" name="eventDesc" rows="15" cols="35" placeholder="Description..."/></textarea>
-<input type="submit" value="Save Edits" id="saveBtn"/>
+<% if (updated) { %>
+    <br>
+    <div class="alert alert-success">
+        Event info was updated successfully - <a href="/events/<%= event.urlslug %>">View post</a>
+    </div>
+<% } %>
+                                    <h1>Edit Event</h1>
+<!-- textbox #newTodo -->
+
+
+<form method="POST" name="Eventupdate" action="/update">
+    <!-- include the blog post _id as a hidden value -->
+    <input type="hidden" name="event_id" value="<%= event._id %>">
+    
+<input type="text" value="<%= event.name %>" id="eventName" name="eventName" size="50" /><br/>
+<input type="text" disabled class="input-medium" name="urlslug" id="urlslug" value="<%= event.urlslug %>">
+<p class="help-block">The url slug for this event entry, the ending of the URL. ie 'http://localhost:5000/event/<b><u>the-best-event</u></b>'</p>
+<input type="text" value="<%= event.date %>" id="eventDate" name="eventDate" size="50" />
+<input type="text" value="<%= event.time %>" id="eventTime" name="eventTime" size="50" />
+<input type="text" value="<%= event.place %>" id="eventPlace" name="eventPlace" size="50" />
+
+<textarea id="eventDesc" name="eventDesc" rows="15" cols="35"  class="input-xlarge"/><%= event.desc %></textarea>
+<input type="submit" value="Add Event" id="saveBtn"/>
 
 </form>
 

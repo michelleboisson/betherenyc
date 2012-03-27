@@ -89,9 +89,6 @@ p { font-size: 1.3em; padding: 1em 0;}
     display: inline;
 }
 
-#eventsorter {
-    width: auto;
-}
 #sidemenu.home {
     background: #FFF;
     opacity: 0.97;
@@ -99,9 +96,8 @@ p { font-size: 1.3em; padding: 1em 0;}
     top: 0;
     bottom:0;
     left:0;
-    width: 400px;
-    bottom: 20px;
-    z-index: 2;
+    bottom: 50px;
+
 }
 #sidemenu {
     position: relative;
@@ -128,7 +124,7 @@ p { font-size: 1.3em; padding: 1em 0;}
     padding: 1em 0;
 }
 #sidemenu.home ul li {
-    padding: 1em;
+    /*padding: 1em;*/
 }
 #sidemenu li h2 {
     font-family: 'Exo', Arial, sans-serif;

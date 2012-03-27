@@ -4,11 +4,11 @@
 
 
 * {margin: 0; padding: 0; }
-html, body { height: 100% }
+html, body { width:100%; height: 100% }
 
 body {
-    /*background: url('images/sky.jpeg') fixed no-repeat;*/
-    background: url('../img/bridge.jpg') fixed no-repeat;
+    /*background: url('images/sky.jpeg') fixed no-repeat;
+    background: url('../img/bridge.jpg') fixed no-repeat;*/
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -45,10 +45,11 @@ p { font-size: 1.3em; padding: 1em 0;}
 	background: #FFF;
 	opacity: 0.96;
         padding: 3em;
-        padding-bottom: 20px;
+        padding-bottom: 60px;
 }
 #container.home{
     width: 100%;
+    height:100%;
     padding: 0;
 }
 

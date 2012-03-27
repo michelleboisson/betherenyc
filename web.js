@@ -1,4 +1,4 @@
-var express = require('express');
+var express = require('express'); 
 var ejs = require('ejs');
 var app = express.createServer(express.logger());
 
@@ -6,6 +6,12 @@ var mongoose = require('mongoose'); // include Mongoose MongoDB library
 var schema = mongoose.Schema; 
 
 var requestURL = require('request'); //gets data from outside
+
+
+var fs = require('fs');
+var xml2js = require('xml2js'); //xml to js 
+var parser = new xml2js.Parser(); //xml to js 
+
 
 /************ DATABASE CONFIGURATION **********/
 app.db = mongoose.connect(process.env.MONGOLAB_URI); //connect to the mongolabs database - local server uses .env file
@@ -54,7 +60,6 @@ app.configure(function() {
 
 });
 /*********** END SERVER CONFIGURATION *****************/
-
 
 app.get('/', function(request, response) {
     
@@ -263,6 +268,125 @@ app.get('/api/allevents', function(request, response){
     });
 });
 
+
+// This is a demonstration of using "remote" JSON data.
+// Requesting data from classmate Jackie, getting museum data
+
+app.get('/museums',function(request, response) {
+
+    // define the remote JSON feed
+    museumsURL= "http://nycmuseums.herokuapp.com/data/allmuseums";
+    museumsSiteName = museumsURL.substring(museumsURL.lastIndexOf('//')+2, museumsURL.length);
+    museumsSiteName = museumsSiteName.substring(museumsSiteName.charAt(0),museumsSiteName.indexOf('/'));
+
+    //str.substring(3,7)
+
+    // make the request
+    requestURL(museumsURL, function(error, httpResponse, data) {
+        //if there is an error
+        if (error) {
+            console.error(error);
+            response.send("uhoh there was an error");
+        }
+
+        // if successful HTTP 200 response
+        if (httpResponse.statusCode == 200) {
+
+            //convert JSON into native javascript
+            museumData = JSON.parse(data);
+
+            if (museumData.status == "OK") {
+                museums = museumData.museum;
+
+                //render template with remote data
+                templateData = {
+                    museums : museums,
+                    sitename : museumsSiteName,
+                    source_url : museumsURL   
+                }
+                response.render("museums.html",templateData)
+            } else {
+
+                response.send("blog post JSON status != OK");
+            }
+        }
+    }); // end of requestURL callback
+}); //end of /jsontest route
+
+app.get('/nycevents',function(request, response) {
+
+    // define the remote feed
+    nycGovURL= "http://www.nycgovparks.org/xml/events_300_rss.xml";
+    //museumsSiteName = nycGovURL.substring(nycGovURL.lastIndexOf('//')+2, nycGovURL.length);
+    //museumsSiteName = museumsSiteName.substring(museumsSiteName.charAt(0),museumsSiteName.indexOf('/'));
+
+    // make the request
+    requestURL(nycGovURL, function(error, httpResponse, data) {
+        //if there is an error
+        if (error) {
+            console.error(error);
+            response.send("uhoh there was an error");
+        }
+
+        // if successful HTTP 200 response
+        if (httpResponse.statusCode == 200) {
+            
+            //cleaning the data before parsing
+            data = data.replace(/event:parkids/g, "eventParkids");
+            data = data.replace(/event:parknames/g, "eventParkNames");
+            data = data.replace(/event:startdate/g, "eventStartDate");
+            data = data.replace(/event:enddate/g, "eventEndDate");
+            data = data.replace(/event:endtime/g, "eventEndTime");
+            data = data.replace(/event:starttime/g, "eventStartTime");
+            data = data.replace(/event:contact_phone/g, "eventContactPhone");
+            data = data.replace(/event:location/g, "eventLocation");
+            data = data.replace(/event:categories/g, "eventCategories");
+
+            //parse the data, convert to js object
+            parser.parseString(data, function (err, result) {
+                //convert to JSON
+                JSON.stringify(result);
+                
+                var nycGovData = result.channel.item; //array of events from nycgovparks.org in JSON
+                console.log(nycGovData.length + " total events found");
+                
+                //get data from today
+                var now = new Date();
+                var today = now.toJSON().toString().substring(0,now.toJSON().toString().indexOf('T'));
+                console.log("Today is " +today);
+                
+                console.log(nycGovData[0]);
+                console.log(nycGovData[0].eventStartDate);
+                
+                var nycGovDataToday; //variable to hold today's events
+                
+ /*               for (today in nycGovData.eventStartDate){
+                    console.log("TODAY: " +nycGovData.title);
+                }
+ */
+                //find events that are happening today
+                for (i = 0; i < nycGovData.length; i++){
+                    
+                    if (nycGovData[i].eventStartDate == today){
+                        console.log("TODAY: " +nycGovData[i].title);
+                        nycGovDataToday.push(nycGovData[i]);
+                    }
+                }
+                console.log("Found " +nycGovDataToday.length + " events happening today.");
+                
+                console.log('Done with data');
+            });
+                    
+                
+                
+                //response.render("museums.html",templateData)
+            //} else {
+
+              //  response.send("blog post JSON status != OK");
+            }
+        //}
+    }); // end of requestURL callback
+}); //end of /nycevents route
 
 
 

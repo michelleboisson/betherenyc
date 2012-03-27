@@ -1,0 +1,43 @@
+
+		<div id="header">
+			<h1 id="logo"><a href="#"><img src="img/betherenyc_logo.png" alt="BeThereNYC" title="BeThereNYC"></a></h1>
+			<h2>free cheap here now</h2>
+		</div>
+		
+
+		<div id="maincontent" class="fullwidth">
+				<div id="signup">
+					<h2>Sign Up for Reminders</h2>
+					<input type="text" width="100%"/>
+                                        <button id="saveBtn">Go!</button>
+				</div>
+                                
+                                <div id="sidemenu" class="leftCol-1Third">
+                                    <!-- ul is a list container -->
+<h2>NYC Museums</h2>
+<p> Data from: <a href="<%= source_url %>"><%= sitename %></a></p>
+<ul id="recentlyAdded">
+
+    
+</ul>
+                                </div>
+                                
+                                <div id="submitForm" class="rightCol-2Thirds">
+                                    
+                                    <% for(i=0; i<museums.length; i++) { %>
+                                    <h1><%= museums[i].museumname %></h1>
+                                    
+                                    <p><%= museums[i].museumtype %><br/>
+                                        <%= museums[i].address %><br/>
+                                    <%= museums[i].phone %><br/>
+                                    <%= museums[i].website %></p>
+                                                        
+                                    <% } %>
+				
+                                </div>
+
+
+                                
+                </div>
+				
+		</div>

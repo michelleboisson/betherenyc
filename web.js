@@ -261,7 +261,30 @@ app.get('/api/allevents', function(request, response){
         response.json(jsonData);
     });
 });
+// return one event entries in json format
+app.get('/api/event/:eventID', function(request, response){
+    
+     var requestedEventID = request.params.eventID;
+    
+    // define the fields you want to include in your json data
+    includeFields = ['name','desc','urlslug','date','time','place'];
+    
+    // query for all events
+    //queryConditions = { 'id': requestedEventID }; //empty conditions - return everything
+    var query = Event.findById( requestedEventID, includeFields);
 
+    query.sort('date',-1); //sort by most recent
+    query.exec(function (err, thisEvent) {
+
+        // render the card_form template with the data above
+        jsonData = {
+          'status' : 'OK',
+          'event' : thisEvent
+        }
+
+        response.json(jsonData);
+    });
+});
 
 // This is a demonstration of using "remote" JSON data.
 // Requesting data from classmate Jackie, getting museum data
@@ -373,6 +396,26 @@ app.get('/nycdata',function(request, response){
                 console.log('Done with data');
                 response.send("Found " +nycGovDataToday.length + " events happening today.<br/><br/>"+reslog);
                 
+                
+                nycGovDataToday.forEach(function(element, index, array){
+                    
+                    var eventData = {
+                        name : element.title,
+                        urlslug : convertToSlug(element.title),
+                        date : element.eventStartDate,
+                        time: element.eventStartTime,
+                        place: element.eventLocation,
+                        desc : element.description
+                    };
+
+                    // create a new event 
+                    var thisEvent = new Event(eventData);
+
+                    // save the event to the database
+                    thisEvent.save();
+                    
+                });
+                
             });
                     
                 
@@ -386,7 +429,14 @@ app.get('/nycdata',function(request, response){
     }); // end of requestURL callback
 }); //end of /nycdata route 
 
-
+function convertToSlug(Text)
+{
+    return Text
+        .toLowerCase()
+        .replace(/[^\w ]+/g,'')
+        .replace(/ +/g,'-')
+        ;
+}
 
 // Make server turn on and listen at defined PORT (or port 3000 if is not defined)
 var port = process.env.PORT || 3000;

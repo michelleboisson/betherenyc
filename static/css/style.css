@@ -97,7 +97,7 @@ p { font-size: 1.3em; padding: 1em 0;}
     bottom:0;
     left:0;
     bottom: 50px;
-
+    margin-left: 0;
 }
 #sidemenu {
     position: relative;
@@ -109,6 +109,7 @@ p { font-size: 1.3em; padding: 1em 0;}
     overflow-y: auto;
     overflow-x: hidden;
     height: 100%;
+    margin:0;
 }
 #sidemenu::-webkit-scrollbar {
 	-webkit-appearance: none;
@@ -121,10 +122,10 @@ p { font-size: 1.3em; padding: 1em 0;}
 }
 
 #sidemenu ul li {
-    padding: 1em 0;
+    padding: 1em 1em;
 }
-#sidemenu.home ul li {
-    /*padding: 1em;*/
+#sidemenu.home ul li p{
+    padding: 0;
 }
 #sidemenu li h2 {
     font-family: 'Exo', Arial, sans-serif;

@@ -62,7 +62,7 @@ app.configure(function() {
 /*********** END SERVER CONFIGURATION *****************/
 
 app.get('/', function(request, response) {
-    
+        
     // build the query
     var query = Event.find({});
     query.sort('date',-1); //sort by date in descending order
@@ -76,7 +76,7 @@ app.get('/', function(request, response) {
             posts : allPosts
         };
         
-        // render the card_form template with the data above
+        // render the page template with the data above
         response.render('home.html', templateData);
         
     });
@@ -95,7 +95,7 @@ app.post('/submit.html', function(request, response){
     console.log('Received new event submission')
     console.log(request.body);
     
-    // Prepare the blog post entry form into a data object
+    // Prepare the event entry form into a data object
     var eventData = {
         name : request.body.eventName,
         urlslug : request.body.urlslug,
@@ -104,13 +104,7 @@ app.post('/submit.html', function(request, response){
         place: request.body.eventPlace,
         desc : request.body.eventDesc
     };
-/*     newEvent = {
-        name : request.body.eventName,
-        date: request.body.eventDate,
-        time: request.body.eventTime,
-        place: request.body.eventPlace
-    };
-*/  
+
     // create a new blog post
     var thisEvent = new Event(eventData);
     
@@ -313,7 +307,7 @@ app.get('/museums',function(request, response) {
     }); // end of requestURL callback
 }); //end of /jsontest route
 
-app.get('/nycevents',function(request, response) {
+app.get('/nycdata',function(request, response){
 
     // define the remote feed
     nycGovURL= "http://www.nycgovparks.org/xml/events_300_rss.xml";
@@ -358,23 +352,27 @@ app.get('/nycevents',function(request, response) {
                 console.log(nycGovData[0]);
                 console.log(nycGovData[0].eventStartDate);
                 
-                var nycGovDataToday; //variable to hold today's events
+                var nycGovDataToday = []; //variable to hold today's events
                 
  /*               for (today in nycGovData.eventStartDate){
                     console.log("TODAY: " +nycGovData.title);
                 }
  */
+                var reslog ="";
                 //find events that are happening today
                 for (i = 0; i < nycGovData.length; i++){
                     
                     if (nycGovData[i].eventStartDate == today){
                         console.log("TODAY: " +nycGovData[i].title);
+                        reslog += nycGovData[i].title+"<br/>";
                         nycGovDataToday.push(nycGovData[i]);
                     }
                 }
                 console.log("Found " +nycGovDataToday.length + " events happening today.");
                 
                 console.log('Done with data');
+                response.send("Found " +nycGovDataToday.length + " events happening today.<br/><br/>"+reslog);
+                
             });
                     
                 
@@ -386,7 +384,7 @@ app.get('/nycevents',function(request, response) {
             }
         //}
     }); // end of requestURL callback
-}); //end of /nycevents route
+}); //end of /nycdata route 
 
 
 

@@ -414,6 +414,8 @@ app.get('/nycdata',function(request, response){
                     // save the event to the database
                     thisEvent.save();
                     
+                    response.redirect('/');
+                    
                 });
                 
             });

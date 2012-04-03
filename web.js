@@ -358,6 +358,7 @@ app.get('/nycdata',function(request, response){
             data = data.replace(/event:contact_phone/g, "eventContactPhone");
             data = data.replace(/event:location/g, "eventLocation");
             data = data.replace(/event:categories/g, "eventCategories");
+            //data = data.replace("&", "&amp;");
 
             //parse the data, convert to js object
             parser.parseString(data, function (err, result) {
@@ -372,8 +373,8 @@ app.get('/nycdata',function(request, response){
                 var today = now.toJSON().toString().substring(0,now.toJSON().toString().indexOf('T'));
                 console.log("Today is " +today);
                 
-                console.log(nycGovData[0]);
-                console.log(nycGovData[0].eventStartDate);
+                console.log(nycGovData[2]);
+                console.log(nycGovData[2].eventStartDate);
                 
                 var nycGovDataToday = []; //variable to hold today's events
                 
@@ -394,11 +395,11 @@ app.get('/nycdata',function(request, response){
                 console.log("Found " +nycGovDataToday.length + " events happening today.");
                 
                 console.log('Done with data');
-                response.send("Found " +nycGovDataToday.length + " events happening today.<br/><br/>"+reslog);
+   //             response.send("Found " +nycGovDataToday.length + " events happening today.<br/><br/>"+reslog);
                 
                 
                 nycGovDataToday.forEach(function(element, index, array){
-                    
+                    console.log("element: "+element.eventStartDate);
                     var eventData = {
                         name : element.title,
                         urlslug : convertToSlug(element.title),
@@ -407,17 +408,17 @@ app.get('/nycdata',function(request, response){
                         place: element.eventLocation,
                         desc : element.description
                     };
-
+                    console.log("eventData: "+eventData);
                     // create a new event 
                     var thisEvent = new Event(eventData);
 
                     // save the event to the database
                     thisEvent.save();
                     
-                    response.redirect('/');
+                    
                     
                 });
-                
+                response.redirect('/');
             });
                     
                 

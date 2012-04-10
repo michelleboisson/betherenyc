@@ -9,12 +9,6 @@
 		modal: true
 	});
     
-
-    $("#launchModal").click(function () {
-	console.log("im clicked");
-	$("#myModal").dialog('open');
-    });
-    
     //append a clink function to each event link
     jQuery(".homeModalLink").each(function(){
         $(this).click(function () {
@@ -36,7 +30,11 @@
 	    jQuery("#recentlyAdded h3").click(function(){
 		console.log("I'm clicked!");
 		JQuery(this).siblings("div").toggleClass("hidden");
-	    })
+	    });
+            
+            jQuery("#loadmore").click(function(){
+                
+            });
 
 }); //end document ready
 
@@ -67,7 +65,7 @@ var getThisEvent = function(eventAPILink) {
         }
 
     }); // end of jQuery.ajax*/
-} // end of getBlogPosts
+} // end of getThisEvent
 
 
 var launchModal = function(event) {
@@ -81,13 +79,6 @@ var launchModal = function(event) {
               <br/>"+ event.place +"</p>\
               <p>"+ event.desc.substr(0, 200) +"...</p>\
               <p><a href=/events/"+ event.urlslug +">Full Description</a>";
-    
-    
-     //   var tmpHTML = "<li><a href='/entry/"+ currentPost.urlslug +"'>"+currentPost.title+"</a></li>";
-        
-        // concatenate tmpHTML to the main html string newHTML
-      //  newHTML += tmpHTML;
-  
     
     //append new html to the DOM (browser's rendered HTML)
     jQuery("#modalInfo").html(newHTML);
@@ -104,6 +95,40 @@ var launchModal = function(event) {
 
 }
 
+var interval = 20; //20 events at a time
+var getMoreEvents = function() {    
+
+    console.log("eventAPILink: "+eventAPILink);
+    
+    var jsonURL = "http://localhost:5000/api/allevents/";
+     
+    jQuery.ajax({
+        
+        url : jsonURL,
+        dataType : 'json',
+        type : 'GET',
+        
+        success : function(data) {
+            console.log("inside success callback");
+            console.log(data);
+            if (data.status == "OK") {
+
+                events = data.events[interval-1];                
+                showMore(events, interval);
+            }
+        },
+        error : function(err) {
+            console.log("error fetching this event");
+        }
+
+    }); // end of jQuery.ajax*/
+} // end of getThisEvent
+
+var showMore = function(events, index){
+    for (var j = 0; j < 20; j++){
+        
+    }
+}
 
 function convertToSlug(Text)
 {

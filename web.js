@@ -64,7 +64,7 @@ app.configure(function() {
 app.get('/', function(request, response) {
         
     // build the query
-    var query = Event.find({});
+    var query = Event.find({}, ['id', 'name', 'place', 'date', 'time']);
     query.sort('date',-1); //sort by date in descending order
     
     // run the query and display blog_main.html template if successful
@@ -358,7 +358,7 @@ app.get('/nycdata',function(request, response){
             data = data.replace(/event:contact_phone/g, "eventContactPhone");
             data = data.replace(/event:location/g, "eventLocation");
             data = data.replace(/event:categories/g, "eventCategories");
-            //data = data.replace("&", "&amp;");
+            
 
             //parse the data, convert to js object
             parser.parseString(data, function (err, result) {
@@ -415,18 +415,10 @@ app.get('/nycdata',function(request, response){
                     // save the event to the database
                     thisEvent.save();
                     
-                    
-                    
                 });
                 response.redirect('/');
             });
                     
-                
-                
-                //response.render("museums.html",templateData)
-            //} else {
-
-              //  response.send("blog post JSON status != OK");
             }
         //}
     }); // end of requestURL callback

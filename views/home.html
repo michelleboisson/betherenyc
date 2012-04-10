@@ -10,7 +10,8 @@
 				<ul>
 					
 					
-                                    <% for(i=0; i< posts.length; i++) { %>
+                                <% var interval = 20; %>
+				<% for(i=0; i< interval; i++) { %>
                                 <li><a modal-link="/api/event/<%= posts[i].id %>" class="homeModalLink">
 						<h3><%= posts[i].name %></h3>
 						<p><%= posts[i].place %><br/>
@@ -19,9 +20,9 @@
 					</li>
                                     
                                     <% } %>
-
 				
 				</ul>
+				<a id="loadmore" loadmore="<% interval %>">Load more events</a>
 			</div><!-- end sidemenu -->
 			
 			

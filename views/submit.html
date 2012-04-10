@@ -1,18 +1,20 @@
 
-		<div id="header">
-			<h1 id="logo"><a href="#"><img src="img/betherenyc_logo.png" alt="BeThereNYC" title="BeThereNYC"></a></h1>
+		
+		<!--<div id="header">
+			<h1 id="logo"><a href="/"><img src="/img/betherenyc_logo.png" alt="BeThereNYC" title="BeThereNYC"></a></h1>
 			<h2>free cheap here now</h2>
 		</div>
-		
+		-->
 
-		<div id="maincontent" class="fullwidth">
-				<div id="signup">
+		<div id="maincontent" class="row-fluid">
+				<!--<div id="signup">
 					<h2>Sign Up for Reminders</h2>
 					<input type="text" width="100%"/>
                                         <button id="saveBtn">Go!</button>
 				</div>
+				-->
                                 
-                                <div id="sidemenu" class="leftCol-1Third">
+                                <div id="sidemenu" class="span2">
                                     <!-- ul is a list container -->
 
                                 </div>
@@ -53,7 +55,19 @@
                });
            
 		$("#eventDate").datepicker();
+		
+		jQuery('#eventName').change(function(e){
+			var currentTitle = jQuery(this).val();
+			jQuery("#urlslug").val(convertToSlug(currentTitle));
+		});
     
             });
-
+function convertToSlug(Text)
+{
+    return Text
+        .toLowerCase()
+        .replace(/[^\w ]+/g,'')
+        .replace(/ +/g,'-')
+        ;
+}
       </script>

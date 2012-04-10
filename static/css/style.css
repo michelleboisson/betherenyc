@@ -15,36 +15,19 @@ body {
     background-size: cover;
     color: #111111;
     font-family: Arial,Verdana,sans-serif;
-    font-size: 72.5%;
-    /*overflow: hidden!important;*/
+    /*font-size: 72.5%;
+    overflow: hidden!important;*/
 }
-p { font-size: 1.3em; padding: 1em 0;}
+p {  padding: 1em 0;}
 
 
-.leftCol-1Third {
-    float: left;
-    width: 30%;
-}
-
-.rightCol-2Thirds{
-/*    width: 65%;
-    margin-left:33%;
-*/
-    width: auto;
-    margin-left: 30%;
-}
-
-.fullwidth{
-    clear: both;
-    width: 100%;
-}
 
 #container{
 	margin: 0 auto;
 	width: 80%;
 	background: #FFF;
 	opacity: 0.96;
-        padding: 3em;
+
         padding-bottom: 60px;
 }
 #container.home{
@@ -122,7 +105,7 @@ p { font-size: 1.3em; padding: 1em 0;}
 }
 
 #sidemenu ul li {
-    padding: 1em 1em;
+    padding: 1em 0;
 }
 #sidemenu.home ul li p{
     padding: 0;
@@ -156,42 +139,13 @@ p { font-size: 1.3em; padding: 1em 0;}
 }
 #signup input {
     padding: 4px;
-    font-size:16px;  
+    /*font-size:16px; */ 
 }
 #signup button{
     padding: 4px;
     
 }
 
-
-#categoryholder {
-    width:65%;
-    
-}
-.categorylist {
-    width: 30%;
-    padding: 1.2em;
-    float: left;
-    font-size: 1.2em;
-}
-.categorylist h1 {
-    color: #8f14ae;
-    font-family: 'Exo', Arial, sans-serif;
-}
-
-.categorylist a{
-    color: #333;
-    text-decoration: none;
-}
-.categorylist a:hover{
-    color: #8f14ae;
-}
-.categorylist ul {
-    list-style-type: none;
-}
-.categorylist li{
-    padding-bottom: 10px;
-}
 
 #footer {
     clear: both;

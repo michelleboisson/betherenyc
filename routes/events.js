@@ -33,8 +33,11 @@ module.exports = {
     },
     
     getSubmitEvent : function(request, response) {
-        console.log("Requesting Submit Page")
-        response.render("submit.html");
+        console.log("Requesting Submit Page");
+        templateData = {
+            currentUser : request.user
+        }
+        response.render("submit.html", templateData);
     },
     
     postSubmittedEvent : function(request, response){
@@ -49,7 +52,8 @@ module.exports = {
             date : request.body.eventDate,
             time: request.body.eventTime,
             place: request.body.eventPlace,
-            desc : request.body.eventDesc
+            desc : request.body.eventDesc,
+            author : request.user._id
         };
 
         // create a new blog post
@@ -64,35 +68,108 @@ module.exports = {
     },
     
     getEventbyUrlslug : function(request, response){
-    
+        var hasOwner;
          // Get the request blog post by urlslug
      
-        // build the query
+        // build the query for the sidebar
         var query = db.Event.find({});
+        query.populate('author');
         query.sort('date',-1); //sort by date in descending order
+        query.limit(5);
         
         // run the query and display blog_main.html template if successful
         query.exec({}, function(err, allPosts){
                 
-            db.Event.findOne({urlslug:request.params.urlslug} ,function(err,event){
+            db.Event.findOne({urlslug:request.params.urlslug}).populate('author').run(function(err,event){
                 if (err) {
                     console.log('error');
                     console.log(err);
                     response.render('card_not_found.html');
                     //response.send("uh oh, can't find that post");
                 }
-        
+                if (event == null ) {
+                    console.log('post not found');
+                    response.send("uh oh, can't find that post");
+                }else{
+                    if (event.author == "undefined" || event.author == "" || event.author == null) {
+                        hasOwner = false;
+                    }else{
+                        hasOwner = true;
+                    }
+                    
+                    if (hasOwner && typeof request.user != "undefined" && (request.user._id.toString() == event.author._id.toString()) ) {
+                        isOwner = true;
+                    } else {
+                        isOwner = false;
+                    }
+                    
+                    
                 // prepare template data
-                var templateData = {
-                    event : event,
-                    posts : allPosts
-                };
-            
+                   var templateData = {
+                        user_is_owner : isOwner,
+                        event_has_owner : hasOwner,
+                        event : event,
+                        posts : allPosts
+                   };
+                }
                 // render the card_form template with the data above
                 response.render('single-event.html', templateData);
             });
         });
     },
+    
+    
+    getEventbyId : function(request, response){
+        var hasOwner;
+         // Get the request blog post by urlslug
+     
+        // build the query for the sidebar
+        var query = db.Event.find({});
+        query.populate('author');
+        query.sort('date',-1); //sort by date in descending order
+        query.limit(5);
+        
+        // run the query and display blog_main.html template if successful
+        query.exec({}, function(err, allPosts){
+                
+            db.Event.findById(request.params.eventId).populate('author').run(function(err,event){
+                if (err) {
+                    console.log('error');
+                    console.log(err);
+                    response.render('card_not_found.html');
+                    //response.send("uh oh, can't find that post");
+                }
+                if (event == null ) {
+                    console.log('post not found');
+                    response.send("uh oh, can't find that post");
+                }else{
+                    if (event.author == "undefined" || event.author == "" || event.author == null) {
+                        hasOwner = false;
+                    }else{
+                        hasOwner = true;
+                    }
+                    
+                    if (hasOwner && typeof request.user != "undefined" && (request.user._id.toString() == event.author._id.toString()) ) {
+                        isOwner = true;
+                    } else {
+                        isOwner = false;
+                    }
+                    
+                    
+                // prepare template data
+                   var templateData = {
+                        user_is_owner : isOwner,
+                        event_has_owner : hasOwner,
+                        event : event,
+                        posts : allPosts
+                   };
+                }
+                // render the card_form template with the data above
+                response.render('single-event.html', templateData);
+            });
+        });
+    },
+    
 
     testMap : function(request, response){
         response.render("maptest.html");

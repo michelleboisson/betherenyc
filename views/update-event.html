@@ -1,27 +1,29 @@
 
-		<div id="header">
-			<h1 id="logo"><a href="#"><img src="img/betherenyc_logo.png" alt="BeThereNYC" title="BeThereNYC"></a></h1>
+		
+		<!--<div id="header">
+			<h1 id="logo"><a href="/"><img src="/img/betherenyc_logo.png" alt="BeThereNYC" title="BeThereNYC"></a></h1>
 			<h2>free cheap here now</h2>
 		</div>
-		
+		-->
 
-		<div id="maincontent" class="fullwidth">
-				<div id="signup">
+		<div id="maincontent" class="row-fluid">
+				<!--<div id="signup">
 					<h2>Sign Up for Reminders</h2>
 					<input type="text" width="100%"/>
                                         <button id="saveBtn">Go!</button>
 				</div>
+				-->
                                 
-                                <div id="sidemenu" class="leftCol-1Third">
+                                <div id="sidemenu" class="span2">
                                     <!-- ul is a list container -->
                                 </div>
                                 
-                                <div id="submitForm" class="rightCol-2Thirds">
+                                <div id="submitForm" class="span8">
 
 <% if (updated) { %>
     <br>
     <div class="alert alert-success">
-        Event info was updated successfully - <a href="/events/<%= event.urlslug %>">View post</a>
+        Event info was updated successfully - <a href="/events/permalink/<%= event._id %>">View post</a>
     </div>
 <% } %>
                                     <h1>Edit Event</h1>
@@ -34,13 +36,12 @@
     
 <input type="text" value="<%= event.name %>" id="eventName" name="eventName" size="50" /><br/>
 <input type="text" disabled class="input-medium" name="urlslug" id="urlslug" value="<%= event.urlslug %>">
-<p class="help-block">The url slug for this event entry, the ending of the URL. ie 'http://localhost:5000/event/<b><u>the-best-event</u></b>'</p>
 <input type="text" value="<%= event.date %>" id="eventDate" name="eventDate" size="50" />
 <input type="text" value="<%= event.time %>" id="eventTime" name="eventTime" size="50" />
 <input type="text" value="<%= event.place %>" id="eventPlace" name="eventPlace" size="50" />
 
 <textarea id="eventDesc" name="eventDesc" rows="15" cols="35"  class="input-xlarge"/><%= event.desc %></textarea>
-<input type="submit" value="Add Event" id="saveBtn"/>
+<input type="submit" value="Update Event" id="saveBtn"/>
 
 </form>
 

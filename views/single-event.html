@@ -1,24 +1,25 @@
 
-		<div id="header">
+		<!--<div id="header">
 			<h1 id="logo"><a href="/"><img src="/img/betherenyc_logo.png" alt="BeThereNYC" title="BeThereNYC"></a></h1>
 			<h2>free cheap here now</h2>
 		</div>
-		
+		-->
 
-		<div id="maincontent" class="fullwidth">
-				<div id="signup">
+		<div id="maincontent" class="row-fluid">
+				<!--<div id="signup">
 					<h2>Sign Up for Reminders</h2>
 					<input type="text" width="100%"/>
                                         <button id="saveBtn">Go!</button>
 				</div>
+				-->
                                 
-                                <div id="sidemenu" class="leftCol-1Third">
+                                <div id="sidemenu" class="span2">
                                     <!-- ul is a list container -->
-<h2>Recently Added</h2>
+<h3>Recently Added</h3>
 <ul id="recentlyAdded">
      <% for(i=0; i<posts.length; i++) { %>
 	<li>
-	<h3><a href="/events/<%= posts[i].urlslug %>"><%= posts[i].name %></a></h3>
+	<h5><a href="/events/<%= posts[i].urlslug %>"><%= posts[i].name %></a></h5>
 	<div class="hidden">
 		<%= posts[i].place %><br/>
 		<%= posts[i].date %>, <%= posts[i].time %><br/>
@@ -30,20 +31,23 @@
 </ul>
                                 </div>
                                 
-                                <div id="submitForm" class="rightCol-2Thirds">
+                                <div id="submitForm" class="span8">
                                     <h1><%= event.name %></h1>
                                     
                                     <p><%= event.date %>&nbsp;, <%= event.time %> <br/>
                                     <%= event.place %></p>
-				    
+				    <% if (event_has_owner) { %>
+				    Submitted by <a href="mailto:<%= event.author.email %>"><%= event.author.name.first %> <%= event.author.name.last %></a>
+				    <% } %>
 				    <p><%= event.desc %></p>
                                     
                                    <!-- <form method="POST">
                                         <button id="edit">Edit</button>
                                     </form>
                                     <a href="../"><button id="Done">Done!</button></a>  -->
-				    
-				    <p><a href="/update/<%= event._id %>" id="update">update...</a></p>
+				    <% if (user_is_owner) { %>
+				    <p><a href="/update/<%= event._id %>" id="update">edit this event...</a>
+				    <% } %></p>
                                 </div>
 
 

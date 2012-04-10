@@ -10,6 +10,7 @@ module.exports.configureSchema = function(Schema, mongoose) {
     , date      : { type: Date}
     , time      : String
     , place     : String
+    , author      : { type: Schema.ObjectId, ref: 'User' }
     });
 
     // add schemas to Mongoose

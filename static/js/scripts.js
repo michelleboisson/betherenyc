@@ -78,7 +78,7 @@ var launchModal = function(event) {
     newHTML = "<p>"+ event.date +", "+ event.time +"\
               <br/>"+ event.place +"</p>\
               <p>"+ event.desc.substr(0, 200) +"...</p>\
-              <p><a href=/events/"+ event.urlslug +">Full Description</a>";
+              <p><a href=/events/permalink/"+ event._id +">Full Description</a>";
     
     //append new html to the DOM (browser's rendered HTML)
     jQuery("#modalInfo").html(newHTML);

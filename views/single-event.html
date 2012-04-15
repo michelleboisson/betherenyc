@@ -39,7 +39,7 @@
 				    <% if (event_has_owner) { %>
 				    Submitted by <a href="mailto:<%= event.author.email %>"><%= event.author.name.first %> <%= event.author.name.last %></a>
 				    <% } %>
-				    <p><%= event.desc %></p>
+				    <p id="event-desc"><%= event.desc %></p>
                                     
                                    <!-- <form method="POST">
                                         <button id="edit">Edit</button>

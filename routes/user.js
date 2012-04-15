@@ -1,5 +1,13 @@
 var db = require('../accessDB');
+var fs = require('fs');
+var knox = require('knox');
 
+var myBucket = 'testing-johnsapp';
+var S3Client = knox.createClient({
+      key: process.env.AWS_KEY
+    , secret: process.env.AWS_SECRET
+    , bucket: myBucket
+});
 
 module.exports = {
 

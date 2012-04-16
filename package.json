@@ -13,6 +13,6 @@
     "passport-local": "0.1.2",
     "knox" : "0.0.9",
     "jsdom": "0.2.14",
-    "moment": latest
+    "moment": "latest"
   }
 }

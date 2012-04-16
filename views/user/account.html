@@ -5,6 +5,7 @@
 <p><%= message %></p>
 <hr>
 <% } %>
+
 <h3>Change password</h3>
 <form method="POST" action="/account/changepassword">
     New Password : <input type="password" name="password"><br>
@@ -12,5 +13,6 @@
     <br>
     <input type="submit" name="submit" value="Change Password">
 </form>
+<p>Access Level: <%= currentUser.accessLevel %></p>
     
 <p><a href="/logout">Logout</a></p>

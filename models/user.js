@@ -11,11 +11,20 @@ var UserSchema = new Schema({
       , last: { type: String, required: true }
     }
   , email: { type: String, unique: true }
+  , accessLevel: {type: Number, default: 1}
+    // 0 : admin (can edit all posts)
+    // 1 : everyone else (can edit their posts)
 
   , salt: { type: String, required: true }
   , hash: { type: String, required: true }
 });
 
+
+UserSchema
+.virtual('name.fullname')
+.get(function () {
+  return this.name.first + ' ' + this.name.last;
+});
 
 UserSchema
 .virtual('password')

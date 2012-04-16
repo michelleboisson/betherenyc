@@ -25,6 +25,7 @@ module.exports = {
             , lname : request.param('lastname')
             , email : request.param('email')
             , password : request.param('password')
+            , accessLevel: 1 //1 = regular user, 0 admin (can edit all posts)
         }, function(err,docs) {
             response.redirect('/account');
         });

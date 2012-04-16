@@ -6,16 +6,24 @@ var db = require('../accessDB');
 var requestURL = require('request'); //gets data from outside
 var fs = require('fs');
 var xml2js = require('xml2js'); //xml to js 
-var parser = new xml2js.Parser(); //xml to js 
+var parser = new xml2js.Parser(); //xml to js
+var jsdom = require("jsdom"); //dom parser 
 
 
 module.exports = {
     
     mainpage : function(request, response) {
         
+        today = new Date();
+        yesterday = new Date();
+        yesterday.setDate(yesterday.getDate()-1);
+        tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate()+1);
+        
         // build the query
-        var query = db.Event.find({}, ['id', 'name', 'place', 'date', 'time']);
+        var query = db.Event.find({}, ['id', 'name', 'place', 'date', 'time', 'location']);
         query.sort('date',-1); //sort by date in descending order
+        query.where('date').gte(yesterday).lte(tomorrow);
     
         // run the query and display blog_main.html template if successful
         query.exec({}, function(err, allPosts){
@@ -103,6 +111,12 @@ module.exports = {
                         isOwner = false;
                     }
                     
+                     //if this is an admin
+                    if (typeof request.user != "undefined" && request.user.accessLevel == "0")
+                    {
+                        isOwner = true;
+                    }
+                    
                     
                 // prepare template data
                    var templateData = {
@@ -153,6 +167,12 @@ module.exports = {
                         isOwner = true;
                     } else {
                         isOwner = false;
+                    }
+                    
+                    //if this is an admin
+                    if (typeof request.user != "undefined" && request.user.accessLevel == "0")
+                    {
+                        isOwner = true;
                     }
                     
                     
@@ -351,27 +371,52 @@ module.exports = {
                     console.log('Done with data');
                 
                     nycGovDataToday.forEach(function(element, index, array){
-                        console.log("element: "+element.eventStartDate);
-                        var eventData = {
-                            name : element.title,
-                            urlslug : convertToSlug(element.title),
-                            date : element.eventStartDate,
-                            time: element.eventStartTime,
-                            place: element.eventLocation,
-                            desc : element.description
-                        };
-                        console.log("eventData: "+eventData);
-                        // create a new event 
-                        var thisEvent = new db.Event(eventData);
+                    
+                        //visit the link to get the freaking latitude and longitude
+                        //parse the html via jsdom!
+                        var eventLink = element.link;
+                        jsdom.env(eventLink, ['http://code.jquery.com/jquery-1.7.min.js'], function(errors, window) {
+                            
+                            var $ = window.$;
+                            $(".map_locations").each(function () {
+                                var mydata = $(this).attr('id').split('__');
+                                //console.log("place: "+ mydata[2]);
+                                //console.log("lat: "+mydata[0]);
+                                //console.log("lng: "+mydata[1]);
+                                
+                                var eventData = {
+                                    name : element.title,
+                                    urlslug : convertToSlug(element.title),
+                                    date : element.eventStartDate,
+                                    time: element.eventStartTime,
+                                    place: element.eventLocation,
+                                    desc : element.description,
+                                    link : element.link,
+                                    location: {
+                                         latitude : mydata[0]
+                                        ,longitude : mydata[1]
+                                        ,placename : mydata[2]
+                                    }
+                                };//end event data  
+                        
+                                    console.log("eventData: "+eventData);
+                                    // create a new event 
+                                    var thisEvent = new db.Event(eventData);
     
-                        // save the event to the database
-                        thisEvent.save();    
-                    });
-                    response.redirect('/');
+                                    // save the event to the database
+                                    thisEvent.save();
+                                    
+                                    response.redirect('/');
+                           //console.log("there have been", window.$("a").length, "nodejs releases!");
+                                });
+                        });//end jsdom
+                        
+                        
+                    }); //end for each event found...    
                 }); //end parser
             }//end if httpResponse
         }); // end of requestURL callback
-    }//end nyc data route   
+    }//end nyc data route  
 }
 
 

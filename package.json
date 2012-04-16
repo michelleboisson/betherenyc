@@ -11,6 +11,8 @@
     "bcrypt" : "0.4.1",
     "passport": "0.1.7",
     "passport-local": "0.1.2",
-    "knox" : "0.0.9"
+    "knox" : "0.0.9",
+    "jsdom": "0.2.14",
+    "moment": latest
   }
 }

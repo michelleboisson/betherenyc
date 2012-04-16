@@ -9,9 +9,11 @@
 			<div id="sidemenu" class="home span4">
 				<ul>
 					
-					
-                                <% var interval = 20; %>
-				<% for(i=0; i< interval; i++) { %>
+				<% if (posts == "") {%>
+				<li><i>Sorry no events today.<br/>Check back tomorrow.</i></li>
+				<% } %>
+                                
+				<% for(i=0; i< posts.length; i++) { %>
                                 <li><a modal-link="/api/event/<%= posts[i].id %>" class="homeModalLink">
 						<h3><%= posts[i].name %></h3>
 						<p><%= posts[i].place %><br/>
@@ -22,7 +24,7 @@
                                     <% } %>
 				
 				</ul>
-				<a id="loadmore" loadmore="<% interval %>">Load more events</a>
+				<a id="loadmore">Load more events</a>
 			</div><!-- end sidemenu -->
 			
 			

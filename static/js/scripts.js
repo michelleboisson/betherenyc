@@ -1,3 +1,5 @@
+var map;
+
   jQuery(document).ready(function() {
 
     //init modal window for event info
@@ -57,7 +59,7 @@ var getThisEvent = function(eventAPILink) {
             if (data.status == "OK") {
                 event = data.event;
                 
-                launchModal(event);
+                //launchModal(event);
             }
         },
         error : function(err) {
@@ -146,16 +148,80 @@ function convertToSlug(Text)
 
 //initialize the map on the home page
 function initialize() {
-    console.log("Staring map");
-    geocoder = new google.maps.Geocoder();
-    var latlng = new google.maps.LatLng(-34.397, 150.644);
+    console.log("Starting map");
     var myOptions = {
-      zoom: 8,
-      center: latlng,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
+          center: new google.maps.LatLng(40.7746431, -73.9701962),
+          zoom: 11,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
     map = new google.maps.Map(document.getElementById("map"), myOptions);
-  }
+    
+    var markers = [];
+    
+    $("#today-events li").each(function(){
+        
+        var thisLat = $(this).attr("map-lat");
+        var thisLng = $(this).attr("map-lng");
+        var thisName = $(this).attr("event-name");
+        var thisTime = $(this).attr("event-time");
+        
+         var contentString = '<strong>'+thisName+'</strong><br/>'+thisTime;
+        
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString,
+            maxWidth: 200
+        });
+        
+        var thisLatlng = new google.maps.LatLng(thisLat,thisLng);
+        var marker = new google.maps.Marker({
+            position: thisLatlng, 
+            map: map,
+            animation: google.maps.Animation.DROP,
+            title:"Hello World!"
+        });
+        
+        google.maps.event.addListener(marker, 'click', function() {
+            
+            for (i = 0; i < markers.length; i++){
+                markers[i].infowindow.close();
+            }
+            infowindow.open(map,marker);
+        });
+        
+        var newObj = {
+            name: thisName,
+            lat: thisLat,
+            lng: thisLng,
+            marker: marker,
+            infowindow : infowindow
+        }
+        markers.push(newObj);
+    });//end each
+    
+    //remove markers when you click elsewhere
+    google.maps.event.addListener(map, 'click', function(){
+        for (i = 0; i < markers.length; i++){
+                markers[i].infowindow.close();
+            }
+    });
+    
+
+}//end initialize()
+
+function toggleBounce() {
+
+    if (marker.getAnimation() != null) {
+      marker.setAnimation(null);
+    } else {
+      marker.setAnimation(google.maps.Animation.BOUNCE);
+    }
+}
+
+function showMarker(e){
+    console.log("hmmm "+e);
+}
+
+
 
 //geocode address and place them on the map
   function codeAddress() {

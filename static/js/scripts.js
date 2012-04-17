@@ -152,7 +152,26 @@ function initialize() {
     var myOptions = {
           center: new google.maps.LatLng(40.7746431, -73.9701962),
           zoom: 11,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          mapTypeControlOptions: {
+            position: google.maps.ControlPosition.RIGHT_TOP
+        },
+      panControlOptions: {
+          position: google.maps.ControlPosition.RIGHT_TOP
+      },
+      zoomControl: true,
+      zoomControlOptions: {
+          style: google.maps.ZoomControlStyle.LARGE,
+          position: google.maps.ControlPosition.RIGHT_TOP
+      },
+      scaleControl: true,
+      scaleControlOptions: {
+          position: google.maps.ControlPosition.RIGHT_TOP
+      },
+      streetViewControl: true,
+      streetViewControlOptions: {
+          position: google.maps.ControlPosition.RIGHT_TOP
+      }
     };
     map = new google.maps.Map(document.getElementById("map"), myOptions);
     
@@ -168,7 +187,6 @@ function initialize() {
          var contentString = '<div id="content">'+
         '<div id="siteNotice">'+
         '</div>'+
-        '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
         '<div id="bodyContent"><strong>'+thisName+'</strong><br/>'+thisTime+
         '</div>'+
         '</div>';
@@ -190,6 +208,7 @@ function initialize() {
             
             for (i = 0; i < markers.length; i++){
                 markers[i].infowindow.close();
+                markers[i].marker.setAnimation(null);
             }
             infowindow.open(map,marker);
         });
@@ -198,11 +217,55 @@ function initialize() {
             name: thisName,
             lat: thisLat,
             lng: thisLng,
+            latlng: thisLatlng,
             marker: marker,
             infowindow : infowindow
         }
         markers.push(newObj);
     });//end each
+    
+    $("#today-events li").live('mouseover', function(){
+        var thisName = $(this).attr("event-name");
+        
+        for (a = 0; a < markers.length; a++){
+            var thisMarker = markers[a].marker;
+            var latLng = new google.maps.LatLng(markers[a].lat, markers[a].lng);
+             
+            if (thisMarker.title == thisName){
+                for(b=0;b<markers.length; b++){
+                    markers[b].infowindow.close();
+                }
+                if (map.getBounds().contains(latLng) == false){
+                    map.panTo(latLng);
+                }
+                thisMarker.setAnimation(google.maps.Animation.BOUNCE);
+            } else{
+                thisMarker.setAnimation(null);
+            }
+        }
+        
+    });
+   
+    $("#today-events li").live('click', function(){
+        var thisName = $(this).attr("event-name");
+        
+        for (a = 0; a < markers.length; a++){
+            var thisMarker = markers[a].marker;
+            var latLng = new google.maps.LatLng(markers[a].lat, markers[a].lng);
+             
+            if (thisMarker.title == thisName){
+                
+                for(b=0;b<markers.length; b++){
+                    markers[b].infowindow.close();
+                }
+                markers[a].infowindow.open(map,thisMarker);
+                thisMarker.setAnimation(null);
+            }
+        }
+        
+    });
+    
+    
     
     //remove markers when you click elsewhere
     google.maps.event.addListener(map, 'click', function(){

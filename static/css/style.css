@@ -148,8 +148,8 @@ p {  padding: 1em 0;}
     
 }
 
-.gmnoprint img {
-    width: auto;
+#map img {
+    max-width: none;
 }
 
 

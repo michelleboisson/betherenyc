@@ -7,18 +7,17 @@ var requestURL = require('request'); //gets data from outside
 var fs = require('fs');
 var xml2js = require('xml2js'); //xml to js 
 var parser = new xml2js.Parser(); //xml to js
-var jsdom = require("jsdom"); //dom parser 
+var jsdom = require("jsdom"); //dom parser
+var moment = require('moment'); //time library
 
 
 module.exports = {
     
     mainpage : function(request, response) {
         
-        today = new Date();
-        yesterday = new Date();
-        yesterday.setDate(yesterday.getDate()-1);
-        tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate()+1);
+        today = moment();
+        yesterday = moment(today).subtract('days', 1);
+        tomorrow = moment(today).add('days', 1);
         
         // build the query
         var query = db.Event.find({}, ['id', 'name', 'place', 'date', 'time', 'location']);
@@ -31,7 +30,8 @@ module.exports = {
             // prepare template data
             var templateData = {
                 pageTitle : 'BeThereNYC- Coming Soon',
-                posts : allPosts
+                posts : allPosts,
+                today: today
             };
             
             // render the page template with the data above

@@ -165,7 +165,13 @@ function initialize() {
         var thisName = $(this).attr("event-name");
         var thisTime = $(this).attr("event-time");
         
-         var contentString = '<strong>'+thisName+'</strong><br/>'+thisTime;
+         var contentString = '<div id="content">'+
+        '<div id="siteNotice">'+
+        '</div>'+
+        '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
+        '<div id="bodyContent"><strong>'+thisName+'</strong><br/>'+thisTime+
+        '</div>'+
+        '</div>';
         
         var infowindow = new google.maps.InfoWindow({
             content: contentString,
@@ -177,7 +183,7 @@ function initialize() {
             position: thisLatlng, 
             map: map,
             animation: google.maps.Animation.DROP,
-            title:"Hello World!"
+            title: thisName
         });
         
         google.maps.event.addListener(marker, 'click', function() {

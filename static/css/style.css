@@ -148,6 +148,10 @@ p {  padding: 1em 0;}
     
 }
 
+.gmnoprint img {
+    width: auto;
+}
+
 
 #footer {
     clear: both;

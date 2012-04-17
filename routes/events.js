@@ -406,13 +406,14 @@ module.exports = {
                                     // save the event to the database
                                     thisEvent.save();
                                     
-                                    response.redirect('/');
+                                    
                            //console.log("there have been", window.$("a").length, "nodejs releases!");
                                 });
                         });//end jsdom
                         
                         
-                    }); //end for each event found...    
+                    }); //end for each event found...
+                    response.redirect('/');
                 }); //end parser
             }//end if httpResponse
         }); // end of requestURL callback

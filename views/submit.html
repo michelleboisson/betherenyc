@@ -19,49 +19,111 @@
 
                                 </div>
                                 
-                                <div id="submitForm" class="rightCol-2Thirds">
+                               
                                     <h1>Add a New Event</h1>
 <!-- textbox #newTodo -->
+ <div id="submitForm" class="span6 offset5">
 <form method="POST" name="EventForm">
-<input type="text" placeholder="Event Name" id="eventName" name="eventName" size="50" /><br/>
+<input type="text" placeholder="Event Name" id="eventName" name="eventName" class="input-medium" /><br/>
 <input type="text" class="input-medium" name="urlslug" id="urlslug" placeholder="url slug">
 <p class="help-block">The url slug for this event entry, the ending of the URL. ie 'http://localhost:5000/event/<b><u>the-best-event</u></b>'</p>
 <input type="text" placeholder="Date" id="eventDate" name="eventDate" size="50" />
-<input type="text" placeholder="Time" id="eventTime" name="eventTime" size="50" />
-<input type="text" placeholder="Place" id="eventPlace" name="eventPlace" size="50" />
+<!--<input type="text" placeholder="Time" id="eventTime" name="eventTime" size="50" />-->
+<div class="input-append">
+<input type="text" placeholder="Place Name" id="eventPlace" name="eventPlace" size="50" class="appendedPrependedInput"/>
+<a id="mapthis" class="btn help-inline">map this</a>
+</div>
+<input type="hidden" id="eventPlaceLat" name="eventPlaceLat" class="input-medium"/>
+<input type="hidden" id="eventPlaceLng" name="eventPlaceLng" size="50"/>
 
 <textarea id="eventDesc" name="eventDesc" rows="15" cols="35" placeholder="Description..."/></textarea>
 <input type="submit" value="Save Edits" id="saveBtn"/>
 
 </form>
+</div>
 
-                                  
-                                    
-                                    
-                                </div>
+<div id="minimap" class="span2">
 
-
+</div>
                                 
                                 
 				
 		</div>
         
         
-        <script type="text/javascript">
+<script type="text/javascript">
 	$(document).ready(function(){
+		var myOptions = {
+	          center: new google.maps.LatLng(40.7746431, -73.9701962),
+	          zoom: 11,
+	          mapTypeId: google.maps.MapTypeId.ROADMAP
+		};
+		
+		$("#eventPlace").focusout(function(){
+			if ($(this).val() != '' ){
+				$("#mapthis").show();
+			}
+		});
+		
+		
+		$("#mapthis").click(function(){
+			var placeName = $("#eventPlace").val();
+			//var myAPIKEY = "HAXUF5OV2J54CYSTU13GAQDV5BXEOOZNRYOFI0ISD5YTIPJJ";
+			//var fsURL= "https://api.foursquare.com/v2/venues/search?near=New%20York,%20NY&query="+placeName+"&oauth_token="+myAPIKEY+"&v=20120417"
+			
+			$.getJSON("https://api.foursquare.com/v2/venues/search", {
+				near: "New York, NY",       
+				client_id: "2TQIGNJBRY041OPCNGJEK0WA4DZR4GE4WWDBXLRMORDYEIF0",
+				client_secret: "AFEPPURRCGM3UXJHRMTSURENT0NNGNMFCH3ZQCXM54RQB5FP",
+				query: placeName,
+				format: "jsonp"
+			}, function(data){
+				console.log(data);
+				var items = data.response.groups[0].items;
+				console.log(data.response.groups[0].items);
+				
+				var somehtml = "<ul id=locationjson><i>Do you mean?</i>";
+				for(i=0; i< items.length; i++){
+					var addItem = "<li place-name='"+items[i].name+"' place-lat="+items[i].location.lat+" place-lng="+items[i].location.lng+">"+items[i].name+" - "+items[i].location.address+" "+items[i].location.city+"</li>";
+					somehtml += addItem;
+				}
+				somehtml += "</ul>";
+				$("#eventPlace").after(somehtml);
 
-               $("#recentlyAdded h3").live("click", function(){           
-                    $(this).siblings().toggle("slow");
-               });
+				
+			}); 
+		});
+		
+		$("#locationjson li").live('click', function(){
+			var buttons = "<a class='btn btn-primary'>Confirm</a> <a class='btn btn-danger'>Deny</a>";
+			var lat = $(this).attr('place-lat');
+			var lng = $(this).attr('place-lng');
+			var n = $(this).attr('place-name');
+			$(this).css('color', 'orange');
+			$(this).css('cursor', 'pointer');
+			
+			$("#eventPlaceLat").val(lat);
+			$("#eventPlaceLng").val(lng);
+			$("#eventPlace").val(n);
+			
+			
+			$("#locationjson").fadeOut();
+			$("#mapthis").fadeOut();
+			//$(this).append(buttons);
+		});
+		//map = new google.maps.Map(document.getElementById("minimap"), myOptions);
            
-		$("#eventDate").datepicker();
+		//$("#eventDate").datepicker();
+		$("#eventDate").datetimepicker();
 		
 		jQuery('#eventName').change(function(e){
 			var currentTitle = jQuery(this).val();
 			jQuery("#urlslug").val(convertToSlug(currentTitle));
 		});
     
-            });
+	});// end doc ready
+	
+	
 function convertToSlug(Text)
 {
     return Text
@@ -70,4 +132,6 @@ function convertToSlug(Text)
         .replace(/ +/g,'-')
         ;
 }
-      </script>
+
+
+</script>

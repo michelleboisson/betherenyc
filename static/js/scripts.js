@@ -1,6 +1,10 @@
 var map;
+var geocoder;
+var markers;
 
-  jQuery(document).ready(function() {
+jQuery(document).ready(function() {
+
+    geocoder = new google.maps.Geocoder();
 
     //init modal window for event info
     jQuery("#myModal").dialog({
@@ -175,7 +179,7 @@ function initialize() {
     };
     map = new google.maps.Map(document.getElementById("map"), myOptions);
     
-    var markers = [];
+    markers = [];
     
     $("#today-events li").each(function(){
         
@@ -183,34 +187,16 @@ function initialize() {
         var thisLng = $(this).attr("map-lng");
         var thisName = $(this).attr("event-name");
         var thisTime = $(this).attr("event-time");
+        var thisId = $(this).attr("event-id");
         
-         var contentString = '<div id="content">'+
-        '<div id="siteNotice">'+
-        '</div>'+
-        '<div id="bodyContent"><strong>'+thisName+'</strong><br/>'+thisTime+
-        '</div>'+
-        '</div>';
         
-        var infowindow = new google.maps.InfoWindow({
-            content: contentString,
-            maxWidth: 200
-        });
         
         var thisLatlng = new google.maps.LatLng(thisLat,thisLng);
         var marker = new google.maps.Marker({
             position: thisLatlng, 
             map: map,
             animation: google.maps.Animation.DROP,
-            title: thisName
-        });
-        
-        google.maps.event.addListener(marker, 'click', function() {
-            
-            for (i = 0; i < markers.length; i++){
-                markers[i].infowindow.close();
-                markers[i].marker.setAnimation(null);
-            }
-            infowindow.open(map,marker);
+            title: thisId
         });
         
         var newObj = {
@@ -218,8 +204,8 @@ function initialize() {
             lat: thisLat,
             lng: thisLng,
             latlng: thisLatlng,
-            marker: marker,
-            infowindow : infowindow
+            marker: marker
+            //infowindow : infowindow
         }
         markers.push(newObj);
     });//end each
@@ -233,7 +219,7 @@ function initialize() {
              
             if (thisMarker.title == thisName){
                 for(b=0;b<markers.length; b++){
-                    markers[b].infowindow.close();
+                  //  markers[b].infowindow.close();
                 }
                 if (map.getBounds().contains(latLng) == false){
                     map.panTo(latLng);
@@ -247,8 +233,12 @@ function initialize() {
     });
    
     $("#today-events li").live('click', function(){
-        var thisName = $(this).attr("event-name");
+        var thisId = $(this).attr("event-id");
         
+                openWindow(thisId);
+        
+        
+  /*      
         for (a = 0; a < markers.length; a++){
             var thisMarker = markers[a].marker;
             var latLng = new google.maps.LatLng(markers[a].lat, markers[a].lng);
@@ -262,10 +252,20 @@ function initialize() {
                 thisMarker.setAnimation(null);
             }
         }
-        
+  */    
     });
     
-    
+    //add event listener for all markers to be clicked.
+    for (b=0;b<markers.length;b++){
+         google.maps.event.addListener(markers[b].marker, 'click', function() {
+            
+            for (i = 0; i < markers.length; i++){
+              //  markers[i].infowindow.close();
+                //markers[i].marker.setAnimation(null);
+            }
+            //infowindow.open(map,marker);
+        });
+    }
     
     //remove markers when you click elsewhere
     google.maps.event.addListener(map, 'click', function(){
@@ -276,6 +276,57 @@ function initialize() {
     
 
 }//end initialize()
+
+function openWindow(id){
+     var jsonURL = "/api/event/"+id;
+     console.log(jsonURL);
+     
+        jQuery.ajax({
+          
+            url : jsonURL,
+            dataType : 'json',
+            type : 'GET',
+            
+            success : function(data) {
+                console.log("inside success callback");
+                console.log(data);
+                if (data.status == "OK") {
+                    
+                    //descr = data.descr;
+                    var contentString = '<div id="content">'+
+                        '<div id="siteNotice">'+
+                        '</div>'+
+                        '<div id="bodyContent"><strong>'+data.event.name+'</strong><br/>'+data.event.time+
+                        '<p><a href=/events/permalink/'+data.event._id+'>See event</a></p></div>'+
+                        '</div>';
+                        //launchModal(event);
+                        
+                        var infowindow = new google.maps.InfoWindow({
+                            content: contentString,
+                            maxWidth: 200
+                        });
+                        
+                        for (i = 0; i<markers.length; i++){
+                            if (markers[i].marker.title == id ){
+                                var thisMarker = markers[i].marker;
+                                 infowindow.open(map,thisMarker);
+                                thisMarker.setAnimation(null);
+                            }else{
+                                console.log("oops! couldn't find that marker.");
+                            }
+                        }
+                        
+                       
+                        
+                }
+            },
+            error : function(err) {
+                console.log("error fetching this event");
+            }
+        
+        }); // end of jQuery.ajax*/
+}//end openWindow
+
 
 function toggleBounce() {
 
@@ -307,3 +358,18 @@ function showMarker(e){
       }
     });
   }
+function lookUpLatLong(address){
+  
+  //http://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&sensor=true_or_false
+  //json .status.geometry.location.lat, .status.geometry.location.lng
+    console.log(address);
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        console.log(results);
+        targetLat = results[0].geometry.location.Ya;
+        targetLong = results[0].geometry.location.Za;        
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
+}

@@ -1,3 +1,5 @@
+var moment = require('moment'); //time library
+
 // export Schemas to web.js
 module.exports.configureSchema = function(Schema, mongoose) {
     
@@ -16,19 +18,20 @@ module.exports.configureSchema = function(Schema, mongoose) {
         ,  longitude : Number
         ,  placename : String
     }
+    , datetime : {
+        timestamp: {type: Date}
+    }
     , link  : String
   
 });
     Event
-    .virtual('prettyDate')
+    .virtual('properDate')
     .get(function () {
-        var date = new Date(this.date);
-        var d = date.getDate();
-        var m = date.getMonth()+1;
+        var date = moment(this.date);
+        var time = moment(this.time);
         
         return this.name.first + ' ' + this.name.last;
     });
-
 
     // add schemas to Mongoose
     mongoose.model('Event', Event);

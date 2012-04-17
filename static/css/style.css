@@ -152,6 +152,12 @@ p {  padding: 1em 0;}
     max-width: none;
 }
 
+#mapthis, #minimap {display: none}
+
+
+#locationjson li:hover {
+    color: #8f14ae;
+}
 
 #footer {
     clear: both;

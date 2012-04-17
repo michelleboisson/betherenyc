@@ -22,6 +22,7 @@ module.exports = {
         // build the query
         var query = db.Event.find({}, ['id', 'name', 'place', 'date', 'time', 'location']);
         query.sort('date',-1); //sort by date in descending order
+        //query.where('date').gte(today).lte(tomorrow);
         query.where('date').gte(yesterday).lte(tomorrow);
     
         // run the query and display blog_main.html template if successful
@@ -61,7 +62,15 @@ module.exports = {
             time: request.body.eventTime,
             place: request.body.eventPlace,
             desc : request.body.eventDesc,
-            author : request.user._id
+            author : request.user._id,
+            location: {
+                latitude: request.body.eventPlaceLat,
+                longitude: request.body.eventPlaceLng,
+                placename: request.body.eventPlace
+            },
+            datetime: {
+                timestamp: request.body.eventTime
+            }
         };
 
         // create a new blog post

@@ -36,6 +36,7 @@
                                     
                                     <p><%= event.date %>&nbsp;, <%= event.time %> <br/>
                                     <%= event.place %></p>
+				    <p><%= event.datetime.timestamp %></p>
 				    <% if (event_has_owner) { %>
 				    Submitted by <a href="mailto:<%= event.author.email %>"><%= event.author.name.first %> <%= event.author.name.last %></a>
 				    <% } %>

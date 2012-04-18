@@ -69,7 +69,7 @@ module.exports = {
                 placename: request.body.eventPlace
             },
             datetime: {
-                timestamp: request.body.eventTime
+                timestamp: request.body.eventDate
             }
         };
 

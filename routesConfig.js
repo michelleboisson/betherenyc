@@ -34,9 +34,6 @@ module.exports = function(app) {
     //get event by urlslug
     app.get('/events/permalink/:eventId', eventRoute.getEventbyId);
     
-    //testing google map api
-    app.get('/maptest.html', eventRoute.testMap);
-    
     //update an event
     app.get("/update/:eventId", ensureAuthenticated, eventRoute.getUpdateEvent);
     

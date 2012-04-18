@@ -1,10 +1,14 @@
 var map;
 var geocoder;
 var markers;
+var infowindow;
 
 jQuery(document).ready(function() {
 
     geocoder = new google.maps.Geocoder();
+    infowindow= new google.maps.InfoWindow({
+        maxWidth: 200
+    });
 
     //init modal window for event info
     jQuery("#myModal").dialog({
@@ -199,6 +203,10 @@ function initialize() {
             title: thisId
         });
         
+        google.maps.event.addListener(marker, 'click', function(){
+            openWindow(marker.title);
+        });
+        
         var newObj = {
             name: thisName,
             lat: thisLat,
@@ -211,13 +219,13 @@ function initialize() {
     });//end each
     
     $("#today-events li").live('mouseover', function(){
-        var thisName = $(this).attr("event-name");
+        var thisId = $(this).attr("event-id");
         
         for (a = 0; a < markers.length; a++){
             var thisMarker = markers[a].marker;
             var latLng = new google.maps.LatLng(markers[a].lat, markers[a].lng);
              
-            if (thisMarker.title == thisName){
+            if (thisMarker.title == thisId){
                 for(b=0;b<markers.length; b++){
                   //  markers[b].infowindow.close();
                 }
@@ -234,44 +242,12 @@ function initialize() {
    
     $("#today-events li").live('click', function(){
         var thisId = $(this).attr("event-id");
-        
-                openWindow(thisId);
-        
-        
-  /*      
-        for (a = 0; a < markers.length; a++){
-            var thisMarker = markers[a].marker;
-            var latLng = new google.maps.LatLng(markers[a].lat, markers[a].lng);
-             
-            if (thisMarker.title == thisName){
-                
-                for(b=0;b<markers.length; b++){
-                    markers[b].infowindow.close();
-                }
-                markers[a].infowindow.open(map,thisMarker);
-                thisMarker.setAnimation(null);
-            }
-        }
-  */    
+        openWindow(thisId);  
     });
-    
-    //add event listener for all markers to be clicked.
-    for (b=0;b<markers.length;b++){
-         google.maps.event.addListener(markers[b].marker, 'click', function() {
-            
-            for (i = 0; i < markers.length; i++){
-              //  markers[i].infowindow.close();
-                //markers[i].marker.setAnimation(null);
-            }
-            //infowindow.open(map,marker);
-        });
-    }
-    
+
     //remove markers when you click elsewhere
     google.maps.event.addListener(map, 'click', function(){
-        for (i = 0; i < markers.length; i++){
-                markers[i].infowindow.close();
-            }
+        infowindow.close();
     });
     
 
@@ -301,18 +277,13 @@ function openWindow(id){
                         '</div>';
                         //launchModal(event);
                         
-                        var infowindow = new google.maps.InfoWindow({
-                            content: contentString,
-                            maxWidth: 200
-                        });
-                        
                         for (i = 0; i<markers.length; i++){
                             if (markers[i].marker.title == id ){
                                 var thisMarker = markers[i].marker;
-                                 infowindow.open(map,thisMarker);
+                                 infowindow.open(map);
+                                 infowindow.setContent(contentString)
+;                                 infowindow.setPosition(thisMarker.position);
                                 thisMarker.setAnimation(null);
-                            }else{
-                                console.log("oops! couldn't find that marker.");
                             }
                         }
                         

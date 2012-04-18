@@ -7,23 +7,12 @@
 		-->
 
 		<div id="maincontent" class="row-fluid">
-				<!--<div id="signup">
-					<h2>Sign Up for Reminders</h2>
-					<input type="text" width="100%"/>
-                                        <button id="saveBtn">Go!</button>
-				</div>
-				-->
-                                
-                                <div id="sidemenu" class="span2">
-                                    <!-- ul is a list container -->
-
-                                </div>
-                                
-                               
+			
+    <div id="submitForm" class="span6 offset2">                            
                                     <h1>Add a New Event</h1>
 <!-- textbox #newTodo -->
- <div id="submitForm" class="span6 offset5">
-<form method="POST" name="EventForm">
+
+<form method="POST" name="EventForm" class="form-horizontal">
 <input type="text" placeholder="Event Name" id="eventName" name="eventName" class="input-medium" /><br/>
 <input type="text" class="input-medium" name="urlslug" id="urlslug" placeholder="url slug">
 <p class="help-block">The url slug for this event entry, the ending of the URL. ie 'http://localhost:5000/event/<b><u>the-best-event</u></b>'</p>
@@ -34,10 +23,11 @@
 <a id="mapthis" class="btn help-inline">map this</a>
 </div>
 <input type="hidden" id="eventPlaceLat" name="eventPlaceLat" class="input-medium"/>
-<input type="hidden" id="eventPlaceLng" name="eventPlaceLng" size="50"/>
+<input type="hidden" id="eventPlaceLng" name="eventPlaceLng" class="input-medium"/>
 
+<input type="text" value="http://" id="eventLink" name="eventLink" size="50" />
 <textarea id="eventDesc" name="eventDesc" rows="15" cols="35" placeholder="Description..."/></textarea>
-<input type="submit" value="Save Edits" id="saveBtn"/>
+<input type="submit" value="Add Event" id="saveBtn"/>
 
 </form>
 </div>

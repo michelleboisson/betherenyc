@@ -199,10 +199,6 @@ module.exports = {
         });
     },
     
-
-    testMap : function(request, response){
-        response.render("maptest.html");
-    },
     
     getUpdateEvent : function(request, response){
     
@@ -242,44 +238,72 @@ module.exports = {
         // update post body should have form element called blog_post_id
         var postid = request.body.event_id;
         console.log("postid: " +postid);
-
-        // we are looking for the BlogPost document where _id == postid
-        var condition = { _id : postid };
-    
-        // update these fields with new values
-        var updatedData = {
-            name : request.body.eventName,
-            date : request.body.eventDate,
-            time: request.body.eventTime,
-            place: request.body.eventPlace,
-            desc : request.body.eventDesc
-        };
         
-        // we only want to update a single document
-        var options = { multi : false };
-        
-        // Perform the document update
-        // find the document with 'condition'
-        // include data to update with 'updatedData'
-        // extra options - this time we only want a single doc to update
-        // after updating run the callback function - return err and numAffected
-        
-        db.Event.update( condition, updatedData, options, function(err, numAffected){
-            
-            if (err) {
-                console.log('Update Error Occurred');
-                response.send('Update Error Occurred ' + err);
-    
-            } else {
-                
-                console.log("update succeeded");
-                console.log(numAffected + " document(s) updated");
-                
-                //redirect the user to the update page - append ?update=true to URL
-                response.redirect('/update/' + postid + "?update=true");
-            
+        // get the blog post with populated author information
+        db.Event.findOne({ _id : postid }).populate('author').run(function(err, event){
+console.log(event);
+            if(err){
+                console.log("uh oh, there was an error.");
             }
-        });
+            if (request.user.accessLevel != 0){
+                
+            //}
+            //if (event.author._id.toString() != request.user._id.toString() || request.user.accessLevel != 0) {
+                
+                noAccessStr = "Sorry you are not allowed to edit this document<br>";
+                //" + event.author._id + " == " + request.user._id;
+                
+                response.send(noAccessStr);
+                
+            } else {
+                console.log("User is allowed to edit this document");
+                //console.log(event.author._id + " == " + request.user._id+ "or is an admin");
+            }
+            // we are looking for the BlogPost document where _id == postid
+            var condition = { _id : postid };
+    
+            // update these fields with new values
+            var updatedData = {
+                name : request.body.eventName,
+                place: request.body.eventPlace,
+                desc : request.body.eventDesc,
+                link: request.body.eventLink,
+                location: {
+                    latitude: request.body.eventPlaceLat,
+                    longitude: request.body.eventPlaceLng,
+                    placename: request.body.eventPlace
+                },
+                datetime: {
+                    timestamp: request.body.eventDateTime
+                }
+            };
+        
+            // we only want to update a single document
+            var options = { multi : false };
+        
+            // Perform the document update
+            // find the document with 'condition'
+            // include data to update with 'updatedData'
+            // extra options - this time we only want a single doc to update
+            // after updating run the callback function - return err and numAffected
+        
+            db.Event.update( condition, updatedData, options, function(err, numAffected){
+            
+                if (err) {
+                    console.log('Update Error Occurred');
+                    response.send('Update Error Occurred ' + err);
+        
+                } else {
+                    
+                    console.log("update succeeded");
+                    console.log(numAffected + " document(s) updated");
+                    
+                    //redirect the user to the update page - append ?update=true to URL
+                    response.redirect('/update/' + postid + "?update=true");
+            
+                }
+            });
+        })   
     },
     
     getMuseumData : function(request, response) {

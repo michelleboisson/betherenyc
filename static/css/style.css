@@ -147,6 +147,7 @@ p {  padding: 1em 0;}
     padding: 4px;
     
 }
+#submitForm {margin-bottom: 50px;}
 
 #map img {
     max-width: none;

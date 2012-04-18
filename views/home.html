@@ -17,7 +17,7 @@
                                 <li map-lat="<%= posts[i].location.latitude%>" map-lng="<%= posts[i].location.longitude%>" event-name="<%= posts[i].name %>" event-place="<%= posts[i].place %>" event-time="<%= posts[i].time %>" event-id="<%= posts[i].id %>"><a modal-link="/api/event/<%= posts[i].id %>">
 						<h3><%= posts[i].name %></h3>
 						<p><%= posts[i].place %><br/>
-						<%= posts[i].date %>, <%= posts[i].time %><br/>
+						<span class="momentFromNow"><%= posts[i].date %></span>, <%= posts[i].time %><br/>
 						</a>
 					</li>
                                     

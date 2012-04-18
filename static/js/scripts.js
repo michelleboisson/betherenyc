@@ -10,6 +10,16 @@ jQuery(document).ready(function() {
         maxWidth: 200
     });
 
+    $(".momentFromNow").each(function(){
+        $(this).html(moment(new Date($(this).html())).fromNow());
+    });
+    $(".convertToMoment").each(function(){
+        var newdate = moment(new Date($(this).html()))
+        newdate.format("dddd, MMMM Do YYYY, h:mm a");
+        $(this).html(newdate);
+        
+    });
+    
     //init modal window for event info
     jQuery("#myModal").dialog({
 		autoOpen: false,

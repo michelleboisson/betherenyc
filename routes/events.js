@@ -20,7 +20,7 @@ module.exports = {
         tomorrow = moment(today).add('days', 1);
         
         // build the query
-        var query = db.Event.find({}, ['id', 'name', 'place', 'date', 'time', 'location']);
+        var query = db.Event.find({}, ['id', 'name', 'place', 'date', 'time', 'location', 'link']);
         query.sort('date',-1); //sort by date in descending order
         //query.where('date').gte(today).lte(tomorrow);
         query.where('date').gte(yesterday).lte(tomorrow);

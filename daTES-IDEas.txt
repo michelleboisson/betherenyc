@@ -1,0 +1,33 @@
+
+
+var myTime = "9:00am";
+myTime
+"9:00am"
+var translatedMoment = moment(myTime, "h:m a");
+
+var fulldate = new Date();
+undefined
+fulldate
+Tue Apr 17 2012 01:53:59 GMT-0400 (EDT)
+
+fulldate = moment(fulldate);
+u
+fulldate.hours(0).minutes(0).seconds(0);
+u
+_d: Tue Apr 17 2012 00:00:00 GMT-0400 (EDT)
+
+fulldate.add(translatedMoment);
+u
+fulldate = moment();
+u
+fulldate.hours(0).minutes(0).seconds(0);
+u
+translatedMoment
+u
+fulldate.add('hours', translatedMoment.hours());
+u
+fulldate.add('minutes', translatedMoment.minutes());
+u
+fulldate.fromNow();
+"in 7 hours"
+

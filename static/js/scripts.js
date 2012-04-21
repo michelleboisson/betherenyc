@@ -14,7 +14,7 @@ jQuery(document).ready(function() {
         $(this).html(moment(new Date($(this).html())).fromNow());
     });
     $(".convertToMoment").each(function(){
-        var newdate = moment(new Date($(this).html()))
+        var newdate = moment($(this).html());
         newdate.format("dddd, MMMM Do YYYY, h:mm a");
         $(this).html(newdate);
         

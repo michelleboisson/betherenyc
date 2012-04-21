@@ -16,18 +16,22 @@ module.exports = {
     mainpage : function(request, response) {
         
         today = moment();
-        yesterday = moment(today).subtract('days', 1);
+        //console.log(today.format("dddd, MMMM Do YYYY, h:mm:ss a"));
+        yesterday = today.subtract('days', 2);
+        //console.log(yesterday.format("dddd, MMMM Do YYYY, h:mm:ss a"));
         tomorrow = moment(today).add('days', 1);
         
         // build the query
-        var query = db.Event.find({}, ['id', 'name', 'place', 'date', 'time', 'location', 'link']);
-        query.sort('date',-1); //sort by date in descending order
+        var query = db.Event.find({}, ['id', 'name', 'place', 'date', 'time', 'location', 'link', 'datetime.timestamp']);
+        query.sort('datetime.timestamp',-1); //sort by date in descending order
         //query.where('date').gte(today).lte(tomorrow);
-        query.where('date').gte(yesterday).lte(tomorrow);
+        query.where('datetime.timestamp').gte(yesterday);
     
         // run the query and display blog_main.html template if successful
         query.exec({}, function(err, allPosts){
-        
+        for (i=0; i<allPosts.length; i++){
+            console.log("date: "+allPosts[i].datetime.timestamp);
+        }
             // prepare template data
             var templateData = {
                 pageTitle : 'BeThereNYC- Coming Soon',

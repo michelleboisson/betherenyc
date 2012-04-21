@@ -36,11 +36,11 @@
                                     
                                     <p><span class=""><%= event.date %></span>&nbsp;, <%= event.time %> <br/>
                                     <%= event.place %></p>
-				    <p><%= event.datetime.timestamp %></p>
+				    <p>Timestamp = <%= event.datetime.timestamp %> - <span class="convertToMoment"><%= event.datetime.timestamp %></span></p>
 				    <% if (event_has_owner) { %>
 				    Submitted by <a href="mailto:<%= event.author.email %>"><%= event.author.name.first %> <%= event.author.name.last %></a>
 				    <% } %>
-				    <p id="event-desc"><%= event.desc %></p>
+				    <p id="event-desc"><%- event.desc %></p>
 				    <p>Source: <a href="<%= event.link %>" target=new><%= event.link %></a></p>
                                     
                                    <!-- <form method="POST">

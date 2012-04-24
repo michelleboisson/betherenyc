@@ -32,12 +32,12 @@ var query = db.Event.find({}, ['id', 'name', 'date', 'time', 'datetime.timestamp
             var thisDate = event.date;
             var translatedTime = moment(thisTime, "h:m a");//.format("dddd, MMMM Do YYYY, h:mm:ss a");
             
-            var translatedDate = moment(thisDate).hours(0).minutes(0).seconds(0);//.format("dddd, MMMM Do YYYY, h:mm:ss a");
+            var translatedDate = moment(thisDate);//.format("dddd, MMMM Do YYYY, h:mm:ss a");
+            translatedDate.hours(translatedTime.hours()).minutes(translatedTime.minutes()).seconds(translatedTime.seconds());
             
-            translatedDate.add('hours', translatedTime.hours());
-            translatedDate.add('minutes', translatedTime.minutes());
-            translatedDate.add('seconds', translatedTime.seconds());
-            
+            //not sure why I have to do this...
+            translatedDate.add('days', 1);
+     
            // console.log(index+" adfsdaf "+translatedTime.format("dddd, MMMM Do YYYY, h:mm:ss a")+" - "+translatedDate.format("dddd, MMMM Do YYYY, h:mm:ss a"));
            // console.log("------"+moment(translatedDate, "dddd, MMMM Do YYYY, h:mm:ss a"));
            // console.log("------"+translatedDate+" ------- "+new Date(translatedDate)+ " -------- "+ moment(translatedDate).format("dddd, MMMM Do YYYY, h:mm:ss a"));
@@ -45,7 +45,8 @@ var query = db.Event.find({}, ['id', 'name', 'date', 'time', 'datetime.timestamp
             var updatedData = {
                 datetime: {
                     timestamp : new Date(translatedDate)
-                }
+                },
+                lastEdited: new Date()
             }
             var conditions = { _id: event.id }
             //, update = { updatedData}

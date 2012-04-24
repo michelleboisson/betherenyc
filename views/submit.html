@@ -7,29 +7,61 @@
 		-->
 
 		<div id="maincontent" class="row-fluid">
-			
+<div class="span8 offset2">			
     <div id="submitForm" class="span6 offset2">                            
                                     <h1>Add a New Event</h1>
 <!-- textbox #newTodo -->
 
 <form method="POST" name="EventForm" class="form-horizontal">
-<input type="text" placeholder="Event Name" id="eventName" name="eventName" class="input-medium" /><br/>
-<input type="text" class="input-medium" name="urlslug" id="urlslug" placeholder="url slug">
-<p class="help-block">The url slug for this event entry, the ending of the URL. ie 'http://localhost:5000/event/<b><u>the-best-event</u></b>'</p>
-<input type="text" placeholder="Date" id="eventDate" name="eventDate" size="50" />
-<!--<input type="text" placeholder="Time" id="eventTime" name="eventTime" size="50" />-->
-<div class="input-append">
-<input type="text" placeholder="Place Name" id="eventPlace" name="eventPlace" size="50" class="appendedPrependedInput"/>
-<a id="mapthis" class="btn help-inline">map this</a>
+<div class="control-group">
+	<label class="control-label" for="appendedPrependedInput">Event Name</label>
+	<div class="controls">
+		<input type="text" placeholder="Event Name" id="eventName" name="eventName" class="input-large" />
+	</div>
 </div>
+<div class="control-group">
+	<label class="control-label" for="appendedPrependedInput">url slug for this site</label>
+	<div class="controls">
+		<input type="text" class="input-large" name="urlslug" id="urlslug" >
+		<p class="help-block">The url slug for this event entry, the ending of the URL. ie 'http://localhost:5000/event/<b><u>the-best-event</u></b>'</p>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label" for="appendedPrependedInput">Event Date & Time</label>
+	<div class="controls">
+		<input type="text" placeholder="Date" id="eventDate" name="eventDate" size="50" />
+	</div>
+</div>
+		<!--<input type="text" placeholder="Time" id="eventTime" name="eventTime" size="50" />-->
+<div class="control-group">
+	<label class="control-label" for="appendedPrependedInput">Name of Venue</label>
+	<div class="controls">
+		<div class="input-append">
+			<input type="text" placeholder="Place Name" id="eventPlace" name="eventPlace" size="50" class="appendedPrependedInput"/>
+			<a id="mapthis" class="btn">map this</a>
+		</div>
+	</div>
+</div>
+
 <input type="hidden" id="eventPlaceLat" name="eventPlaceLat" class="input-medium"/>
 <input type="hidden" id="eventPlaceLng" name="eventPlaceLng" class="input-medium"/>
 
-<input type="text" value="http://" id="eventLink" name="eventLink" size="50" />
-<textarea id="eventDesc" name="eventDesc" rows="15" cols="35" placeholder="Description..."/></textarea>
-<input type="submit" value="Add Event" id="saveBtn"/>
+<div class="control-group">
+	<label class="control-label" for="appendedPrependedInput">Info came from</label>
+	<div class="controls">
+		<input type="text" value="http://" id="eventLink" name="eventLink" size="50" />
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label" for="appendedPrependedInput">Event Name</label>
+	<div class="controls">
+		<textarea id="eventDesc" name="eventDesc" rows="15" cols="35" placeholder="Description..."/></textarea>
+	</div>
+</div>
 
+	<input class="offset2" type="submit" value="Add Event" id="saveBtn"/>
 </form>
+</div>
 </div>
 
 <div id="minimap" class="span2">
@@ -62,10 +94,13 @@
 			//var fsURL= "https://api.foursquare.com/v2/venues/search?near=New%20York,%20NY&query="+placeName+"&oauth_token="+myAPIKEY+"&v=20120417"
 			
 			$.getJSON("https://api.foursquare.com/v2/venues/search", {
-				near: "New York, NY",       
+				//near: "New York, NY",       
 				client_id: "2TQIGNJBRY041OPCNGJEK0WA4DZR4GE4WWDBXLRMORDYEIF0",
 				client_secret: "AFEPPURRCGM3UXJHRMTSURENT0NNGNMFCH3ZQCXM54RQB5FP",
 				query: placeName,
+				ll: "40.74828059076867,-73.98556262254715",
+				intent: "browse",
+				radius: 100000,
 				format: "jsonp"
 			}, function(data){
 				console.log(data);

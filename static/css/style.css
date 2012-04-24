@@ -76,7 +76,7 @@ body {
     top: 0;
     bottom:0;
     left:0;
-    bottom: 50px;
+    top: 50px;
     margin-left: 0;
     z-index: 1;
 }
@@ -128,7 +128,7 @@ body {
 #maincontent {
     clear: both;
     width: 100%;
-    margin-top:50px;
+    margin-top:80px;
 }
 #signup {
     width: 33%;
@@ -144,7 +144,7 @@ body {
     padding: 4px;
     
 }
-#submitForm {margin-bottom: 50px;}
+
 
 #map img {
     max-width: none;
@@ -162,7 +162,7 @@ body {
     border-top: 1px solid #666;
     height: 3em;
     position: fixed;
-    bottom: 0;
+    top: 0;
     width: 100%;
     background: #000;
     padding-left: 20px;
@@ -175,14 +175,14 @@ body {
     text-decoration: none;
 }
 
-/*----------------- SUBMIT ------------*/
+/*----------------- SUBMIT ------------
 #submitForm input, textarea{
     padding: 4px;
     font-size:16px;  
     display: block;
     margin: 1em 0;
 }
-
+*/
 
 .hidden {
     display:none;

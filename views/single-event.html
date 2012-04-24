@@ -36,9 +36,9 @@
                                     
                                     <p><span class=""><%= event.date %></span>&nbsp;, <%= event.time %> <br/>
                                     <%= event.place %></p>
-				    <p>Timestamp = <%= event.datetime.timestamp %> - <span class="convertToMoment"><%= event.datetime.timestamp %></span></p>
+				    <p>Timestamp = <%= event.datetime.timestamp %></p>
 				    <% if (event_has_owner) { %>
-				    Submitted by <a href="mailto:<%= event.author.email %>"><%= event.author.name.first %> <%= event.author.name.last %></a>
+				    Submitted by <%= event.author.name.first %></a>
 				    <% } %>
 				    <p id="event-desc"><%- event.desc %></p>
 				    <p>Source: <a href="<%= event.link %>" target=new><%= event.link %></a></p>
@@ -48,7 +48,7 @@
                                     </form>
                                     <a href="../"><button id="Done">Done!</button></a>  -->
 				    <% if (user_is_owner) { %>
-				    <p><a href="/update/<%= event._id %>" id="update">edit this event...</a>
+				    <p><a href="/update/<%= event._id %>" id="update">edit this event</a> | <a href="/delete/<%= event._id %>" id="update">delete this event</a> 
 				    <% } %></p>
                                 </div>
 

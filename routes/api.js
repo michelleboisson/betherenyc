@@ -8,7 +8,7 @@ module.exports = {
    getAllEventsJSON : function(request, response){
     
         // define the fields you want to include in your json data
-        includeFields = ['name','desc','urlslug','date','time','place', 'location', 'link'];
+        includeFields = ['name','desc','urlslug','date','time','place', 'location', 'link', 'datetime.timestamp'];
         
         // query for all events
         queryConditions = {}; //empty conditions - return everything
@@ -32,7 +32,7 @@ module.exports = {
         var requestedEventID = request.params.eventID;
     
         // define the fields you want to include in your json data
-        includeFields = ['name','desc','urlslug','date','time','place', 'location','link'];
+        includeFields = ['name','desc','urlslug','date','time','place', 'location','link', 'datetime.timestamp'];
         
         // query for one events
         var query = db.Event.findById( requestedEventID, includeFields);

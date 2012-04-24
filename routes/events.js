@@ -17,28 +17,26 @@ module.exports = {
         
         today = moment();
         //console.log(today.format("dddd, MMMM Do YYYY, h:mm:ss a"));
-        yesterday = today.subtract('days', 2);
+        yesterday = moment(today).subtract('days', 1);
         //console.log(yesterday.format("dddd, MMMM Do YYYY, h:mm:ss a"));
         tomorrow = moment(today).add('days', 1);
+        //console.log(tomorrow.format("dddd, MMMM Do YYYY, h:mm:ss a"));
         
         // build the query
         var query = db.Event.find({}, ['id', 'name', 'place', 'date', 'time', 'location', 'link', 'datetime.timestamp']);
-        query.sort('datetime.timestamp',-1); //sort by date in descending order
-        //query.where('date').gte(today).lte(tomorrow);
-        query.where('datetime.timestamp').gte(yesterday);
-    
+        query.sort('datetime.timestamp',1); //sort by date in descending order
+        query.where('datetime.timestamp').gte(today).lte(tomorrow);
+
         // run the query and display blog_main.html template if successful
         query.exec({}, function(err, allPosts){
-        for (i=0; i<allPosts.length; i++){
-            console.log("date: "+allPosts[i].datetime.timestamp);
-        }
+
             // prepare template data
             var templateData = {
                 pageTitle : 'BeThereNYC- Coming Soon',
                 posts : allPosts,
                 today: today
             };
-            
+             console.log(templateData);
             // render the page template with the data above
             response.render('home.html', templateData);
         
@@ -74,7 +72,9 @@ module.exports = {
             },
             datetime: {
                 timestamp: request.body.eventDate
-            }
+            },
+            lastEdited : new Date(),
+            link : request.body.eventLink
         };
 
         // create a new blog post
@@ -245,11 +245,11 @@ module.exports = {
         
         // get the blog post with populated author information
         db.Event.findOne({ _id : postid }).populate('author').run(function(err, event){
-console.log(event);
+            console.log(event);
             if(err){
                 console.log("uh oh, there was an error.");
             }
-            if (request.user.accessLevel != 0){
+            if (request.user.accessLevel != 0 || event.author._id.toString() != request.user._id.toString()){
                 
             //}
             //if (event.author._id.toString() != request.user._id.toString() || request.user.accessLevel != 0) {
@@ -269,19 +269,18 @@ console.log(event);
             // update these fields with new values
             var updatedData = {
                 name : request.body.eventName,
-                place: request.body.eventPlace,
                 desc : request.body.eventDesc,
                 link: request.body.eventLink,
                 location: {
                     latitude: request.body.eventPlaceLat,
-                    longitude: request.body.eventPlaceLng,
-                    placename: request.body.eventPlace
+                    longitude: request.body.eventPlaceLng
                 },
                 datetime: {
-                    timestamp: request.body.eventDateTime
-                }
+                    timestamp: new Date(request.body.eventDate)
+                },
+                lastEdited : new Date()
             };
-        
+            
             // we only want to update a single document
             var options = { multi : false };
         
@@ -308,6 +307,32 @@ console.log(event);
                 }
             });
         })   
+    },
+    
+    deleteEvent : function(request, response){
+        
+        // get the request blog post id
+        var requestedEventID = request.params.eventId;
+        
+        if (request.user.accessLevel != 0 || event.author._id.toString() != request.user._id.toString()){
+                
+            //}
+            //if (event.author._id.toString() != request.user._id.toString() || request.user.accessLevel != 0) {
+                
+                noAccessStr = "Sorry you are not allowed to edit this document<br>";
+                //" + event.author._id + " == " + request.user._id;
+                
+                response.send(noAccessStr);
+                
+            } else {
+                console.log("User is allowed to edit this document");
+                //console.log(event.author._id + " == " + request.user._id+ "or is an admin");
+            }
+        
+        Event.remove({ _id : requestedEventID }, function(){
+            console.log("Removing :"+requestedEventID);
+            response.redirect('/?delete=true');
+        });
     },
     
     getMuseumData : function(request, response) {
@@ -389,6 +414,7 @@ console.log(event);
                     //get data from today
                     var now = new Date();
                     var today = now.toJSON().toString().substring(0,now.toJSON().toString().indexOf('T'));
+                    //var today = "2012-04-22";
                     console.log("Today is " +today);
                         
                     var nycGovDataToday = []; //variable to hold today's events
@@ -420,7 +446,16 @@ console.log(event);
                                 //console.log("place: "+ mydata[2]);
                                 //console.log("lat: "+mydata[0]);
                                 //console.log("lng: "+mydata[1]);
-                                
+                            var thisTime = element.eventStartTime;
+                            var thisDate = element.eventStartDate;
+                            var translatedTime = moment(thisTime, "h:m a");//.format("dddd, MMMM Do YYYY, h:mm:ss a");
+                
+                            var translatedDate = moment(thisDate);//.format("dddd, MMMM Do YYYY, h:mm:ss a");
+                            translatedDate.hours(translatedTime.hours()).minutes(translatedTime.minutes()).seconds(translatedTime.seconds());
+            
+                            //not sure why I have to do this...
+                            //translatedDate.add('days', 1);
+
                                 var eventData = {
                                     name : element.title,
                                     urlslug : convertToSlug(element.title),
@@ -433,6 +468,9 @@ console.log(event);
                                          latitude : mydata[0]
                                         ,longitude : mydata[1]
                                         ,placename : mydata[2]
+                                    },
+                                    datetime : {
+                                        timestamp: new Date(translatedDate)
                                     }
                                 };//end event data  
                         

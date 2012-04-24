@@ -22,16 +22,9 @@ module.exports.configureSchema = function(Schema, mongoose) {
         timestamp: {type: Date}
     }
     , link  : String
+    , lastEdited: { type: Date }
   
 });
-    Event
-    .virtual('properDate')
-    .get(function () {
-        var date = moment(this.date);
-        var time = moment(this.time);
-        
-        return this.name.first + ' ' + this.name.last;
-    });
 
     // add schemas to Mongoose
     mongoose.model('Event', Event);

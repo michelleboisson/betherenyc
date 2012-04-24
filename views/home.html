@@ -1,6 +1,4 @@
 
-
-
 <div id="map" style="width: 100%; height: 100%"></div>
 <div id='modalInfo'></div>
 
@@ -17,11 +15,11 @@
                                 <li map-lat="<%= posts[i].location.latitude%>" map-lng="<%= posts[i].location.longitude%>" event-name="<%= posts[i].name %>" event-place="<%= posts[i].place %>" event-time="<%= posts[i].datetime.timestamp %>" event-id="<%= posts[i].id %>"><a modal-link="/api/event/<%= posts[i].id %>">
 						<h3><%= posts[i].name %></h3>
 						<p><%= posts[i].place %><br/>
-						<span class="momentFromNow"><%= posts[i].datetime.timestamp %></span>, <%= posts[i].time %><br/>
+						<span class="momentFromNow"><%= posts[i].datetime.timestamp %></span><br/>
 						</a>
 					</li>
                                     
-                                    <% } %>
+                 <% } %>
 				
 				</ul>
 		<!--		<a id="loadmore">Load more events</a> -->

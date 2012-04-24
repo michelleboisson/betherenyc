@@ -169,7 +169,7 @@ function initialize() {
     console.log("Starting map");
     var myOptions = {
           center: new google.maps.LatLng(40.7746431, -73.9701962),
-          zoom: 11,
+          zoom: 12,
           mapTypeId: google.maps.MapTypeId.ROADMAP,
           mapTypeControlOptions: {
             position: google.maps.ControlPosition.RIGHT_TOP
@@ -282,7 +282,8 @@ function openWindow(id){
                     var contentString = '<div id="content">'+
                         '<div id="siteNotice">'+
                         '</div>'+
-                        '<div id="bodyContent"><strong>'+data.event.name+'</strong><br/>'+data.event.time+
+                        '<div id="bodyContent"><strong>'+data.event.name+'</strong><br/><i>'+moment(data.event.datetime.timestamp).fromNow()+
+                        '</i><p>'+data.event.desc.substr(0, 200) +'...'+
                         '<p><a href=/events/permalink/'+data.event._id+'>See event</a></p></div>'+
                         '</div>';
                         //launchModal(event);

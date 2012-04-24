@@ -36,10 +36,8 @@
     
 <input type="text" value="<%= event.name %>" id="eventName" name="eventName" size="50" /><br/>
 <input type="text" disabled class="input-medium" name="urlslug" id="urlslug" value="<%= event.urlslug %>"/>
-<input type="text" disabled value="<%= event.date %>" id="eventDate" name="eventDate" size="50" />
-<input type="text" value="<%= event.time %>" id="eventTime" name="eventTime" size="50" />
 <input type="text" disabled value="<%= event.place %>" id="eventPlace" name="eventPlace" size="50" />
-<input type="text" value="<%= event.datetime.timestamp %>" id="eventDateTime" name="eventDateTime" size="50" />
+<input type="text" value="<%= event.datetime.timestamp %>" id="eventDate" name="eventDate" size="50" />
 <input type="hidden" value="<%= event.location.latitude %>" id="eventPlaceLat" name="eventPlaceLat" class="input-medium"/>
 <input type="hidden" value="<%= event.location.longitude %>" id="eventPlaceLng" name="eventPlaceLng" class="input-medium"/>
 <input type="text" value="<%= event.link %>" id="eventLink" name="eventLink" size="50" />

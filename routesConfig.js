@@ -41,7 +41,7 @@ module.exports = function(app) {
     app.post("/update", ensureAuthenticated, eventRoute.postUpdatedEvent);
     
     //delete an event
-    app.get("/delete/:eventId", ensureAuthenticated, eventRoute.getUpdateEvent);
+    app.get("/delete/:eventId", ensureAuthenticated, eventRoute.deleteEvent);
     
     // This is a demonstration of using "remote" JSON data.
     // Requesting data from classmate Jackie, getting museum data

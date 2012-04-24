@@ -124,7 +124,10 @@ body {
     height: 100%;
     /*position: static!important;*/
 }
-
+#mapEvent {
+    width: 100%;
+    height: 200px;
+}
 #maincontent {
     clear: both;
     width: 100%;

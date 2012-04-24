@@ -30,19 +30,52 @@
 <!-- textbox #newTodo -->
 
 
-<form method="POST" name="Eventupdate" action="/update">
+<form method="POST" name="Eventupdate" action="/update" class="form-horizontal">
     <!-- include the blog post _id as a hidden value -->
     <input type="hidden" name="event_id" value="<%= event._id %>">
-    
+<div class="control-group">
+	<label class="control-label" for="appendedPrependedInput">Event Name</label>
+	<div class="controls">    
 <input type="text" value="<%= event.name %>" id="eventName" name="eventName" size="50" /><br/>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label" for="appendedPrependedInput">url slug for this site</label>
+	<div class="controls">
 <input type="text" disabled class="input-medium" name="urlslug" id="urlslug" value="<%= event.urlslug %>"/>
-<input type="text" disabled value="<%= event.place %>" id="eventPlace" name="eventPlace" size="50" />
-<input type="text" value="<%= event.datetime.timestamp %>" id="eventDate" name="eventDate" size="50" />
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label" for="appendedPrependedInput">Event Date & Time</label>
+	<div class="controls">
+		<input type="text" value="<%= event.datetime.timestamp %>" id="eventDate" name="eventDate" size="50" />
+</div>
+</div>
+		<!--<input type="text" placeholder="Time" id="eventTime" name="eventTime" size="50" />-->
+<div class="control-group">
+	<label class="control-label" for="appendedPrependedInput">Name of Venue</label>
+	<div class="controls">
+		<div class="input-append">
+			<input type="text" disabled value="<%= event.place %>" id="eventPlace" name="eventPlace" size="50" class="appendedPrependedInput"/>
+		</div>
+	</div>
+</div>
+
 <input type="hidden" value="<%= event.location.latitude %>" id="eventPlaceLat" name="eventPlaceLat" class="input-medium"/>
 <input type="hidden" value="<%= event.location.longitude %>" id="eventPlaceLng" name="eventPlaceLng" class="input-medium"/>
-<input type="text" value="<%= event.link %>" id="eventLink" name="eventLink" size="50" />
+<div class="control-group">
+	<label class="control-label" for="appendedPrependedInput">Info came from</label>
+	<div class="controls">
+		<input type="text" value="<%= event.link %>" id="eventLink" name="eventLink" size="50" />
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label" for="appendedPrependedInput">Event Name</label>
+	<div class="controls">
 <textarea id="eventDesc" name="eventDesc" rows="15" cols="35"  class="input-xlarge"/><%= event.desc %></textarea>
-<input type="submit" value="Update Event" id="saveBtn"/>
+</div>
+</div>
+<input class="offset2" type="submit" value="Update Event" id="saveBtn"/>
 
 </form>
 
@@ -64,9 +97,8 @@
                $("#recentlyAdded h3").live("click", function(){           
                     $(this).siblings().toggle("slow");
                });
-           
-		$("#eventDate").datepicker();
-		$("#eventDateTime").datetimepicker();
+
+		$("#eventDate").datetimepicker();
     
             });        
       </script>

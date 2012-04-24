@@ -314,22 +314,8 @@ module.exports = {
         // get the request blog post id
         var requestedEventID = request.params.eventId;
         
-        if (request.user.accessLevel != 0 || event.author._id.toString() != request.user._id.toString()){
-                
-            //}
-            //if (event.author._id.toString() != request.user._id.toString() || request.user.accessLevel != 0) {
-                
-                noAccessStr = "Sorry you are not allowed to edit this document<br>";
-                //" + event.author._id + " == " + request.user._id;
-                
-                response.send(noAccessStr);
-                
-            } else {
-                console.log("User is allowed to edit this document");
-                //console.log(event.author._id + " == " + request.user._id+ "or is an admin");
-            }
         
-        Event.remove({ _id : requestedEventID }, function(){
+        db.Event.remove({ _id : requestedEventID }, function(){
             console.log("Removing :"+requestedEventID);
             response.redirect('/?delete=true');
         });
@@ -503,4 +489,7 @@ function convertToSlug(Text)
         .replace(/[^\w ]+/g,'')
         .replace(/ +/g,'-')
         ;
+}
+function getCleanURLSource(url){
+    return url.substring(url.charAt(0),url.indexOf('/'));
 }

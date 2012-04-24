@@ -25,6 +25,12 @@ module.exports.configureSchema = function(Schema, mongoose) {
     , lastEdited: { type: Date }
   
 });
+    
+Event
+.virtual('linkname')
+.get(function () {
+  return this.link.substring(this.link.charAt(0),this.link.indexOf('/',7));
+});
 
     // add schemas to Mongoose
     mongoose.model('Event', Event);

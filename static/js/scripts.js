@@ -14,9 +14,9 @@ jQuery(document).ready(function() {
         $(this).html(moment(new Date($(this).html())).fromNow());
     });
     $(".convertToMoment").each(function(){
-        var newdate = moment($(this).html());
-        newdate.format("dddd, MMMM Do YYYY, h:mm a");
-        $(this).html(newdate);
+        //var newdate = moment(new Date($(this).html()));
+        //newdate.format("dddd, MMMM Do YYYY, h:mm a");
+        $(this).html(moment(new Date($(this).html())));
         
     });
     
@@ -38,8 +38,12 @@ jQuery(document).ready(function() {
         });
         
     });
-
-	    initialize();
+            if ( $('#mapHome')[0] ){
+        	    initializeHomeMap();
+            }
+            if ( $("#mapEvent")[0] ){
+                    initializeOneMap();
+            }
 	    
             jQuery('#eventName').change(function(e){
                 var currentTitle = jQuery(this).val();
@@ -165,7 +169,7 @@ function convertToSlug(Text)
 
 
 //initialize the map on the home page
-function initialize() {
+function initializeHomeMap() {
     console.log("Starting map");
     var myOptions = {
           center: new google.maps.LatLng(40.7746431, -73.9701962),
@@ -191,7 +195,7 @@ function initialize() {
           position: google.maps.ControlPosition.RIGHT_TOP
       }
     };
-    map = new google.maps.Map(document.getElementById("map"), myOptions);
+    map = new google.maps.Map(document.getElementById("mapHome"), myOptions);
     
     markers = [];
     
@@ -353,5 +357,45 @@ function lookUpLatLong(address){
       } else {
         alert("Geocode was not successful for the following reason: " + status);
       }
+    });
+}
+
+function initializeOneMap(){
+    console.log("init one event map");
+    
+    var thisEventLat = $("#mapEvent").attr("map-lat");
+    var thisEventLng = $("#mapEvent").attr("map-lng");
+    var thisEventLatLng = new google.maps.LatLng(thisEventLat,thisEventLng);
+    
+    var myOptions = {
+          center: thisEventLatLng,
+          zoom: 13,
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          mapTypeControlOptions: {
+            position: google.maps.ControlPosition.RIGHT_TOP
+        },
+      panControlOptions: {
+          position: google.maps.ControlPosition.RIGHT_TOP
+      },
+      zoomControl: true,
+      zoomControlOptions: {
+          style: google.maps.ZoomControlStyle.LARGE,
+          position: google.maps.ControlPosition.RIGHT_TOP
+      },
+      scaleControl: true,
+      scaleControlOptions: {
+          position: google.maps.ControlPosition.RIGHT_TOP
+      },
+      streetViewControl: true,
+      streetViewControlOptions: {
+          position: google.maps.ControlPosition.RIGHT_TOP
+      }
+    };
+    map = new google.maps.Map(document.getElementById("mapEvent"), myOptions);
+    
+    var marker = new google.maps.Marker({
+            position: thisEventLatLng, 
+            map: map,
+            animation: google.maps.Animation.DROP
     });
 }

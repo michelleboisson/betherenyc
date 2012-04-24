@@ -1,59 +1,24 @@
 
-		<!--<div id="header">
-			<h1 id="logo"><a href="/"><img src="/img/betherenyc_logo.png" alt="BeThereNYC" title="BeThereNYC"></a></h1>
-			<h2>free cheap here now</h2>
-		</div>
-		-->
 
-		<div id="maincontent" class="row-fluid">
-				<!--<div id="signup">
-					<h2>Sign Up for Reminders</h2>
-					<input type="text" width="100%"/>
-                                        <button id="saveBtn">Go!</button>
-				</div>
-				-->
-                                
-                                <div id="sidemenu" class="span2">
-                                    <!-- ul is a list container -->
-<h3>Recently Added</h3>
-<ul id="recentlyAdded">
-     <% for(i=0; i<posts.length; i++) { %>
-	<li>
-	<h5><a href="/events/<%= posts[i].urlslug %>"><%= posts[i].name %></a></h5>
-	<div class="hidden">
-		<%= posts[i].place %><br/>
-		<%= posts[i].date %>, <%= posts[i].time %><br/>
-		<a href="/events/<%= posts[i].urlslug %>">Details...</a></div>
-	</li>
+<div id="maincontent" class="row">     
+        <div id="submitForm" class="span8">
+                <h1><%= event.name %></h1>
+		
+		<% if (event_has_owner) { %>
+		Submitted by <%= event.author.name.first %></a>
+		<% } %>
+			
+		<p id="event-desc"><%- event.desc %></p>
+	</div>
+	<div class="span4">
+		<div id="mapEvent" map-lat="<%= event.location.latitude %>" map-lng="<%= event.location.longitude %>"></div>
+		<p><%= event.place %></p>
+		<p class="convertToMoment"><%= event.datetime.timestamp %></p>
+		<p>More info: <a href="<%= event.link %>" target=new><%= event.linkname %></a></p>
                                     
-    <% } %>
-    
-</ul>
-                                </div>
-                                
-                                <div id="submitForm" class="span8">
-                                    <h1><%= event.name %></h1>
-                                    
-                                    <p><span class=""><%= event.date %></span>&nbsp;, <%= event.time %> <br/>
-                                    <%= event.place %></p>
-				    <p>Timestamp = <%= event.datetime.timestamp %></p>
-				    <% if (event_has_owner) { %>
-				    Submitted by <%= event.author.name.first %></a>
-				    <% } %>
-				    <p id="event-desc"><%- event.desc %></p>
-				    <p>Source: <a href="<%= event.link %>" target=new><%= event.link %></a></p>
-                                    
-                                   <!-- <form method="POST">
-                                        <button id="edit">Edit</button>
-                                    </form>
-                                    <a href="../"><button id="Done">Done!</button></a>  -->
-				    <% if (user_is_owner) { %>
-				    <p><a href="/update/<%= event._id %>" id="update">edit this event</a> | <a href="/delete/<%= event._id %>" id="update">delete this event</a> 
-				    <% } %></p>
-                                </div>
-
-
-                                
-                </div>
-				
-		</div>
+                <% if (user_is_owner) { %>
+		<p><a href="/update/<%= event._id %>" id="update">edit this event</a> | <a href="/delete/<%= event._id %>" id="update">delete this event</a> 
+		<% } %></p>
+	</div>
+        </div>                  
+</div>

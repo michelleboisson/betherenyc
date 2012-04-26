@@ -9,12 +9,17 @@ var mongoose = require('mongoose')
 
 db.startup(process.env.MONGOLAB_URI); // start the db connection
 
-
+today = moment();
+        //console.log(today.format("dddd, MMMM Do YYYY, h:mm:ss a"));
+        yesterday = moment(today).subtract('days', 1);
+        //console.log(yesterday.format("dddd, MMMM Do YYYY, h:mm:ss a"));
+        tomorrow = moment(today).add('days', 1);
 // find events, fix time 
 var query = db.Event.find({}, ['id', 'name', 'date', 'time', 'datetime.timestamp']);
-    query.where(this.time != undefined && this.time != '' && this.datetime.timestamp == '');
-    
+    query.where(this.time != undefined && this.time != '' );
+    query.where('date').gte(today);
     query.exec(function(err, events) {    
+    
     if (events.length == 0) {
         console.log("There are currently no events");
         

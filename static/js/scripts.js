@@ -391,11 +391,11 @@ function initializeOneMap(){
           position: google.maps.ControlPosition.RIGHT_TOP
       }
     };
-    map = new google.maps.Map(document.getElementById("mapEvent"), myOptions);
+    var mapOne = new google.maps.Map(document.getElementById("mapEvent"), myOptions);
     
     var marker = new google.maps.Marker({
             position: thisEventLatLng, 
-            map: map,
+            map: mapOne,
             animation: google.maps.Animation.DROP
     });
 }

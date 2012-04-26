@@ -25,7 +25,7 @@ module.exports = {
         // build the query
         var query = db.Event.find({}, ['id', 'name', 'place', 'date', 'time', 'location', 'link', 'datetime.timestamp']);
         query.sort('datetime.timestamp',1); //sort by date in descending order
-        query.where('datetime.timestamp').gte(today).lte(tomorrow);
+        query.where('datetime.timestamp').gte(today);
 
         // run the query and display blog_main.html template if successful
         query.exec({}, function(err, allPosts){
@@ -136,7 +136,7 @@ module.exports = {
                         user_is_owner : isOwner,
                         event_has_owner : hasOwner,
                         event : event,
-                        posts : allPosts
+                        pageTitle : event.name+ " - BeThereNYC"
                    };
                 }
                 // render the card_form template with the data above
@@ -194,7 +194,7 @@ module.exports = {
                         user_is_owner : isOwner,
                         event_has_owner : hasOwner,
                         event : event,
-                        posts : allPosts
+                        pageTitle : event.name+ " - BeThereNYC"
                    };
                 }
                 // render the card_form template with the data above
@@ -249,8 +249,9 @@ module.exports = {
             if(err){
                 console.log("uh oh, there was an error.");
             }
-            if (request.user.accessLevel != 0 || event.author._id.toString() != request.user._id.toString()){
-                
+            
+            //if (request.user.accessLevel != 0 || (hasAuthor && event.author._id.toString()!= request.user._id.toString())){
+                if (request.user.accessLevel != 0 ){
             //}
             //if (event.author._id.toString() != request.user._id.toString() || request.user.accessLevel != 0) {
                 

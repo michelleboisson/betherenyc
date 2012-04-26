@@ -14,9 +14,9 @@ body {
     -o-background-size: cover;
     background-size: cover;
     color: #111111;
-    font-family: Arial,Verdana,sans-serif;
-    /*font-size: 72.5%;
-    overflow: hidden!important;*/
+    font-family: Exo, Arial,Verdana,sans-serif;
+    /*font-size: 72.5%;*/
+
 }
 
 #container{
@@ -67,6 +67,7 @@ body {
     width: 250px;
     height: 160px;
     display: inline;
+    line-height: 50px;
 }
 
 #sidemenu.home {
@@ -120,8 +121,9 @@ body {
     background-color: #f0f0f0;
 }
 
-#map {
+#mapHome {
     height: 100%;
+    top: 50px;
     /*position: static!important;*/
 }
 #mapEvent {
@@ -161,18 +163,25 @@ body {
 }
 
 #footer {
-    clear: both;
+/*    clear: both;
     border-top: 1px solid #666;
     height: 3em;
     position: fixed;
     top: 0;
-    width: 100%;
-    background: #000;
     padding-left: 20px;
     padding-top: 15px;
-    color: #fff;
     z-index: 3;
+    width: 100%;*/
+    background: #000;
+    
+    color: #fff;
+    height: 4em;
+
+    -moz-box-shadow:    0px 2px 3px 3px #ccc;
+    -webkit-box-shadow: 0px 2px 3px 3px #ccc;
+    box-shadow:         0px 2px 3px 3px #ccc;
 }
+
 #footer a {
     color: #fff;
     text-decoration: none;

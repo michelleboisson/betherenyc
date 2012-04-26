@@ -1,6 +1,6 @@
 
-
-<div id="maincontent" class="row">     
+<div  class="container">
+<div id="maincontent" class="row-fluid">     
         <div id="submitForm" class="span8">
                 <h1><%= event.name %></h1>
 		
@@ -12,13 +12,18 @@
 	</div>
 	<div class="span4">
 		<div id="mapEvent" map-lat="<%= event.location.latitude %>" map-lng="<%= event.location.longitude %>"></div>
-		<p><%= event.place %></p>
-		<p class="convertToMoment"><%= event.datetime.timestamp %></p>
+		<p><br/><%= event.place %></p>
+		<p class=""><%= event.datetime.timestamp %></p>
 		<p>More info: <a href="<%= event.link %>" target=new><%= event.linkname %></a></p>
+		<span class='st_sharethis' displayText='ShareThis'></span>
+		<span class='st_email' displayText='Email'></span>
+		<span class='st_facebook' displayText='Facebook'></span>
+		<span class='st_twitter' displayText='Tweet'></span>
                                     
                 <% if (user_is_owner) { %>
 		<p><a href="/update/<%= event._id %>" id="update">edit this event</a> | <a href="/delete/<%= event._id %>" id="update">delete this event</a> 
 		<% } %></p>
 	</div>
-        </div>                  
+</div>
+
 </div>

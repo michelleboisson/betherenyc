@@ -13,7 +13,7 @@
 	<div class="span4">
 		<div id="mapEvent" map-lat="<%= event.location.latitude %>" map-lng="<%= event.location.longitude %>"></div>
 		<p><br/><%= event.place %></p>
-		<p class=""><%= event.datetime.timestamp %></p>
+		<p class="convertToMoment"><%= event.datetime.timestamp %></p>
 		<p>More info: <a href="<%= event.link %>" target=new><%= event.linkname %></a></p>
 		<span class='st_sharethis' displayText='ShareThis'></span>
 		<span class='st_email' displayText='Email'></span>

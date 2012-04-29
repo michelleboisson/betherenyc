@@ -58,6 +58,8 @@ module.exports = function(app) {
     // return one event entries in json format
     app.get('/api/event/:eventID', apiRoute.getEventbyIdJSON);
     
+    // return entries from a certain data in json
+    app.get('/api/:date', apiRoute.getEventsbyDate );
     
      /*********** USER ROUTES ************/    
     

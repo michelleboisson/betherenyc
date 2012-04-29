@@ -31,6 +31,12 @@ Event
 .get(function () {
   return this.link.substring(this.link.charAt(0),this.link.indexOf('/',7));
 });
+Event
+.virtual('datetime.moment')
+.get(function() {
+    var thisEventMoment = moment(this.datetime.timestamp);
+    return thisEventMoment;
+});
 
     // add schemas to Mongoose
     mongoose.model('Event', Event);

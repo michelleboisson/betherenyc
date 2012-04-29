@@ -8,6 +8,7 @@ var mongoose = require('mongoose')
     , parser = new xml2js.Parser() //xml to js
     , jsdom = require("jsdom") //dom parser
     , moment = require('moment') //time library
+    , requestURL = require('request'); //gets data from outside
 
 
 db.startup(process.env.MONGOLAB_URI); // start the db connection
@@ -51,6 +52,7 @@ db.startup(process.env.MONGOLAB_URI); // start the db connection
                     //var today = now.toJSON().toString().substring(0,now.toJSON().toString().indexOf('T'));
                     //var today = "2012-04-22";
                     console.log("Tomorrow is " +tomorrow);
+                    var tomorrowStr = tomorrow.format("YYYY-MM-DD");
                     //var convertedTomorrow = moment(today, "YYYY-MM-DD").add('days', 1);
                     
                     var nycGovDataToday = []; //variable to hold tomorrow's events
@@ -59,7 +61,7 @@ db.startup(process.env.MONGOLAB_URI); // start the db connection
                     //find events that are happening today
                     for (i = 0; i < nycGovData.length; i++){
                         
-                        if (moment(nycGovData[i].eventStartDate, "YYYY-MM-DD") < tomorrow){
+                        if (nycGovData[i].eventStartDate == tomorrowStr){
                             console.log("TOMORROW: " +nycGovData[i].title);
                             reslog += nycGovData[i].title+"<br/>";
                             nycGovDataToday.push(nycGovData[i]);
@@ -111,24 +113,34 @@ db.startup(process.env.MONGOLAB_URI); // start the db connection
                                     }
                                 };//end event data  
                         
-                                    console.log("eventData: "+eventData);
+                                    console.log("eventData: "+eventData.name);
                                     // create a new event 
                                     var thisEvent = new db.Event(eventData);
     
                                     // save the event to the database
                                     thisEvent.save();
-                                    
-                                    
-                           //console.log("there have been", window.$("a").length, "nodejs releases!");
+                            
                                 });
                         });//end jsdom
-                        
                         
                     }); //end for each event found...
                     //response.redirect('/');
                 }); //end parser
             }//end if httpResponse
+        console.log("*******CLOSING DB - SCRIPT SHOULD TERMINATE AS EXPECTED ******");
+        db.closeDB(); // <--- VERY IMPORTANT. MUST CLOSE DB WHEN FINISHED.
         }); // end of requestURL callback
  
-    console.log("*******CLOSING DB - SCRIPT SHOULD TERMINATE AS EXPECTED ******");
-    db.closeDB(); // <--- VERY IMPORTANT. MUST CLOSE DB WHEN FINISHED.
+
+    
+    function convertToSlug(Text)
+{
+    return Text
+        .toLowerCase()
+        .replace(/[^\w ]+/g,'')
+        .replace(/ +/g,'-')
+        ;
+}
+function getCleanURLSource(url){
+    return url.substring(url.charAt(0),url.indexOf('/'));
+}

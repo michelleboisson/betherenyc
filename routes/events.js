@@ -19,7 +19,7 @@ module.exports = {
         //console.log(today.format("dddd, MMMM Do YYYY, h:mm:ss a"));
         yesterday = moment(today).subtract('days', 1);
         //console.log(yesterday.format("dddd, MMMM Do YYYY, h:mm:ss a"));
-        tomorrow = moment(today).add('days', 1);
+        tomorrow = moment(today).add('hours', 24);
         //console.log(tomorrow.format("dddd, MMMM Do YYYY, h:mm:ss a"));
         
         // build the query

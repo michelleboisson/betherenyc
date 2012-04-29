@@ -128,4 +128,6 @@ db.startup(process.env.MONGOLAB_URI); // start the db connection
                 }); //end parser
             }//end if httpResponse
         }); // end of requestURL callback
-    }//end nyc data route  
+ 
+    console.log("*******CLOSING DB - SCRIPT SHOULD TERMINATE AS EXPECTED ******");
+    db.closeDB(); // <--- VERY IMPORTANT. MUST CLOSE DB WHEN FINISHED.

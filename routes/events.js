@@ -427,6 +427,7 @@ module.exports = {
                         var eventLink = element.link;
                         jsdom.env(eventLink, ['http://code.jquery.com/jquery-1.7.min.js'], function(errors, window) {
                             
+                            //look for event information in the html
                             var $ = window.$;
                             $(".map_locations").each(function () {
                                 var mydata = $(this).attr('id').split('__');
@@ -435,8 +436,8 @@ module.exports = {
                                 //console.log("lng: "+mydata[1]);
                             var thisTime = element.eventStartTime;
                             var thisDate = element.eventStartDate;
+                            
                             var translatedTime = moment(thisTime, "h:m a");//.format("dddd, MMMM Do YYYY, h:mm:ss a");
-                
                             var translatedDate = moment(thisDate);//.format("dddd, MMMM Do YYYY, h:mm:ss a");
                             translatedDate.hours(translatedTime.hours()).minutes(translatedTime.minutes()).seconds(translatedTime.seconds());
             

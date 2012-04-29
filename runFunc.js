@@ -1,6 +1,6 @@
 //one time functions
 
-console.log("Running this one function...........................................");
+console.log("Running this daily function...........................................");
 
 // base dependencies for script
 var mongoose = require('mongoose')

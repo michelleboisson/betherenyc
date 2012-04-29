@@ -18,6 +18,9 @@ body {
     /*font-size: 72.5%;*/
 
 }
+#mapHome img {
+    max-width: none;
+}
 
 #container{
 	margin: 0 auto;

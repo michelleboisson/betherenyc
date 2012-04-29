@@ -46,25 +46,26 @@ db.startup(process.env.MONGOLAB_URI); // start the db connection
                     var nycGovData = result.channel.item; //array of events from nycgovparks.org in JSON
                     console.log(nycGovData.length + " total events found");
                     
-                    //get data from today
-                    var now = new Date();
-                    var today = now.toJSON().toString().substring(0,now.toJSON().toString().indexOf('T'));
+                    //get data from tomorrow
+                    var tomorrow = moment().add('days', 1);
+                    //var today = now.toJSON().toString().substring(0,now.toJSON().toString().indexOf('T'));
                     //var today = "2012-04-22";
-                    console.log("Today is " +today);
-                        
-                    var nycGovDataToday = []; //variable to hold today's events
+                    console.log("Tomorrow is " +tomorrow);
+                    //var convertedTomorrow = moment(today, "YYYY-MM-DD").add('days', 1);
+                    
+                    var nycGovDataToday = []; //variable to hold tomorrow's events
                 
                     var reslog ="";
                     //find events that are happening today
                     for (i = 0; i < nycGovData.length; i++){
                         
-                        if (nycGovData[i].eventStartDate == today){
-                            console.log("TODAY: " +nycGovData[i].title);
+                        if (moment(nycGovData[i].eventStartDate, "YYYY-MM-DD") < tomorrow){
+                            console.log("TOMORROW: " +nycGovData[i].title);
                             reslog += nycGovData[i].title+"<br/>";
                             nycGovDataToday.push(nycGovData[i]);
                         }
                     }
-                    console.log("Found " +nycGovDataToday.length + " events happening today.");
+                    console.log("Found " +nycGovDataToday.length + " events happening tomorrow.");
                 
                     console.log('Done with data');
                 

@@ -7,13 +7,12 @@ var mongoose = require('mongoose')
     , xml2js = require('xml2js') //xml to js 
     , parser = new xml2js.Parser() //xml to js
     , jsdom = require("jsdom") //dom parser
-    , moment = require('moment') //time library
     , requestURL = require('request'); //gets data from outside
 
 
 db.startup(process.env.MONGOLAB_URI); // start the db connection
 
-
+        var saved = 0;
       // define the remote feed
         nycGovURL= "http://www.nycgovparks.org/xml/events_300_rss.xml";
 
@@ -49,16 +48,13 @@ db.startup(process.env.MONGOLAB_URI); // start the db connection
                     
                     //get data from tomorrow
                     var tomorrow = moment().add('days', 1);
-                    //var today = now.toJSON().toString().substring(0,now.toJSON().toString().indexOf('T'));
-                    //var today = "2012-04-22";
                     console.log("Tomorrow is " +tomorrow);
                     var tomorrowStr = tomorrow.format("YYYY-MM-DD");
-                    //var convertedTomorrow = moment(today, "YYYY-MM-DD").add('days', 1);
                     
                     var nycGovDataToday = []; //variable to hold tomorrow's events
                 
                     var reslog ="";
-                    //find events that are happening today
+                    //find events that are happening tomorrow
                     for (i = 0; i < nycGovData.length; i++){
                         
                         if (nycGovData[i].eventStartDate == tomorrowStr){
@@ -118,22 +114,29 @@ db.startup(process.env.MONGOLAB_URI); // start the db connection
                                     var thisEvent = new db.Event(eventData);
     
                                     // save the event to the database
-                                    thisEvent.save();
-                            
+                                    thisEvent.save(function (err, doc){
+                                        saved++;
+                                        console.error('saved!', saved);
+                                    });
                                 });
+                            console.log("Array: ", array.length);
+                            //when we've saved all the elements
+                             if (saved >= array.length){
+                            console.log("*******CLOSING DB - SCRIPT SHOULD TERMINATE AS EXPECTED ******");
+                            db.closeDB(); // <--- VERY IMPORTANT. MUST CLOSE DB WHEN FINISHED.
+                        }
+                       
                         });//end jsdom
                         
                     }); //end for each event found...
                     //response.redirect('/');
                 }); //end parser
             }//end if httpResponse
-        console.log("*******CLOSING DB - SCRIPT SHOULD TERMINATE AS EXPECTED ******");
-        db.closeDB(); // <--- VERY IMPORTANT. MUST CLOSE DB WHEN FINISHED.
+            
         }); // end of requestURL callback
- 
 
     
-    function convertToSlug(Text)
+function convertToSlug(Text)
 {
     return Text
         .toLowerCase()
@@ -144,3 +147,6 @@ db.startup(process.env.MONGOLAB_URI); // start the db connection
 function getCleanURLSource(url){
     return url.substring(url.charAt(0),url.indexOf('/'));
 }
+
+
+

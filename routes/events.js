@@ -365,7 +365,7 @@ module.exports = {
     
     getNYCData : function(request, response){
 
-        // define the remote feed
+          // define the remote feed
         nycGovURL= "http://www.nycgovparks.org/xml/events_300_rss.xml";
 
         // make the request
@@ -398,25 +398,27 @@ module.exports = {
                     var nycGovData = result.channel.item; //array of events from nycgovparks.org in JSON
                     console.log(nycGovData.length + " total events found");
                     
-                    //get data from today
-                    var now = new Date();
-                    var today = now.toJSON().toString().substring(0,now.toJSON().toString().indexOf('T'));
+                    //get data from tomorrow
+                    var tomorrow = moment().add('days', 1);
+                    //var today = now.toJSON().toString().substring(0,now.toJSON().toString().indexOf('T'));
                     //var today = "2012-04-22";
-                    console.log("Today is " +today);
-                        
-                    var nycGovDataToday = []; //variable to hold today's events
+                    console.log("Tomorrow is " +tomorrow);
+                    var tomorrowStr = tomorrow.format("YYYY-MM-DD");
+                    //var convertedTomorrow = moment(today, "YYYY-MM-DD").add('days', 1);
+                    
+                    var nycGovDataToday = []; //variable to hold tomorrow's events
                 
                     var reslog ="";
                     //find events that are happening today
                     for (i = 0; i < nycGovData.length; i++){
                         
-                        if (nycGovData[i].eventStartDate == today){
-                            console.log("TODAY: " +nycGovData[i].title);
+                        if (nycGovData[i].eventStartDate == tomorrowStr){
+                            console.log("TOMORROW: " +nycGovData[i].title);
                             reslog += nycGovData[i].title+"<br/>";
                             nycGovDataToday.push(nycGovData[i]);
                         }
                     }
-                    console.log("Found " +nycGovDataToday.length + " events happening today.");
+                    console.log("Found " +nycGovDataToday.length + " events happening tomorrow.");
                 
                     console.log('Done with data');
                 
@@ -462,23 +464,21 @@ module.exports = {
                                     }
                                 };//end event data  
                         
-                                    console.log("eventData: "+eventData);
+                                    console.log("eventData: "+eventData.name);
                                     // create a new event 
                                     var thisEvent = new db.Event(eventData);
     
                                     // save the event to the database
                                     thisEvent.save();
-                                    
-                                    
-                           //console.log("there have been", window.$("a").length, "nodejs releases!");
+                            
                                 });
                         });//end jsdom
-                        
                         
                     }); //end for each event found...
                     response.redirect('/');
                 }); //end parser
             }//end if httpResponse
+
         }); // end of requestURL callback
     }//end nyc data route  
 }

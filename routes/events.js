@@ -14,33 +14,9 @@ var moment = require('moment'); //time library
 module.exports = {
     
     mainpage : function(request, response) {
-        
-       /* today = moment();
-        //console.log(today.format("dddd, MMMM Do YYYY, h:mm:ss a"));
-        yesterday = moment(today).subtract('days', 1);
-        //console.log(yesterday.format("dddd, MMMM Do YYYY, h:mm:ss a"));
-        tomorrow = moment(today).add('hours', 24);
-        //console.log(tomorrow.format("dddd, MMMM Do YYYY, h:mm:ss a"));
-        
-        // build the query
-        var query = db.Event.find({}, ['id', 'name', 'place', 'date', 'time', 'location', 'link', 'datetime.timestamp']);
-        query.sort('datetime.timestamp',1); //sort by date in descending order
-        query.where('datetime.timestamp').gte(today);
-
-        // run the query and display blog_main.html template if successful
-        query.exec({}, function(err, allPosts){
-
-            // prepare template data
-            var templateData = {
-                pageTitle : 'BeThereNYC- Coming Soon',
-                posts : allPosts,
-                today: today
-            };
-             console.log(templateData);*/
-            // render the page template with the data above
+             
             response.render('home.html');
-        
-        //});
+
     },
     
     getSubmitEvent : function(request, response) {

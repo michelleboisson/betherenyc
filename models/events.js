@@ -37,7 +37,12 @@ Event
     var thisEventMoment = moment(this.datetime.timestamp);
     return thisEventMoment;
 });
-
+Event
+.virtual('name.keywords')
+.get(function() {
+    var thisNameKeywords = this.name.split(" ");
+    return thisNameKeywords;
+});
     // add schemas to Mongoose
     mongoose.model('Event', Event);
 

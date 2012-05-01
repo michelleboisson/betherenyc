@@ -1,19 +1,22 @@
 
 
 		<div id="maincontent" class="row-fluid">
-<div class="span8 offset2">			
-    <div id="submitForm" class="span6 offset2">                            
+		
+    <div id="submitForm" class="span4">                            
                                     <h1>Add a New Event</h1>
-<!-- textbox #newTodo -->
-
-<form method="POST" name="EventForm" class="form-horizontal">
+<!-- textbox #newTodo --><p id="eventInfo"></p>
+    </div>
+<div class="span5">	
+<form method="POST" name="EventForm" class="form-horizontal" id="EventForm">
+	 <fieldset>
+            <legend>Event Basics</legend>
 <div class="control-group">
 	<label class="control-label" for="appendedPrependedInput">Event Name</label>
 	<div class="controls">
 		<input type="text" placeholder="Event Name" id="eventName" name="eventName" class="input-large" />
 	</div>
 </div>
-<div class="control-group">
+<div class="control-group" style="visibility:hidden">
 	<label class="control-label" for="appendedPrependedInput">the pretty link for this event</label>
 	<div class="controls">
 		<input type="text" class="input-large" name="urlslug" id="urlslug" >
@@ -26,6 +29,9 @@
 		<input type="text" placeholder="Date" id="eventDate" name="eventDate" size="50" />
 	</div>
 </div>
+</fieldset>
+	  <fieldset>
+            <legend>Venue Info</legend>
 		<!--<input type="text" placeholder="Time" id="eventTime" name="eventTime" size="50" />-->
 <div class="control-group">
 	<label class="control-label" for="appendedPrependedInput">Name of Venue</label>
@@ -39,7 +45,10 @@
 
 <input type="hidden" id="eventPlaceLat" name="eventPlaceLat" class="input-medium"/>
 <input type="hidden" id="eventPlaceLng" name="eventPlaceLng" class="input-medium"/>
+	  </fieldset>
 
+	  <fieldset>
+            <legend>Account information</legend>
 <div class="control-group">
 	<label class="control-label" for="appendedPrependedInput">Info came from</label>
 	<div class="controls">
@@ -47,18 +56,17 @@
 	</div>
 </div>
 <div class="control-group">
-	<label class="control-label" for="appendedPrependedInput">Event Name</label>
+	<label class="control-label" for="appendedPrependedInput">Tell us a bit more</label>
 	<div class="controls">
 		<textarea id="eventDesc" name="eventDesc" rows="15" cols="35" placeholder="Description..."/></textarea>
 	</div>
 </div>
+	  </fieldset>
 
 	<input class="offset2" type="submit" value="Add Event" id="saveBtn"/>
 </form>
 </div>
 </div>
-
-<div id="minimap" class="span2">
 
 </div>
                                 
@@ -69,11 +77,8 @@
         
 <script type="text/javascript">
 	$(document).ready(function(){
-		var myOptions = {
-	          center: new google.maps.LatLng(40.7746431, -73.9701962),
-	          zoom: 11,
-	          mapTypeId: google.maps.MapTypeId.ROADMAP
-		};
+		
+		$("#EventForm").formToWizard({ submitButton: 'saveBtn' })
 		
 		$("#eventPlace").focusout(function(){
 			if ($(this).val() != '' ){

@@ -15,7 +15,7 @@ module.exports = {
     
     mainpage : function(request, response) {
         
-        today = moment();
+       /* today = moment();
         //console.log(today.format("dddd, MMMM Do YYYY, h:mm:ss a"));
         yesterday = moment(today).subtract('days', 1);
         //console.log(yesterday.format("dddd, MMMM Do YYYY, h:mm:ss a"));
@@ -36,11 +36,11 @@ module.exports = {
                 posts : allPosts,
                 today: today
             };
-             console.log(templateData);
+             console.log(templateData);*/
             // render the page template with the data above
-            response.render('home.html', templateData);
+            response.render('home.html');
         
-        });
+        //});
     },
     
     getSubmitEvent : function(request, response) {

@@ -52,6 +52,10 @@ module.exports = function(app) {
     
     
     /*********** EVENT APIs ************/
+    
+    // data api information for developers
+    app.get('/api/info', apiRoute.apiInfo);
+    
     // return all event entries in json format
     app.get('/api/allevents', apiRoute.getAllEventsJSON);
         

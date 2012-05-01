@@ -15,8 +15,12 @@ The app is written in NodeJS, uses MongoDb, is built for Heroku, and uses follow
 - [jsdom](https://github.com/tmpvar/jsdom): 0.2.14 - A javascript implementation of the W3C DOM.
 - [moment](http://momentjs.com/): 1.5.0 - a javascript data library
 
+On the Heroku side, you need the following add-ons:
+* MongoLab
+* Heroku Scheduler
+
 On the front-end:
--HTML 5, CSS3, jQuery, Google Maps API, Google geocoder, momentjs, FourSquare API
+* HTML 5, CSS3, jQuery, Google Maps API, Google geocoder, momentjs, FourSquare API
 
 
 # Getting Setup

@@ -2,6 +2,9 @@ var map;
 var geocoder;
 var markers;
 var infowindow;
+var todayEvents;
+var today;
+    var eventsHTML = "";
 
 jQuery(document).ready(function() {
 
@@ -119,41 +122,6 @@ var launchModal = function(event) {
 
 }
 
-var interval = 20; //20 events at a time
-var getMoreEvents = function() {    
-
-    console.log("eventAPILink: "+eventAPILink);
-    
-    var jsonURL = "http://localhost:5000/api/allevents/";
-     
-    jQuery.ajax({
-        
-        url : jsonURL,
-        dataType : 'json',
-        type : 'GET',
-        
-        success : function(data) {
-            console.log("inside success callback");
-            console.log(data);
-            if (data.status == "OK") {
-
-                events = data.events[interval-1];                
-                showMore(events, interval);
-            }
-        },
-        error : function(err) {
-            console.log("error fetching this event");
-        }
-
-    }); // end of jQuery.ajax*/
-} // end of getThisEvent
-
-var showMore = function(events, index){
-    for (var j = 0; j < 20; j++){
-        
-    }
-}
-
 function convertToSlug(Text)
 {
     return Text
@@ -166,11 +134,11 @@ function convertToSlug(Text)
       
         
 
-
-
 //initialize the map on the home page
 function initializeHomeMap() {
     console.log("Starting map");
+    
+    //setup map
     var myOptions = {
           center: new google.maps.LatLng(40.7746431, -73.9701962),
           zoom: 12,
@@ -199,39 +167,104 @@ function initializeHomeMap() {
     
     markers = [];
     
-    $("#today-events li").each(function(){
-        
-        var thisLat = $(this).attr("map-lat");
-        var thisLng = $(this).attr("map-lng");
-        var thisName = $(this).attr("event-name");
-        var thisTime = $(this).attr("event-time");
-        var thisId = $(this).attr("event-id");
-        
-        
-        
-        var thisLatlng = new google.maps.LatLng(thisLat,thisLng);
-        var marker = new google.maps.Marker({
-            position: thisLatlng, 
-            map: map,
-            animation: google.maps.Animation.DROP,
-            title: thisId
-        });
-        
-        google.maps.event.addListener(marker, 'click', function(){
-            openWindow(marker.title);
-        });
-        
-        var newObj = {
-            name: thisName,
-            lat: thisLat,
-            lng: thisLng,
-            latlng: thisLatlng,
-            marker: marker
-            //infowindow : infowindow
-        }
-        markers.push(newObj);
-    });//end each
+    /* ----- Get Today's events ----*/
+    todayEvents = [];
+    today = moment();
+    console.log("today", today.format());
+    var tomorrow = moment(today).add('hours', 24);
+    jsonURL = "http://betherenyc.herokuapp.com/api/allevents/";
+    //jsonURL = "http://localhost:5000/api/allevents/";
+    var eventsHTML = "";
     
+    jQuery.ajax({
+          
+            url : jsonURL,
+            dataType : 'json',
+            type : 'GET',
+            
+            success : function(data) {
+                console.log("inside success callback");
+                console.log(data);
+                if (data.status == "OK") {
+                    
+                    //save events
+                    var events = data.events;
+                    console.log("num events", events.length);
+                    //loop and find events happening between now and the next 24hrs
+                    //save to todaysEvents array
+                    for (var c=0; c < events.length; c++){
+                        console.log(c, events[c].datetime.timestamp);
+                        if (moment(events[c].datetime.timestamp) >= today && events[c].datetime.timestamp != null){
+                            todayEvents.push(events[c]);
+                            console.log("found one!");
+                            //build the html
+                            eventsHTML = "\
+                                <li map-lat='"+events[c].location.latitude+"' \
+                                map-lng='"+events[c].location.longitude+"' \
+                                event-name='"+events[c].name+"' \
+                                event-place='"+events[c].place+"' \
+                                event-time='"+events[c].datetime.timestamp+"' \
+                                event-id='"+events[c]._id+"'>\
+                                <a modal-link='/api/event/"+events[c]._id+"'> \
+                                    <h3>"+events[c].name+"</h3> \
+                                    <p>"+events[c].place+"<br/> \
+				    <span>"+moment(events[c].datetime.timestamp).fromNow()+"</span><br/> \
+				</a> \
+				</li>" + eventsHTML;
+
+                        }
+                    }
+                    console.log("done");
+                    
+                    //push to the dom
+                    $(".loading").remove();
+                    $("#today-events").html(eventsHTML);
+                    
+                    //add markers for each event
+                    todayEvents.forEach(function(element, index, array){
+                        
+                        var thisLat = element.location.latitude;
+                        var thisLng = element.location.longitude;
+                        var thisName = element.name;
+                        var thisTime = element.datetime.timestamp;
+                        var thisId = element._id;
+                        
+                        
+                        var thisLatlng = new google.maps.LatLng(thisLat,thisLng);
+                        var marker = new google.maps.Marker({
+                            position: thisLatlng, 
+                            map: map,
+                            animation: google.maps.Animation.DROP,
+                            title: thisId
+                        });
+                        
+                        //add onclick event listener for the markers
+                        google.maps.event.addListener(marker, 'click', function(){
+                            openWindow(marker.title);
+                        });
+        
+                        var newObj = {
+                            name: thisName,
+                            lat: thisLat,
+                            lng: thisLng,
+                            latlng: thisLatlng,
+                            marker: marker
+                            //infowindow : infowindow
+                        }       
+                        markers.push(newObj);
+                        
+                    }); //end for each event
+                    
+                }//end if status OK
+            },
+            error : function(err) {
+                console.log("error fetching events");
+            }
+        
+        }); // end of jQuery.ajax*/
+    
+
+    //focus on the corresponding marker on mouseover
     $("#today-events li").live('mouseover', function(){
         var thisId = $(this).attr("event-id");
         
@@ -254,6 +287,7 @@ function initializeHomeMap() {
         
     });
    
+    //open the marker window on click
     $("#today-events li").live('click', function(){
         var thisId = $(this).attr("event-id");
         openWindow(thisId);  

@@ -6,6 +6,10 @@ var moment = require('moment'); //time library
 
 module.exports = {
 
+   apiInfo : function(resquest, response){
+          response.render('api/developer-info.html');
+   },
+
    getAllEventsJSON : function(request, response){
     
         // define the fields you want to include in your json data
@@ -58,10 +62,14 @@ module.exports = {
         console.log("converted Date: "+convertedDate);
         //console.log(convertedDate.date(), convertedDate.month(), convertedDate.year());
 
+        //
+        convertedDate.hours(0).minutes(0).seconds(0);
+        var tomorrow = moment(convertedDate).add('hours',24);
+        
         // build the query
-        var query = db.Event.find({}, ['id', 'name', 'place','location', 'link', 'datetime']);
+        var query = db.Event.find({}, ['id', 'name', 'place','desc','location', 'link', 'datetime']);
         query.sort('datetime.timestamp',1); //sort by date in descending order
-        query.where('datetime.moment').gte(convertedDate);
+        query.where('datetime.timestamp').gte(convertedDate).lte(tomorrow);
         //query.$where('moment(this.datetime.timestamp).month() == convertedDate.month()');
        // query.$where('moment(this.datetime.timestamp).year() == convertedDate.year()');
 

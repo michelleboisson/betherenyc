@@ -7,19 +7,7 @@
 			<div id="sidemenu" class="home span4">
 				<ul id="today-events">
 					
-				<% if (posts == "") {%>
-				<li><i>Sorry no events today.<br/>Check back tomorrow.</i></li>
-				<% } %>
-                                
-				<% for(i=0; i< posts.length; i++) { %>
-                                <li map-lat="<%= posts[i].location.latitude%>" map-lng="<%= posts[i].location.longitude%>" event-name="<%= posts[i].name %>" event-place="<%= posts[i].place %>" event-time="<%= posts[i].datetime.timestamp %>" event-id="<%= posts[i].id %>"><a modal-link="/api/event/<%= posts[i].id %>">
-						<h3><%= posts[i].name %></h3>
-						<p><%= posts[i].place %><br/>
-						<span class="momentFromNow"><%= posts[i].datetime.timestamp %></span><br/>
-						</a>
-					</li>
-                                    
-                 <% } %>
+				<li class="loading">Events are loading...</li>
 				
 				</ul>
 		<!--		<a id="loadmore">Load more events</a> -->

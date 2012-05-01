@@ -389,7 +389,8 @@ function getPosition(){
       //var targetLoc = localStorage.getItem("targetLoc");
       localStorage.setItem("yourLocation", currentPos);
 
-      youAreHereMarker.position = new google.maps.LatLng(currentPosition.coords.latitude,currentPosition.coords.longitude);
+      youAreHereMarker.setPosition(new google.maps.LatLng(currentPosition.coords.latitude,currentPosition.coords.longitude));
+      
     //add onclick event listener for the markers
     google.maps.event.addListener(youAreHereMarker, 'click', function(){
         infowindow.open(map);

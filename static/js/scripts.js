@@ -44,62 +44,51 @@ jQuery(document).ready(function() {
 		height: 240,
 		modal: true
 	});
-    
-    //append a clink function to each event link
-    jQuery(".homeModalLink").each(function(){
-        $(this).click(function () {
-            console.log("im clicked");
-            getThisEvent($(this).attr('modal-link'));
-            
-        });
-        
-    });
 	    
             jQuery('#eventName').change(function(e){
                 var currentTitle = jQuery(this).val();
                 jQuery("#urlslug").val(convertToSlug(currentTitle));
 
             });
-	    
-	    jQuery("#recentlyAdded h3").click(function(){
-		console.log("I'm clicked!");
-		JQuery(this).siblings("div").toggleClass("hidden");
-	    });
-            
-            jQuery("#loadmore").click(function(){
-                
-            });
 
 }); //end document ready
 
 
-var getThisEvent = function(eventAPILink) {
-    
-    console.log("eventAPILink: "+eventAPILink);
-    
-    var jsonURL = eventAPILink;
-     
-    jQuery.ajax({
-        
-        url : jsonURL,
-        dataType : 'json',
-        type : 'GET',
-        
-        success : function(data) {
-            console.log("inside success callback");
-            console.log(data);
-            if (data.status == "OK") {
-                event = data.event;
-                
-                //launchModal(event);
-            }
-        },
-        error : function(err) {
-            console.log("error fetching this event");
-        }
+/* Mobile Things! ------------------------- */
 
-    }); // end of jQuery.ajax*/
-} // end of getThisEvent
+  
+  if ($(window).width() < 767){
+        console.log("mobile!");
+      /*  var s = document.createElement("script");
+        s.setAttribute("src", "http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js");
+        s.setAttribute("id","jqueryMobileScript");
+        document.body.appendChild(s);
+      */
+        $("#sidemenu").removeClass("span4");
+        
+        //open the marker window on click
+        $("#today-events li").live('click', function(){
+           var thisId = $(this).attr("event-id");
+           var url = "/events/permalink/"+thisId;
+           window.location = url;  
+        });
+        
+        $("#showMap").click(function(){
+            $("#mapHome").show();
+            $("#sidemenu").hide();
+        });
+        $("#showList").click(function(){
+            $("#mapHome").hide();
+            $("#sidemenu").css('display','block');
+        });
+
+  }
+  else {
+    $("#jqueryMobileScript").remove();
+    $("#sidemenu").addClass("span4");
+  }
+  
+
 
 
 var launchModal = function(event) {
@@ -187,8 +176,8 @@ function getTodaysEvents(){
     today = moment();
     console.log("today", today.format());
     var tomorrow = moment(today).add('hours', 24);
-    jsonURL = "http://betherenyc.herokuapp.com/api/allevents/";
-    //jsonURL = "http://localhost:5000/api/allevents/";
+    //jsonURL = "http://betherenyc.herokuapp.com/api/allevents/";
+    jsonURL = "http://localhost:5000/api/allevents/";
     var eventsHTML = "";
     
     jQuery.ajax({

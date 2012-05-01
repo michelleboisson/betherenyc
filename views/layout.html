@@ -2,8 +2,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="viewport" "initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width" />
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
         
         <script src="/js/jquery-1.7.2.js" type="text/javascript" ></script>
         <script src="/js/jquery-ui-1.8.17.custom.min.js" type="text/javascript"></script>
@@ -54,7 +56,11 @@
     
 	<div id="footer" class="navbar navbar-fixed-top">
 	    <div class="span2"><h1 id="logo"><a href="/">BeThereNYC</a></h1></div>
-    	    <div class="" style="text-align: right; margin-right: 50px; line-height:50px;"><a href="/submit.html">Add an Event</a> | <a href="/api/info/">Data API</a> | <a href="/login">Login</a></div>
+    	    <div id="fullmenu" style="text-align: right; margin-right: 50px; line-height:50px;"><a href="/submit.html">Add an Event</a> | <a href="/api/info/">Data API</a> | <a href="/login">Login</a></div>
+	    <div id="mobilemenu" style="text-align: right; margin-right: 50px; line-height:60px;">
+		<a href="/submit.html" class="btn btn-navbar">Add</a></div>
+		<a href="#mapHome" class="btn btn-navbar" id="showMap">Map</a>
+		<a href="#sidemenu" data-role="button" class="btn btn-navbar" id="showList"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
 	</div>
 
                 <%- body %>

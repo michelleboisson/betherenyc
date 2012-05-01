@@ -106,7 +106,8 @@ db.startup(process.env.MONGOLAB_URI); // start the db connection
                                     },
                                     datetime : {
                                         timestamp: new Date(translatedDate)
-                                    }
+                                    },
+                                    lastEdited: new Date()
                                 };//end event data  
                         
                                     console.log("eventData: "+eventData.name);

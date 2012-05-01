@@ -4,11 +4,24 @@ var markers;
 var infowindow;
 var todayEvents;
 var today;
-    var eventsHTML = "";
+var eventsHTML = "";
+var currentPos;
+
+var youAreHereMarker;
 
 jQuery(document).ready(function() {
 
     geocoder = new google.maps.Geocoder();
+
+    if ( $('#mapHome')[0] ){
+        initializeHomeMap();
+    }
+    if ( $("#mapEvent")[0] ){
+        initializeOneMap();
+    }
+    getPosition();
+    getTodaysEvents();
+    
     infowindow= new google.maps.InfoWindow({
         maxWidth: 200
     });
@@ -41,12 +54,6 @@ jQuery(document).ready(function() {
         });
         
     });
-            if ( $('#mapHome')[0] ){
-        	    initializeHomeMap();
-            }
-            if ( $("#mapEvent")[0] ){
-                    initializeOneMap();
-            }
 	    
             jQuery('#eventName').change(function(e){
                 var currentTitle = jQuery(this).val();
@@ -137,7 +144,6 @@ function convertToSlug(Text)
 //initialize the map on the home page
 function initializeHomeMap() {
     console.log("Starting map");
-    
     //setup map
     var myOptions = {
           center: new google.maps.LatLng(40.7746431, -73.9701962),
@@ -167,13 +173,22 @@ function initializeHomeMap() {
     
     markers = [];
     
+    youAreHereMarker = new google.maps.Marker({
+        map: map,
+        icon: "http://maps.google.com/mapfiles/marker_purple.png"
+    });
+    
+}
+
+function getTodaysEvents(){
+    
     /* ----- Get Today's events ----*/
     todayEvents = [];
     today = moment();
     console.log("today", today.format());
     var tomorrow = moment(today).add('hours', 24);
-    jsonURL = "http://betherenyc.herokuapp.com/api/allevents/";
-    //jsonURL = "http://localhost:5000/api/allevents/";
+    //jsonURL = "http://betherenyc.herokuapp.com/api/allevents/";
+    jsonURL = "http://localhost:5000/api/allevents/";
     var eventsHTML = "";
     
     jQuery.ajax({
@@ -184,19 +199,19 @@ function initializeHomeMap() {
             
             success : function(data) {
                 console.log("inside success callback");
-                console.log(data);
+                
                 if (data.status == "OK") {
                     
                     //save events
                     var events = data.events;
-                    console.log("num events", events.length);
+                    
                     //loop and find events happening between now and the next 24hrs
                     //save to todaysEvents array
                     for (var c=0; c < events.length; c++){
-                        console.log(c, events[c].datetime.timestamp);
+                        
                         if (moment(events[c].datetime.timestamp) >= today && events[c].datetime.timestamp != null){
                             todayEvents.push(events[c]);
-                            console.log("found one!");
+                            
                             //build the html
                             eventsHTML = "\
                                 <li map-lat='"+events[c].location.latitude+"' \
@@ -208,7 +223,7 @@ function initializeHomeMap() {
                                 <a modal-link='/api/event/"+events[c]._id+"'> \
                                     <h3>"+events[c].name+"</h3> \
                                     <p>"+events[c].place+"<br/> \
-				    <span>"+moment(events[c].datetime.timestamp).fromNow()+"</span><br/> \
+				    <span>"+moment(events[c].datetime.timestamp).local().calendar()+"</span><br/> \
 				</a> \
 				</li>" + eventsHTML;
 
@@ -299,7 +314,8 @@ function initializeHomeMap() {
     });
     
 
-}//end initialize()
+
+}//end getTodaysEvents()
 
 function openWindow(id){
      var jsonURL = "/api/event/"+id;
@@ -362,6 +378,37 @@ function showMarker(e){
 }
 
 
+function getPosition(){
+  if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(function(currentPosition) {
+      console.log("getting position");
+      console.log(currentPosition);
+      currentLat = currentPosition.coords.latitude;
+      currentLong = currentPosition.coords.longitude;
+      currentPos = currentLat+","+currentLong;
+      //var targetLoc = localStorage.getItem("targetLoc");
+      localStorage.setItem("yourLocation", currentPos);
+
+      youAreHereMarker.position = new google.maps.LatLng(currentPosition.coords.latitude,currentPosition.coords.longitude);
+    //add onclick event listener for the markers
+    google.maps.event.addListener(youAreHereMarker, 'click', function(){
+        infowindow.open(map);
+        infowindow.setContent("This is you!");
+        infowindow.setPosition(youAreHereMarker.position);
+    });
+      map.panTo(youAreHereMarker.position);
+
+        
+      
+    }, function(error){
+      alert("Error occurred when watching. Error code: " + error);
+    
+    }, {enableHighAccuracy:true, maximumAge:30000, timeout:27000});
+  }
+  else {
+    Alert('Geolocation is not supported for this Browser/OS version yet.');
+  }
+};
 
 //geocode address and place them on the map
   function codeAddress() {

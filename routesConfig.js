@@ -55,15 +55,13 @@ module.exports = function(app) {
     
     // data api information for developers
     app.get('/api/info', apiRoute.apiInfo);
-    
-    // return all event entries in json format
-    app.get('/api/allevents', apiRoute.getAllEventsJSON);
-        
+           
+    //search for an event by name
+    app.get('/api/search', apiRoute.getSearchJSON);
+
     // return one event entries in json format
     app.get('/api/event/:eventID', apiRoute.getEventbyIdJSON);
-       
-    //search for an event by name
-    app.get('/api/search', apiRoute.getSearchName);
+
     
      /*********** USER ROUTES ************/    
     

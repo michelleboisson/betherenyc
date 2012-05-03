@@ -22,8 +22,7 @@ module.exports.configureSchema = function(Schema, mongoose) {
         ,  placename : String
     }
     , datetime : {
-        timestamp: {type: Date},
-        date: String
+        timestamp: {type: Date}
     }
     , link  : String
     , lastEdited: { type: Date }

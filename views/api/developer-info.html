@@ -37,17 +37,19 @@
             
 		<h2>All Events</h2>
                 <p>
-                <code>http://betherenyc.herokuapp.com/api/allevents/</code>
+                <code>http://betherenyc.herokuapp.com/api/search</code>
                 <br/>will return all the events in the database in ascending order by date (furthest event in the future is first)</p>
                 
+		 <h2>Query for a Date or an Event Name</h2>
+                <code>http://betherenyc.herokuapp.com/api/search?name=Toca Tuesday&date=2012-04-25</code>
+                <br/>both <code>date</code> and <code>name</code> are optional; and where <code>date</code> is a date in the format "YYYY-DD-MM". This will return an array of events happening that day.</p>
+		
                 <h2>One Event by Id</h2>
                 <p>
                 <code>http://betherenyc.herokuapp.com/api/event/:eventID</code>
                 <br/>will return one evnt with the id "eventID"</p>
                 
-                <h2>Events by Date</h2>
-                <code>http://betherenyc.herokuapp.com/api/:date</code>
-                <br/>where <code>:date</code> is a date in the format "YYYY-DD-MM". This will return an array of events happening that day.</p>
+               
 	</div>
 </div>
 

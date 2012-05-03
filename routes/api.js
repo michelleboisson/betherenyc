@@ -19,7 +19,7 @@ module.exports = {
         queryConditions = {}; //empty conditions - return everything
         var query = db.Event.find( queryConditions, includeFields);
     
-        query.sort('date',-1); //sort by most recent
+        query.sort('datetime.timestamp',-1); //sort by most recent
         query.exec(function (err, eventPosts) {
     
             jsonData = {
@@ -42,7 +42,7 @@ module.exports = {
         // query for one events
         var query = db.Event.findById( requestedEventID, includeFields);
     
-        query.sort('date',-1); //sort by most recent
+        query.sort('datetime.timestamp',-1); //sort by most recent
         query.exec(function (err, thisEvent) {
     
             jsonData = {
@@ -54,7 +54,7 @@ module.exports = {
         });
     },
     
-    getSearchName : function(request,response){
+    getSearchJSON : function(request,response){
           //var sname = request.params.searchName.toUpperCase();
          //var url_parts = url.parse(request.url, true);
           var sdate = request.query["date"];
@@ -63,11 +63,16 @@ module.exports = {
           var sname = request.query["name"];
           console.log(sname);
           
-          var conditions;
+          var splace = request.query["place"];
+          console.log(splace);
+          
+          var conditions ={};
           if (sname!= "" && sname!= undefined && sname!=null)
-               conditions = {  name : { $regex: sname }};
+               conditions.name = { $regex: sname };
           
-          
+     /*     if (splace!="" && splace!=undefined && splace!=null)
+               conditions.location= { placename: { $regex: splace }};
+     */        
           var query = db.Event.find( conditions ,['id', 'name', 'place','desc','location', 'link', 'datetime'] );
           
           if(sdate!= "" && sdate!= undefined && sdate!=null){
@@ -78,7 +83,7 @@ module.exports = {
                query.where('datetime.timestamp').gte(convertedDate).lte(tomorrow);
           }
           
-          query.sort('datetime.timestamp',1); //sort by date in descending order
+          query.sort('datetime.timestamp',-1); //sort by date in descending order
                    	
           query.exec({}, function(err, allEvents){
 	       console.log(allEvents);

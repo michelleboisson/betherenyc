@@ -178,8 +178,8 @@ function getTodaysEvents(){
     today = moment();
     console.log("today", today.format());
     var tomorrow = moment(today).add('hours', 24);
-    //jsonURL = "http://betherenyc.herokuapp.com/api/search";
-    jsonURL = "http://localhost:5000/api/search";
+    jsonURL = "http://betherenyc.herokuapp.com/api/search";
+    //jsonURL = "http://localhost:5000/api/search";
     var eventsHTML = "";
     
     jQuery.ajax({

@@ -10,7 +10,9 @@ var currentPos;
 var youAreHereMarker;
 
 jQuery(document).ready(function() {
-
+    
+    getWeatherData();    
+    
     geocoder = new google.maps.Geocoder();
 
     if ( $('#mapHome')[0] ){
@@ -211,7 +213,7 @@ function getTodaysEvents(){
                                 <a modal-link='/api/event/"+events[p]._id+"'> \
                                     <h3>"+events[p].name+"</h3> \
                                     <p>"+events[p].place+"<br/> \
-				    <span>"+moment(events[p].datetime.timestamp).calendar()+"</span><br/> \
+				    <span>"+moment(events[p].datetime.timestamp).add('hours', 4).calendar()+"</span><br/> \
 				</a> \
 				</li>" + eventsHTML;
                             todayEvents.push(events[p]);
@@ -322,11 +324,15 @@ function openWindow(id){
                 if (data.status == "OK") {
                     
                     //descr = data.descr;
+                    var currentPos = localStorage.getItem("yourLocation").split(",");
+                    console.log(currentPos);
                     var contentString = '<div id="content">'+
                         '<div id="siteNotice">'+
                         '</div>'+
-                        '<div id="bodyContent"><strong>'+data.event.name+'</strong><br/><i>'+moment(data.event.datetime.timestamp).fromNow()+
-                        '</i><p>'+data.event.desc.substr(0, 200) +'...'+
+                        '<div id="bodyContent"><p><strong>'+data.event.name+'</strong></p>'+
+                        '<p style="color:darkmagenta"><i>'+moment(data.event.datetime.timestamp).fromNow()+
+                        '</i> <span style="float:right">'+calculateDistance(currentPos[0], currentPos[1], data.event.location.latitude, data.event.location.longitude)+'mi</span></p>'+
+                        '<p>'+data.event.desc.substr(0, 200) +'...'+
                         '<p><a href=/events/permalink/'+data.event._id+'>See event</a></p></div>'+
                         '</div>';
                         //launchModal(event);
@@ -365,6 +371,27 @@ function toggleBounce() {
 function showMarker(e){
     console.log("hmmm "+e);
 }
+
+
+function getWeatherData(){
+    //var jsonURL = "http://weather.yahooapis.com/forecastjson?w=2459115&callback=gotWeatherData";
+    var jsonURL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D2459115&format=json&diagnostics=true&callback=cbfunc";
+        $.getJSON(jsonURL, function(data) {
+  console.log( data );
+  var img = data.condition.image;
+                    var imgcode = "<img src="+img+"/>";
+                    $("#logo").append(imgcode);
+});
+}
+function gotWeatherData(json){
+    console.log("got json back!");
+                    var img = json.condition.image;
+                    var imgcode = "<img src="+img+"/>";
+                    $("#logo").append(imgcode);
+               
+    
+}
+
 
 
 function getPosition(){
@@ -469,4 +496,31 @@ function initializeOneMap(){
             map: mapOne,
             animation: google.maps.Animation.DROP
     });
+}
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  var R = 6371;
+  var dLat = (lat2-lat1).toRad();
+  console.log("dLAT = "+dLat);
+  
+  if (typeof(Number.prototype.toRad) === "undefined") {
+  Number.prototype.toRad = function() {
+    return this * Math.PI / 180;
+    }
+  }
+  
+  var dLon = (lon2-lon1).toRad();
+  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.cos((lat1* Math.PI / 180).toRad()) * Math.cos((lat2* Math.PI / 180).toRad()) *
+          Math.sin(dLon/2) * Math.sin(dLon/2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  var d = R * c * 0.621371192;// km to mi
+  
+  return d.toFixed(1);
+}
+/** Converts numeric degrees to radians */
+if (typeof(Number.prototype.toRad) === "undefined") {
+  Number.prototype.toRad = function() {
+    return this * Math.PI / 180;
+  }
 }

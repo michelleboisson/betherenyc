@@ -173,6 +173,7 @@ module.exports = {
                         user_is_owner : isOwner,
                         event_has_owner : hasOwner,
                         event : event,
+                        add : request.query.add,
                         pageTitle : event.name+ " - BeThereNYC"
                    };
                 }
@@ -223,7 +224,7 @@ module.exports = {
         console.log("postid: " +postid);
         
         // get the blog post with populated author information
-        db.Event.findOne({ _id : postid }).populate('author').run(function(err, event){
+        db.Event.findOne({ _id : postid }).run(function(err, event){
             console.log(event);
             if(err){
                 console.log("uh oh, there was an error.");

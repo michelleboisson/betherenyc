@@ -16,6 +16,7 @@
 		<input type="text" placeholder="Event Name" id="eventName" name="eventName" class="input-large" />
 	</div>
 </div>
+<ul class="controls span8" id="possibleevents"></ul>
 <div class="control-group">
 	<label class="control-label" for="appendedPrependedInput">the pretty link for this event</label>
 	<div class="controls">
@@ -38,13 +39,25 @@
 	<div class="controls">
 		<div class="input-append">
 			<input type="text" placeholder="Place Name" id="eventPlace" name="eventPlace" size="50" class="appendedPrependedInput"/>
-			<a id="mapthis" class="btn">map this</a>
+			
+			
 		</div>
 	</div>
 </div>
-
+<ul id="locationjson" class="controls span8"></ul>
 <input type="hidden" id="eventPlaceLat" name="eventPlaceLat" class="input-medium"/>
 <input type="hidden" id="eventPlaceLng" name="eventPlaceLng" class="input-medium"/>
+<div class="control-group">
+	<label class="control-label" for="appendedPrependedInput">Address</label>
+	<div class="controls">
+		<div class="input-append">
+			<input type="text" placeholder="(optional)" id="eventAddress" name="eventAddress" size="50" class="appendedPrependedInput"/>
+			
+			
+		</div>
+	</div>
+</div>
+<a id="mapthis" class="btn">map this</a>
 	  </fieldset>
 
 	  <fieldset>
@@ -65,6 +78,7 @@
 
  <fieldset>
             <legend>Your Info</legend>
+	    <p>We just want to make sure you're a real person, and not a robot. Robots don't post fun events. </p>
 <div class="control-group">
 	<label class="control-label" for="appendedPrependedInput">Your Name</label>
 	<div class="controls">
@@ -97,10 +111,9 @@
 		
 		$("#eventName").change(function(){
 			//check database if event exists
-			jsonURL = "http://localhost:5000/api/allevents/";
+			jsonURL = "http://localhost:5000/api/search?name="+$(this).val();
 			var eventsHTML = "";
-			var enteredEventName = $(this).val().split(" ");
-			console.log(enteredEventName);
+			
 			jQuery.ajax({
           
 				url : jsonURL,
@@ -111,16 +124,18 @@
 					console.log("inside success callback");
                 
 					if (data.status == "OK") {
-						//loop through the names to see if there's a match
-					/*	for (var f=0; f < data.events.length; f++){
-							//check if any of the words in the entered name match an event in the database
-							for (var g=0; g<enteredEventName.length; g++){
-								if(data.event[f].name.contains("Bike"){
-									console.log("match! - "+ data.event[f].name);
-								}
-							}
+						console.log(data);
+						if (data.events.length > 0){
+						var somehtml = "<pre><strong>Are you sure it's not one of these?</strong>";
+						for(var i=0; i<data.events.length;i++){
+							var thisevent = data.events[i];
+							var addItem = "<li more-info="+thisevent._id+"><a href=/events/permalink/"+thisevent._id+"?add=true>"+moment(thisevent.datetime.timestamp).calendar()+" - "+thisevent.name+"</a></li>";
+							somehtml += addItem;
 						}
-					*/	
+						somehtml +="</pre>";
+						somehtml += "<a class='btn btn-warning' id='cancelsugg'>Nope, this is a new event</a>";
+						$("#possibleevents").html(somehtml);
+					}
 					}
 						
 				}//end if status OK
@@ -132,16 +147,20 @@
 		        }); // end of jQuery.ajax*/			
 		});
 		
+		$("#cancelsugg").live('click', function(){
+			$("#cancelsugg").fadeOut();
+			$("pre").fadeOut();
+			$("#eventAddress").val("").focus();
+			$("#eventAddress").attr("placeholder", "*required");
+		});
 		
-		
-		$("#eventPlace").focusout(function(){
-			if ($(this).val() != '' ){
-				$("#mapthis").show();
-			}
+		$("#possibleevents li").live('click', function(){
+			//visit page
+			$(window).location = "/event/"+$(this).attr('more-info');
 		});
 		
 		
-		$("#mapthis").click(function(){
+		$("#eventPlace").change(function(){
 			var placeName = $("#eventPlace").val();
 			//var myAPIKEY = "HAXUF5OV2J54CYSTU13GAQDV5BXEOOZNRYOFI0ISD5YTIPJJ";
 			//var fsURL= "https://api.foursquare.com/v2/venues/search?near=New%20York,%20NY&query="+placeName+"&oauth_token="+myAPIKEY+"&v=20120417"
@@ -154,19 +173,21 @@
 				ll: "40.74828059076867,-73.98556262254715",
 				intent: "browse",
 				radius: 100000,
+				limit: 10,
 				format: "jsonp"
 			}, function(data){
 				console.log(data);
 				var items = data.response.groups[0].items;
 				console.log(data.response.groups[0].items);
 				
-				var somehtml = "<ul id=locationjson><i>Do you mean?</i>";
+				var somehtml = "<pre><b>Do you mean?</b>";
 				for(i=0; i< items.length; i++){
-					var addItem = "<li place-name='"+items[i].name+"' place-lat="+items[i].location.lat+" place-lng="+items[i].location.lng+">"+items[i].name+" - "+items[i].location.address+" "+items[i].location.city+"</li>";
+					var addItem = "<li place-name='"+items[i].name+"' place-lat="+items[i].location.lat+" place-lng="+items[i].location.lng+" place-addr='"+items[i].location.address+", "+items[i].location.city+"'>"+items[i].name+" <br/> "+items[i].location.address+" "+items[i].location.city+"</li>";
 					somehtml += addItem;
 				}
-				somehtml += "</ul>";
-				$("#eventPlace").after(somehtml);
+				somehtml += "</pre>";
+				somehtml += "<a class='btn btn-warning' id='cancelsugg'>Nope, I'll type the address myself</a>";
+				$("#locationjson").html(somehtml);
 
 				
 			}); 
@@ -177,16 +198,19 @@
 			var lat = $(this).attr('place-lat');
 			var lng = $(this).attr('place-lng');
 			var n = $(this).attr('place-name');
+			var addr = $(this).attr('place-addr');
 			$(this).css('color', 'orange');
 			$(this).css('cursor', 'pointer');
 			
 			$("#eventPlaceLat").val(lat);
 			$("#eventPlaceLng").val(lng);
 			$("#eventPlace").val(n);
+			$("#eventAddress").val(addr);
 			
 			
-			$("#locationjson").fadeOut();
-			$("#mapthis").fadeOut();
+			$("#cancelsugg").fadeOut();
+			$("pre").fadeOut();
+		
 			//$(this).append(buttons);
 		});
 		//map = new google.maps.Map(document.getElementById("minimap"), myOptions);
@@ -198,6 +222,8 @@
 			var currentTitle = jQuery(this).val();
 			jQuery("#urlslug").val(convertToSlug(currentTitle));
 		});
+		
+		
     
 	});// end doc ready
 	

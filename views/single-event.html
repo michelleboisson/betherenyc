@@ -2,6 +2,12 @@
 <div  class="container">
 <div id="maincontent" class="row-fluid">     
         <div id="submitForm" class="span8">
+		<% if (add) { %>
+    <br>
+    <div class="alert alert-success">
+        Would you like to edit this event? - <a href="/update/<%= event._id %>">Edit post</a>
+    </div>
+<% } %>
                 <h1><%= event.name %></h1>
 		
 		<% if (event_has_owner) { %>
@@ -14,6 +20,7 @@
 		<div id="mapEvent" map-lat="<%= event.location.latitude %>" map-lng="<%= event.location.longitude %>"></div>
 		<p><br/><%= event.place %></p>
 		<p class=""><%= event.datetime.timestamp %></p>
+		<p>Closest Train Station:<span id="stations"></span></p>
 		<p>More info: <a href="<%= event.link %>" target=new><%= event.linkname %></a></p>
 		<p style="border-bottom: 1px solid #ccc">&nbsp;</p>
 		<span class='st_sharethis' displayText='ShareThis'></span>

@@ -196,7 +196,7 @@ body {
     display:none;
 }
 
- .prev, .next { background-color:#b0232a; padding:5px 10px; color:#fff; text-decoration:none;}
+ .prev, .next { background-color:#333; padding:5px 10px; color:#fff; text-decoration:none;}
         .prev:hover, .next:hover { background-color:#000; text-decoration:none;}
         .prev { float:left;}
         .next { float:right;}

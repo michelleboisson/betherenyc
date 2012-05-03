@@ -16,10 +16,10 @@
 		<input type="text" placeholder="Event Name" id="eventName" name="eventName" class="input-large" />
 	</div>
 </div>
-<div class="control-group" style="visibility:hidden">
+<div class="control-group">
 	<label class="control-label" for="appendedPrependedInput">the pretty link for this event</label>
 	<div class="controls">
-		<input type="text" class="input-large" name="urlslug" id="urlslug" >
+		<input type="text" class="input-large" disabled name="urlslug" id="urlslug" >
 		<p class="help-block">The url slug for this event entry, the ending of the URL. ie 'http://betherenyc.herokuapp.com/event/<b><u>the-best-event</u></b>'</p>
 	</div>
 </div>
@@ -48,9 +48,9 @@
 	  </fieldset>
 
 	  <fieldset>
-            <legend>Account information</legend>
+            <legend>Event Details</legend>
 <div class="control-group">
-	<label class="control-label" for="appendedPrependedInput">Info came from</label>
+	<label class="control-label" for="appendedPrependedInput">Link to more info about this</label>
 	<div class="controls">
 		<input type="text" value="http://" id="eventLink" name="eventLink" size="50" />
 	</div>
@@ -63,6 +63,21 @@
 </div>
 	  </fieldset>
 
+ <fieldset>
+            <legend>Your Info</legend>
+<div class="control-group">
+	<label class="control-label" for="appendedPrependedInput">Your Name</label>
+	<div class="controls">
+		<input type="text" value="" id="eventAuthorName" name="eventAuthorName" size="50" />
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label" for="appendedPrependedInput">Email</label>
+	<div class="controls">
+		<input type="text" placeholder="you@email.com" id="eventAuthorEmail" name="eventAuthorEmail" size="50" />
+	</div>
+</div>
+	  </fieldset>
 	<input class="offset2" type="submit" value="Add Event" id="saveBtn"/>
 </form>
 </div>
@@ -78,7 +93,46 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		
-		$("#EventForm").formToWizard({ submitButton: 'saveBtn' })
+		$("#EventForm").formToWizard({ submitButton: 'saveBtn' });
+		
+		$("#eventName").change(function(){
+			//check database if event exists
+			jsonURL = "http://localhost:5000/api/allevents/";
+			var eventsHTML = "";
+			var enteredEventName = $(this).val().split(" ");
+			console.log(enteredEventName);
+			jQuery.ajax({
+          
+				url : jsonURL,
+				dataType : 'json',
+				type : 'GET',
+            
+				success : function(data) {
+					console.log("inside success callback");
+                
+					if (data.status == "OK") {
+						//loop through the names to see if there's a match
+					/*	for (var f=0; f < data.events.length; f++){
+							//check if any of the words in the entered name match an event in the database
+							for (var g=0; g<enteredEventName.length; g++){
+								if(data.event[f].name.contains("Bike"){
+									console.log("match! - "+ data.event[f].name);
+								}
+							}
+						}
+					*/	
+					}
+						
+				}//end if status OK
+				,
+				error : function(err) {
+				    console.log("error fetching events");
+				}
+        
+		        }); // end of jQuery.ajax*/			
+		});
+		
+		
 		
 		$("#eventPlace").focusout(function(){
 			if ($(this).val() != '' ){

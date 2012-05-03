@@ -196,25 +196,25 @@ function getTodaysEvents(){
                     
                     //loop and find events happening between now and the next 24hrs
                     //save to todaysEvents array
-                    for (var c=0; c < events.length; c++){
-                        
-                        if (moment(events[c].datetime.timestamp) >= today && events[c].datetime.timestamp != null){
-                            todayEvents.push(events[c]);
+                    //events.forEach(function(element, index, array){
+                      for(var p=0; p< events.length; p++){  
+                        if (moment(events[p].datetime.timestamp) >= today && events[p].datetime.timestamp != null){
                             
                             //build the html
                             eventsHTML = "\
-                                <li map-lat='"+events[c].location.latitude+"' \
-                                map-lng='"+events[c].location.longitude+"' \
-                                event-name='"+events[c].name+"' \
-                                event-place='"+events[c].place+"' \
-                                event-time='"+events[c].datetime.timestamp+"' \
-                                event-id='"+events[c]._id+"'>\
-                                <a modal-link='/api/event/"+events[c]._id+"'> \
-                                    <h3>"+events[c].name+"</h3> \
-                                    <p>"+events[c].place+"<br/> \
-				    <span>"+moment(events[c].datetime.timestamp).local().calendar()+"</span><br/> \
+                                <li map-lat='"+events[p].location.latitude+"' \
+                                map-lng='"+events[p].location.longitude+"' \
+                                event-name='"+events[p].name+"' \
+                                event-place='"+events[p].place+"' \
+                                event-time='"+events[p].datetime.timestamp+"' \
+                                event-id='"+events[p]._id+"'>\
+                                <a modal-link='/api/event/"+events[p]._id+"'> \
+                                    <h3>"+events[p].name+"</h3> \
+                                    <p>"+events[p].place+"<br/> \
+				    <span>"+moment(events[p].datetime.timestamp).calendar()+"</span><br/> \
 				</a> \
 				</li>" + eventsHTML;
+                            todayEvents.push(events[p]);
 
                         }
                     }

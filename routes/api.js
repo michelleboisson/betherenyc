@@ -54,44 +54,51 @@ module.exports = {
         });
     },
     
-     getEventsbyDate : function(request, response) {
-        
-        var requestedDate= request.params.date;
-        
-        var convertedDate = moment(requestedDate, "YYYY-MM-DD");
-        console.log("converted Date: "+convertedDate);
-        //console.log(convertedDate.date(), convertedDate.month(), convertedDate.year());
-
-        //
-        convertedDate.hours(0).minutes(0).seconds(0);
-        var tomorrow = moment(convertedDate).add('hours',24);
-        
-        // build the query
-        var query = db.Event.find({}, ['id', 'name', 'place','desc','location', 'link', 'datetime']);
-        query.sort('datetime.timestamp',1); //sort by date in descending order
-        query.where('datetime.timestamp').gte(convertedDate).lte(tomorrow);
-        //query.$where('moment(this.datetime.timestamp).month() == convertedDate.month()');
-       // query.$where('moment(this.datetime.timestamp).year() == convertedDate.year()');
-
-        // run the query and display blog_main.html template if successful
-        query.exec({}, function(err, eventPosts){
-           if (err){
-               console.log("there was an error : "+err);
-           }
-          else{
-          // prepare template data
-          var jsonData = {
-               'status' : 'OK',
-               'date': requestedDate,
-               'count': eventPosts.length,
-               'events' : eventPosts
-          };
-          response.json(jsonData);
-        }
-        });
-    }
-    
-    
+    getSearchName : function(request,response){
+          //var sname = request.params.searchName.toUpperCase();
+         //var url_parts = url.parse(request.url, true);
+          var sdate = request.query["date"];
+          console.log(sdate);
+          
+          var sname = request.query["name"];
+          console.log(sname);
+          
+          var conditions;
+          if (sname!= "" && sname!= undefined && sname!=null)
+               conditions = {  name : { $regex: sname }};
+          
+          
+          var query = db.Event.find( conditions ,['id', 'name', 'place','desc','location', 'link', 'datetime'] );
+          
+          if(sdate!= "" && sdate!= undefined && sdate!=null){
+               var convertedDate = moment(sdate, "YYYY-MM-DD");
+               
+               convertedDate.hours(0).minutes(0).seconds(0);
+               var tomorrow = moment(convertedDate).add('hours',24);
+               query.where('datetime.timestamp').gte(convertedDate).lte(tomorrow);
+          }
+          
+          query.sort('datetime.timestamp',1); //sort by date in descending order
+                   	
+          query.exec({}, function(err, allEvents){
+	       console.log(allEvents);
+	       // prepare template data
+	       if (err){
+                    console.log("there was an error : "+err);
+               }
+               else{
+               // prepare template data
+                    var jsonData = {
+                    'status' : 'OK',
+                    'name-query': sname,
+                    'date-query': sdate,
+                    'count': allEvents.length,
+                    'events' : allEvents
+                    };
+               response.json(jsonData);
+               }
+          });
+     }   
     
     
 }

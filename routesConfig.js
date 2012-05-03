@@ -23,10 +23,10 @@ module.exports = function(app) {
     app.get('/', eventRoute.mainpage );
     
     //request submit page
-    app.get('/submit.html', ensureAuthenticated, eventRoute.getSubmitEvent);
+    app.get('/submit.html', eventRoute.getSubmitEvent);
     
     //post submitted event
-    app.post('/submit.html', ensureAuthenticated, eventRoute.postSubmittedEvent);
+    app.post('/submit.html', eventRoute.postSubmittedEvent);
     
     //get event by urlslug
     app.get('/events/:urlslug', eventRoute.getEventbyUrlslug);
@@ -61,9 +61,9 @@ module.exports = function(app) {
         
     // return one event entries in json format
     app.get('/api/event/:eventID', apiRoute.getEventbyIdJSON);
-    
-    // return entries from a certain data in json
-    app.get('/api/:date', apiRoute.getEventsbyDate );
+       
+    //search for an event by name
+    app.get('/api/search', apiRoute.getSearchName);
     
      /*********** USER ROUTES ************/    
     

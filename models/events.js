@@ -12,14 +12,18 @@ module.exports.configureSchema = function(Schema, mongoose) {
     , date      : { type: Date}
     , time      : String
     , place     : String
-    , author    : { type: Schema.ObjectId, ref: 'User' }
+    , author    : {
+            name: String
+        ,   email: String
+    }
     , location  : {
            latitude : Number
         ,  longitude : Number
         ,  placename : String
     }
     , datetime : {
-        timestamp: {type: Date}
+        timestamp: {type: Date},
+        date: String
     }
     , link  : String
     , lastEdited: { type: Date }

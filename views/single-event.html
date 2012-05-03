@@ -5,7 +5,7 @@
                 <h1><%= event.name %></h1>
 		
 		<% if (event_has_owner) { %>
-		Submitted by <%= event.author.name.first %></a>
+		Submitted by <%= event.author.name %></a>
 		<% } %>
 			
 		<p id="event-desc"><%- event.desc %></p>

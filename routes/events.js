@@ -40,7 +40,10 @@ module.exports = {
             time: request.body.eventTime,
             place: request.body.eventPlace,
             desc : request.body.eventDesc,
-            author : request.user._id,
+            author : {
+                name: request.body.eventAuthorName,
+                email: request.body.eventAuthorEmail
+            },
             location: {
                 latitude: request.body.eventPlaceLat,
                 longitude: request.body.eventPlaceLng,
@@ -77,7 +80,7 @@ module.exports = {
         // run the query and display blog_main.html template if successful
         query.exec({}, function(err, allPosts){
                 
-            db.Event.findOne({urlslug:request.params.urlslug}).populate('author').run(function(err,event){
+            db.Event.findOne({urlslug:request.params.urlslug}).run(function(err,event){
                 if (err) {
                     console.log('error');
                     console.log(err);
@@ -94,7 +97,7 @@ module.exports = {
                         hasOwner = true;
                     }
                     
-                    if (hasOwner && typeof request.user != "undefined" && (request.user._id.toString() == event.author._id.toString()) ) {
+                    if (hasOwner && typeof request.user != "undefined" && (request.user._id.toString() == event.author.name) ) {
                         isOwner = true;
                     } else {
                         isOwner = false;

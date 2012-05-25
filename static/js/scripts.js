@@ -187,8 +187,8 @@ function getTodaysEvents(){
     today = moment();
     console.log("today", today.format());
     var tomorrow = moment(today).add('hours', 36);
-    jsonURL = "http://betherenyc.herokuapp.com/api/search";
-    //jsonURL = "http://localhost:5000/api/search";
+    //jsonURL = "http://betherenyc.herokuapp.com/api/search";
+    jsonURL = "http://localhost:5000/api/search";
     var eventsHTML = "";
     
     jQuery.ajax({
@@ -354,19 +354,26 @@ function openWindow(id){
                     
                     //if event started already
                     if (moment(data.event.datetime.starttimestamp) < today){
-                        var text = "ends " +moment(new Date(data.event.datetime.endtimestamp)).fromNow();
+                        var timetext = "ends " +moment(new Date(data.event.datetime.endtimestamp)).fromNow();
                     }else{
-                        var text = moment(new Date(data.event.datetime.starttimestamp)).fromNow();
+                        var timetext = moment(new Date(data.event.datetime.starttimestamp)).fromNow();
                     }
                     //descr = data.descr;
                     var currentPos = localStorage.getItem("yourLocation").split(",");
+                    console.log(currentPos[0]);
+                    
+                    if (currentPos[0] == null){
+                        var text = calculateDistance(currentPos[0], currentPos[1], data.event.location.latitude, data.event.location.longitude)+"mi";
+                    }else{
+                        var text = "";
+                    }
                     console.log(currentPos);
                     var contentString = '<div id="content">'+
                         '<div id="siteNotice">'+
                         '</div>'+
                         '<div id="bodyContent"><p><strong>'+data.event.name+'</strong></p>'+
-                        '<p style="color:darkmagenta"><i>'+text+
-                        '</i> <span style="float:right">'+calculateDistance(currentPos[0], currentPos[1], data.event.location.latitude, data.event.location.longitude)+'mi</span></p>'+
+                        '<p style="color:darkmagenta"><i>'+timetext+
+                        '</i> <span style="float:right">'+text+'</span></p>'+
                         '<p>'+data.event.desc.substr(0, 200) +'...'+
                         '<p><a href=/events/permalink/'+data.event._id+'>See event</a></p></div>'+
                         '</div>';

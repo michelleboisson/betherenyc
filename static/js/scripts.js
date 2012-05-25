@@ -188,7 +188,7 @@ function getTodaysEvents(){
     console.log("today", today.format());
     var tomorrow = moment(today).add('hours', 36);
     //jsonURL = "http://betherenyc.herokuapp.com/api/search";
-    jsonURL = "http://localhost:5000/api/search";
+    jsonURL = "/api/search";
     var eventsHTML = "";
     
     jQuery.ajax({
@@ -362,7 +362,7 @@ function openWindow(id){
                     var currentPos = localStorage.getItem("yourLocation").split(",");
                     console.log(currentPos[0]);
                     
-                    if (currentPos[0] == null){
+                    if (currentPos[0] != ""){
                         var text = calculateDistance(currentPos[0], currentPos[1], data.event.location.latitude, data.event.location.longitude)+"mi";
                     }else{
                         var text = "";

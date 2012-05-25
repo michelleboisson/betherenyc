@@ -136,8 +136,8 @@ var universalLoader = " \
 		
 		$("#eventName").change(function(){
 			//check database if event exists
-			jsonURL = "http://localhost:5000/api/search?name="+$(this).val();
-			//jsonURL = "http://betherenyc.herokuapp.com/api/search?name="+$(this).val();
+			//jsonURL = "http://localhost:5000/api/search?name="+$(this).val();
+			jsonURL = "http://betherenyc.herokuapp.com/api/search?name="+$(this).val();
 			var eventsHTML = "";
 			
 			$("#eventName").after(universalLoader);

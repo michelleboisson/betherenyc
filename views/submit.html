@@ -117,15 +117,30 @@
         
         
 <script type="text/javascript">
+
+var geocoder;
+
+var universalLoader = " \
+<div id='loadercircle' class='marginLeft'> \
+					<div id='circle_1' class='circle'></div> \
+					<div id='circle_2' class='circle'></div> \
+					<div id='circle_3' class='circle'></div> \
+					<div class='clearfix'></div> \
+				</div>                      ";
+
+
+
 	$(document).ready(function(){
-		
+		    geocoder = new google.maps.Geocoder();
 		$("#EventForm").formToWizard({ submitButton: 'saveBtn' });
 		
 		$("#eventName").change(function(){
 			//check database if event exists
-			//jsonURL = "http://localhost:5000/api/search?name="+$(this).val();
-			jsonURL = "http://betherenyc.herokuapp.com/api/search?name="+$(this).val();
+			jsonURL = "http://localhost:5000/api/search?name="+$(this).val();
+			//jsonURL = "http://betherenyc.herokuapp.com/api/search?name="+$(this).val();
 			var eventsHTML = "";
+			
+			$("#eventName").after(universalLoader);
 			
 			jQuery.ajax({
           
@@ -142,11 +157,12 @@
 						var somehtml = "<pre><strong>Are you sure it's not one of these?</strong>";
 						for(var i=0; i<data.events.length;i++){
 							var thisevent = data.events[i];
-							var addItem = "<li more-info="+thisevent._id+"><a href=/events/permalink/"+thisevent._id+"?add=true>"+moment(thisevent.datetime.timestamp).calendar()+" - "+thisevent.name+"</a></li>";
+							var addItem = "<li more-info="+thisevent._id+"><a href=/events/permalink/"+thisevent._id+"?add=true>"+moment(thisevent.datetime.starttimestamp).calendar()+" - "+thisevent.name+"</a></li>";
 							somehtml += addItem;
 						}
 						somehtml +="</pre>";
 						somehtml += "<a class='btn btn-warning' id='cancelsugg'>Nope, this is a new event</a>";
+						$("#loadercircle").remove();
 						$("#possibleevents").html(somehtml);
 					}
 					}
@@ -177,6 +193,7 @@
 			var placeName = $("#eventPlace").val();
 			//var myAPIKEY = "HAXUF5OV2J54CYSTU13GAQDV5BXEOOZNRYOFI0ISD5YTIPJJ";
 			//var fsURL= "https://api.foursquare.com/v2/venues/search?near=New%20York,%20NY&query="+placeName+"&oauth_token="+myAPIKEY+"&v=20120417"
+			$(this).after(universalLoader);
 			
 			$.getJSON("https://api.foursquare.com/v2/venues/search", {
 				//near: "New York, NY",       
@@ -200,6 +217,7 @@
 				}
 				somehtml += "</pre>";
 				somehtml += "<a class='btn btn-warning' id='cancelsugg'>Nope, I'll type the address myself</a>";
+				$("#loadercircle").remove();
 				$("#locationjson").html(somehtml);
 
 				
@@ -226,6 +244,13 @@
 		
 			//$(this).append(buttons);
 		});
+		
+		$("#eventAddress").change(function(){
+			$(this).after(universalLoader);
+			lookUpLatLong($(this).val());
+		});
+		
+		
 		//map = new google.maps.Map(document.getElementById("minimap"), myOptions);
            
 		$("#eventDate").datepicker();
@@ -250,6 +275,23 @@ function convertToSlug(Text)
         .replace(/ +/g,'-')
         ;
 }
-
+function lookUpLatLong(address){
+  
+  //http://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&sensor=true_or_false
+  //json .status.geometry.location.lat, .status.geometry.location.lng
+    console.log("looking up address");
+    console.log(address);
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        console.log(results);
+        $("#eventPlaceLat").val(results[0].geometry.location.lat());
+        $("#eventPlaceLng").val(results[0].geometry.location.lng());
+	console.log("new lat: "+ $("#eventPlaceLat").val());
+	$("#loadercircle").remove();
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
+}
 
 </script>

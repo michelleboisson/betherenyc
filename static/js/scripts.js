@@ -6,9 +6,18 @@ var todayEvents;
 var today;
 var eventsHTML = "";
 var currentPos;
-
+ 
 var youAreHereMarker;
 
+
+var universalLoader = " \
+<div id='loadercircle' class='marginLeft'> \
+					<div id='circle_1' class='circle'></div> \
+					<div id='circle_2' class='circle'></div> \
+					<div id='circle_3' class='circle'></div> \
+					<div class='clearfix'></div> \
+				</div>                      ";
+                         
 jQuery(document).ready(function() {
     
     getWeatherData();    
@@ -462,20 +471,7 @@ function getPosition(){
       }
     });
   }
-function lookUpLatLong(address){
-  
-  //http://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&sensor=true_or_false
-  //json .status.geometry.location.lat, .status.geometry.location.lng
-    console.log(address);
-    geocoder.geocode( { 'address': address}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        console.log(results);
-        targetLat = results[0].geometry.location.Ya;
-        targetLong = results[0].geometry.location.Za;        
-      } else {
-        alert("Geocode was not successful for the following reason: " + status);
-      }
-    });
+
 }
 
 function initializeOneMap(){

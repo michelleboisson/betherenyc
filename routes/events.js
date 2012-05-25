@@ -53,7 +53,7 @@ module.exports = {
         console.log("endTimeStamp: "+endTimeStamp);
         console.log(endTimeStamp.format("dddd, MMMM Do YYYY, h:mm:ss a"));
         
-    
+    //geocode address
         
     
         // Prepare the event entry form into a data object

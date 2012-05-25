@@ -18,16 +18,28 @@
 </div>
 <ul class="controls span8" id="possibleevents"></ul>
 <div class="control-group">
-	<label class="control-label" for="appendedPrependedInput">the pretty link for this event</label>
+	
 	<div class="controls">
-		<input type="text" class="input-large" disabled name="urlslug" id="urlslug" >
-		<p class="help-block">The url slug for this event entry, the ending of the URL. ie 'http://betherenyc.herokuapp.com/event/<b><u>the-best-event</u></b>'</p>
+		<input class="input-large" type="hidden" name="urlslug" id="urlslug" >
 	</div>
 </div>
 <div class="control-group">
-	<label class="control-label" for="appendedPrependedInput">Event Date & Time</label>
+	<label class="control-label" for="appendedPrependedInput">Event Date</label>
 	<div class="controls">
 		<input type="text" placeholder="Date" id="eventDate" name="eventDate" size="50" />
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label" for="appendedPrependedInput">Start Time</label>
+	<div class="controls">
+		<input type="text" placeholder="Event starts at..." id="eventStartTime" name="eventStartTime" size="50" />
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label" for="appendedPrependedInput">End Time</label>
+	<div class="controls">
+		<input type="text" placeholder="Event ends at..." id="eventEndTime" name="eventEndTime" size="50" />
+		<p class="help-block checkbox"><input type="checkbox" id="dunno" value="dunno">I'm not sure when it ends (default to 2 hours later)</p>
 	</div>
 </div>
 </fieldset>
@@ -216,8 +228,9 @@
 		});
 		//map = new google.maps.Map(document.getElementById("minimap"), myOptions);
            
-		//$("#eventDate").datepicker();
-		$("#eventDate").datetimepicker();
+		$("#eventDate").datepicker();
+		$("#eventStartTime").timepicker({ampm: true});
+		$("#eventEndTime").timepicker({ampm: true});
 		
 		jQuery('#eventName').change(function(e){
 			var currentTitle = jQuery(this).val();

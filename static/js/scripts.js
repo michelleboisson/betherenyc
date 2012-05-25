@@ -178,8 +178,8 @@ function getTodaysEvents(){
     today = moment();
     console.log("today", today.format());
     var tomorrow = moment(today).add('hours', 24);
-    jsonURL = "http://betherenyc.herokuapp.com/api/search";
-    //jsonURL = "http://localhost:5000/api/search";
+    //jsonURL = "http://betherenyc.herokuapp.com/api/search";
+    jsonURL = "http://localhost:5000/api/search";
     var eventsHTML = "";
     
     jQuery.ajax({
@@ -200,7 +200,26 @@ function getTodaysEvents(){
                     //save to todaysEvents array
                     //events.forEach(function(element, index, array){
                       for(var p=0; p< events.length; p++){  
-                        if (moment(events[p].datetime.timestamp) >= today && events[p].datetime.timestamp != null){
+                        if (moment(events[p].datetime.endtimestamp) >= today && events[p].datetime.endtimestamp != null){
+                            
+                            if (events[p].datetime.starttimestamp < today ){
+                                //it's happening now!
+                                //build the html
+                            eventsHTML = "\
+                                <li map-lat='"+events[p].location.latitude+"' \
+                                map-lng='"+events[p].location.longitude+"' \
+                                event-name='"+events[p].name+"' \
+                                event-place='"+events[p].place+"' \
+                                event-time='"+events[p].datetime.timestamp+"' \
+                                event-id='"+events[p]._id+"'>\
+                                <a modal-link='/api/event/"+events[p]._id+"'> \
+                                    <h3>"+events[p].name+"</h3> \
+                                    <p>"+events[p].place+"<br/> \
+				    <span>happening now!</span><br/> \
+				</a> \
+				</li>" + eventsHTML;
+                            }
+                            else{
                             
                             //build the html
                             eventsHTML = "\
@@ -213,9 +232,10 @@ function getTodaysEvents(){
                                 <a modal-link='/api/event/"+events[p]._id+"'> \
                                     <h3>"+events[p].name+"</h3> \
                                     <p>"+events[p].place+"<br/> \
-				    <span>"+moment(events[p].datetime.timestamp).add('hours', 4).calendar()+"</span><br/> \
+				    <span>"+moment(new Date(events[p].datetime.starttimestamp)).calendar()+"</span><br/> \
 				</a> \
 				</li>" + eventsHTML;
+                            }
                             todayEvents.push(events[p]);
 
                         }
@@ -330,7 +350,7 @@ function openWindow(id){
                         '<div id="siteNotice">'+
                         '</div>'+
                         '<div id="bodyContent"><p><strong>'+data.event.name+'</strong></p>'+
-                        '<p style="color:darkmagenta"><i>'+moment(data.event.datetime.timestamp).fromNow()+
+                        '<p style="color:darkmagenta"><i>'+moment(new Date(data.event.datetime.timestamp)).fromNow()+
                         '</i> <span style="float:right">'+calculateDistance(currentPos[0], currentPos[1], data.event.location.latitude, data.event.location.longitude)+'mi</span></p>'+
                         '<p>'+data.event.desc.substr(0, 200) +'...'+
                         '<p><a href=/events/permalink/'+data.event._id+'>See event</a></p></div>'+

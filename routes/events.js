@@ -31,13 +31,36 @@ module.exports = {
     
         console.log('Received new event submission')
         console.log(request.body);
+        
+        //Prepare date data
+        var thisStartTime = moment(request.body.eventStartTime, "hh:mm a");
+        var thisEndTime = moment(request.body.eventEndTime, "hh:mm a");
+        var thisDay = moment(request.body.eventDate, "M/D/YYYY");
+        
+        console.log(thisDay.format("dddd, MMMM Do YYYY, h:mm:ss a"));
+        console.log(thisStartTime.format("dddd, MMMM Do YYYY, h:mm:ss a"));
+        console.log(thisEndTime.format("dddd, MMMM Do YYYY, h:mm:ss a"));
+        
+        var startTimeStamp = moment(thisDay);
+        startTimeStamp.hours(thisStartTime.hours()).minutes(thisStartTime.minutes()).seconds(thisStartTime.seconds());
+        
+        var endTimeStamp = moment(thisDay);
+        endTimeStamp.hours(thisEndTime.hours()).minutes(thisEndTime.minutes()).seconds(thisEndTime.seconds());
+        
+        console.log(startTimeStamp.from(endTimeStamp));
+        console.log("startTimeStamp: "+startTimeStamp);
+        console.log(startTimeStamp.format("dddd, MMMM Do YYYY, h:mm:ss a"));
+        console.log("endTimeStamp: "+endTimeStamp);
+        console.log(endTimeStamp.format("dddd, MMMM Do YYYY, h:mm:ss a"));
+        
+    
+        
     
         // Prepare the event entry form into a data object
         var eventData = {
             name : request.body.eventName,
             urlslug : request.body.urlslug,
             date : request.body.eventDate,
-            time: request.body.eventTime,
             place: request.body.eventPlace,
             desc : request.body.eventDesc,
             author : {
@@ -47,10 +70,14 @@ module.exports = {
             location: {
                 latitude: request.body.eventPlaceLat,
                 longitude: request.body.eventPlaceLng,
-                placename: request.body.eventPlace
+                placename: request.body.eventPlace,
+                address: request.body.eventAddress
             },
             datetime: {
-                timestamp: request.body.eventDate
+                timestamp: new Date(thisDay),
+                date: new Date(thisDay),
+                starttimestamp: new Date(startTimeStamp),
+                endtimestamp: new Date(endTimeStamp)
             },
             lastEdited : new Date(),
             link : request.body.eventLink
@@ -58,7 +85,7 @@ module.exports = {
 
         // create a new blog post
         var thisEvent = new db.Event(eventData);
-    
+        
         // save the blog post
         thisEvent.save();
     
@@ -69,16 +96,10 @@ module.exports = {
     
     getEventbyUrlslug : function(request, response){
         var hasOwner;
-         // Get the request blog post by urlslug
-     
-        // build the query for the sidebar
-        var query = db.Event.find({});
-        query.populate('author');
-        query.sort('date',-1); //sort by date in descending order
-        query.limit(5);
-        
-        // run the query and display blog_main.html template if successful
-        query.exec({}, function(err, allPosts){
+         // Get the request event by urlslug
+             
+        // run the query
+
                 
             db.Event.findOne({urlslug:request.params.urlslug}).run(function(err,event){
                 if (err) {
@@ -115,13 +136,14 @@ module.exports = {
                         user_is_owner : isOwner,
                         event_has_owner : hasOwner,
                         event : event,
-                        pageTitle : event.name+ " - BeThereNYC"
+                        pageTitle : event.name+ " - BeThereNYC",
+                        add: false
                    };
                 }
                 // render the card_form template with the data above
                 response.render('single-event.html', templateData);
             });
-        });
+
     },
     
     

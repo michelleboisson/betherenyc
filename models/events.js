@@ -9,7 +9,6 @@ module.exports.configureSchema = function(Schema, mongoose) {
       name     : String
     , urlslug   : { type: String }
     , desc   : String
-    , date      : { type: Date}
     , time      : String
     , place     : String
     , author    : {
@@ -20,9 +19,15 @@ module.exports.configureSchema = function(Schema, mongoose) {
            latitude : Number
         ,  longitude : Number
         ,  placename : String
+        ,  address : String
+        ,  trains: String
+        ,  station: String
     }
     , datetime : {
-        timestamp: {type: Date}
+        timestamp: {type: Date},
+        date: {type: Date},
+        starttimestamp: {type: Date},
+        endtimestamp: {type: Date}
     }
     , link  : String
     , lastEdited: { type: Date }

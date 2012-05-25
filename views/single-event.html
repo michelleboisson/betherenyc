@@ -19,7 +19,8 @@
 	<div class="span4">
 		<div id="mapEvent" map-lat="<%= event.location.latitude %>" map-lng="<%= event.location.longitude %>"></div>
 		<p><br/><%= event.place %></p>
-		<p class=""><%= event.datetime.timestamp %></p>
+		<p id="datetime"><%= event.datetime.starttimestamp %></p>
+		<p id="endtime"><%= event.datetime.endtimestamp %></p>
 		<p>Closest Train Station:<span id="stations"></span></p>
 		<p>More info: <a href="<%= event.link %>" target=new><%= event.linkname %></a></p>
 		<p style="border-bottom: 1px solid #ccc">&nbsp;</p>
@@ -35,3 +36,13 @@
 </div>
 
 </div>
+<script>
+	$(document).ready(function(){
+		var startTime = $("#datetime").html();
+		$("#datetime").html(moment(new Date(startTime)).calendar());
+		var endtime = $("#endtime").html();
+		$("#endtime").html("ends at " + moment(new Date(endtime)).format("h:mm a"));
+	});
+		
+	
+</script>

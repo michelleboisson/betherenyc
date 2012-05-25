@@ -15,10 +15,12 @@
 		<% } %>
 			
 		<p id="event-desc"><%- event.desc %></p>
+		<p>More info: <a href="<%= event.link %>" target=new><%= event.linkname %></a></p>
 	</div>
 	<div class="span4">
 		<div id="mapEvent" map-lat="<%= event.location.latitude %>" map-lng="<%= event.location.longitude %>"></div>
-		<p><br/><%= event.place %></p>
+		<p><br/><%= event.location.placename %><br/>
+		<%= event.location.address %></p>
 		<p id="datetime"><%= event.datetime.starttimestamp %></p>
 		<p id="endtime"><%= event.datetime.endtimestamp %></p>
 		<p>Closest Train Station:<span id="stations"></span></p>

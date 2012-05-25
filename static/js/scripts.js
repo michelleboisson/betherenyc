@@ -186,7 +186,7 @@ function getTodaysEvents(){
     todayEvents = [];
     today = moment();
     console.log("today", today.format());
-    var tomorrow = moment(today).add('hours', 24);
+    var tomorrow = moment(today).add('hours', 36);
     //jsonURL = "http://betherenyc.herokuapp.com/api/search";
     jsonURL = "http://localhost:5000/api/search";
     var eventsHTML = "";
@@ -209,17 +209,17 @@ function getTodaysEvents(){
                     //save to todaysEvents array
                     //events.forEach(function(element, index, array){
                       for(var p=0; p< events.length; p++){  
-                        if (moment(events[p].datetime.endtimestamp) >= today && events[p].datetime.endtimestamp != null){
+                        if (moment(events[p].datetime.endtimestamp) >= today && moment(events[p].datetime.endtimestamp) <= tomorrow && events[p].datetime.endtimestamp != null){
                             
-                            if (events[p].datetime.starttimestamp < today ){
+                            if (moment(events[p].datetime.starttimestamp) < today ){
                                 //it's happening now!
                                 //build the html
                             eventsHTML = "\
                                 <li map-lat='"+events[p].location.latitude+"' \
                                 map-lng='"+events[p].location.longitude+"' \
                                 event-name='"+events[p].name+"' \
-                                event-place='"+events[p].place+"' \
-                                event-time='"+events[p].datetime.timestamp+"' \
+                                event-place='"+events[p].location.placename+"' \
+                                event-time='"+events[p].datetime.starttimestamp+"' \
                                 event-id='"+events[p]._id+"'>\
                                 <a modal-link='/api/event/"+events[p]._id+"'> \
                                     <h3>"+events[p].name+"</h3> \
@@ -231,19 +231,19 @@ function getTodaysEvents(){
                             else{
                             
                             //build the html
-                            eventsHTML = "\
+                            eventsHTML = eventsHTML + "\
                                 <li map-lat='"+events[p].location.latitude+"' \
                                 map-lng='"+events[p].location.longitude+"' \
                                 event-name='"+events[p].name+"' \
-                                event-place='"+events[p].place+"' \
-                                event-time='"+events[p].datetime.timestamp+"' \
+                                event-place='"+events[p].location.placename+"' \
+                                event-time='"+events[p].datetime.starttimestamp+"' \
                                 event-id='"+events[p]._id+"'>\
                                 <a modal-link='/api/event/"+events[p]._id+"'> \
                                     <h3>"+events[p].name+"</h3> \
-                                    <p>"+events[p].place+"<br/> \
+                                    <p>"+events[p].location.placename+"<br/> \
 				    <span>"+moment(new Date(events[p].datetime.starttimestamp)).calendar()+"</span><br/> \
 				</a> \
-				</li>" + eventsHTML;
+				</li>" ;
                             }
                             todayEvents.push(events[p]);
 
@@ -352,6 +352,12 @@ function openWindow(id){
                 console.log(data);
                 if (data.status == "OK") {
                     
+                    //if event started already
+                    if (moment(data.event.datetime.starttimestamp) < today){
+                        var text = "ends " +moment(new Date(data.event.datetime.endtimestamp)).fromNow();
+                    }else{
+                        var text = moment(new Date(data.event.datetime.starttimestamp)).fromNow();
+                    }
                     //descr = data.descr;
                     var currentPos = localStorage.getItem("yourLocation").split(",");
                     console.log(currentPos);
@@ -359,7 +365,7 @@ function openWindow(id){
                         '<div id="siteNotice">'+
                         '</div>'+
                         '<div id="bodyContent"><p><strong>'+data.event.name+'</strong></p>'+
-                        '<p style="color:darkmagenta"><i>'+moment(new Date(data.event.datetime.timestamp)).fromNow()+
+                        '<p style="color:darkmagenta"><i>'+text+
                         '</i> <span style="float:right">'+calculateDistance(currentPos[0], currentPos[1], data.event.location.latitude, data.event.location.longitude)+'mi</span></p>'+
                         '<p>'+data.event.desc.substr(0, 200) +'...'+
                         '<p><a href=/events/permalink/'+data.event._id+'>See event</a></p></div>'+
@@ -472,7 +478,6 @@ function getPosition(){
     });
   }
 
-}
 
 function initializeOneMap(){
     console.log("init one event map");

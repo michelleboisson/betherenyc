@@ -53,8 +53,6 @@ module.exports = {
         console.log("endTimeStamp: "+endTimeStamp);
         console.log(endTimeStamp.format("dddd, MMMM Do YYYY, h:mm:ss a"));
         
-    //geocode address
-        
     
         // Prepare the event entry form into a data object
         var eventData = {
@@ -169,7 +167,7 @@ module.exports = {
                 }
                 if (event == null ) {
                     console.log('post not found');
-                    response.send("uh oh, can't find that post");
+                    response.send("uh oh, can't find that event");
                 }else{
                     if (event.author == "undefined" || event.author == "" || event.author == null) {
                         hasOwner = false;

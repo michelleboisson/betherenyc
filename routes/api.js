@@ -13,13 +13,13 @@ module.exports = {
    getAllEventsJSON : function(request, response){
     
         // define the fields you want to include in your json data
-        includeFields = ['name','desc','urlslug','place', 'location', 'link', 'datetime.timestamp'];
+        includeFields = ['name','desc','urlslug','place', 'location', 'link', 'datetime.date', 'datetime.starttimestamp', 'datetime.endtimestamp'];
         
         // query for all events
         queryConditions = {}; //empty conditions - return everything
         var query = db.Event.find( queryConditions, includeFields);
     
-        query.sort('datetime.timestamp',-1); //sort by most recent
+        query.sort('datetime.starttimestamp',-1); //sort by most recent
         query.exec(function (err, eventPosts) {
     
             jsonData = {
@@ -37,7 +37,7 @@ module.exports = {
         var requestedEventID = request.params.eventID;
     
         // define the fields you want to include in your json data
-        includeFields = ['name','desc','urlslug','place', 'location','link', 'datetime.timestamp'];
+        includeFields = ['name','desc','urlslug','place', 'location','link', 'datetime.date', 'datetime.starttimestamp', 'datetime.endtimestamp'];
         
         // query for one events
         var query = db.Event.findById( requestedEventID, includeFields);

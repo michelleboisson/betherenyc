@@ -137,7 +137,7 @@ var universalLoader = " \
 		$("#eventName").change(function(){
 			//check database if event exists
 			//jsonURL = "http://localhost:5000/api/search?name="+$(this).val();
-			jsonURL = "http://betherenyc.herokuapp.com/api/search?name="+$(this).val();
+			jsonURL = "/api/search?name="+$(this).val();
 			var eventsHTML = "";
 			
 			$("#eventName").after(universalLoader);
@@ -162,9 +162,10 @@ var universalLoader = " \
 						}
 						somehtml +="</pre>";
 						somehtml += "<a class='btn btn-warning' id='cancelsugg'>Nope, this is a new event</a>";
-						$("#loadercircle").remove();
+						
 						$("#possibleevents").html(somehtml);
 					}
+					$("#loadercircle").remove();
 					}
 						
 				}//end if status OK
@@ -188,6 +189,12 @@ var universalLoader = " \
 			$(window).location = "/event/"+$(this).attr('more-info');
 		});
 		
+		$("#dunno").live('change', function(){
+			if($(this).is(':checked')){
+				var newTime = moment($("#eventStartTime").val(), 'h:mm a').add('hours', 2).format('h:mm a');
+				$("#eventEndTime").val(newTime);
+			}
+		})
 		
 		$("#eventPlace").change(function(){
 			var placeName = $("#eventPlace").val();

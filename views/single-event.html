@@ -16,6 +16,7 @@
 			
 		<p id="event-desc"><%- event.desc %></p>
 		<p>More info: <a href="<%= event.link %>" target=new><%= event.linkname %></a></p>
+		
 	</div>
 	<div class="span4">
 		<div id="mapEvent" map-lat="<%= event.location.latitude %>" map-lng="<%= event.location.longitude %>"></div>
@@ -40,10 +41,19 @@
 </div>
 <script>
 	$(document).ready(function(){
+		moment.calendar = {
+			lastDay : '[Yesterday at] LT',
+			sameDay : '[Today at] LT',
+			    nextDay : '[Tomorrow at] LT',
+			    lastWeek : '[last] dddd [at] LT',
+			    nextWeek : 'dddd [at] LT',
+			sameElse : 'LLLL'
+		};
+		
 		var startTime = $("#datetime").html();
-		$("#datetime").html(moment(new Date(startTime)).calendar());
 		var endtime = $("#endtime").html();
-		$("#endtime").html("ends at " + moment(new Date(endtime)).format("h:mm a"));
+		$("#datetime").html(moment(new Date(startTime)).calendar() +" - "+moment(new Date(endtime)).format("h:mm a"));
+		$("#endtime").remove();
 	});
 		
 	

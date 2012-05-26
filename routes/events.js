@@ -33,25 +33,15 @@ module.exports = {
         console.log(request.body);
         
         //Prepare date data
-        var thisStartTime = moment(request.body.eventStartTime, "hh:mm a");
-        var thisEndTime = moment(request.body.eventEndTime, "hh:mm a");
+        var thisStartTime = moment(request.body.eventStartTime, "h:mm a");
+        var thisEndTime = moment(request.body.eventEndTime, "h:mm a");
         var thisDay = moment(request.body.eventDate, "M/D/YYYY");
-        
-        console.log(thisDay.format("dddd, MMMM Do YYYY, h:mm:ss a"));
-        console.log(thisStartTime.format("dddd, MMMM Do YYYY, h:mm:ss a"));
-        console.log(thisEndTime.format("dddd, MMMM Do YYYY, h:mm:ss a"));
         
         var startTimeStamp = moment(thisDay);
         startTimeStamp.hours(thisStartTime.hours()).minutes(thisStartTime.minutes()).seconds(thisStartTime.seconds());
         
         var endTimeStamp = moment(thisDay);
         endTimeStamp.hours(thisEndTime.hours()).minutes(thisEndTime.minutes()).seconds(thisEndTime.seconds());
-        
-        console.log(startTimeStamp.from(endTimeStamp));
-        console.log("startTimeStamp: "+startTimeStamp);
-        console.log(startTimeStamp.format("dddd, MMMM Do YYYY, h:mm:ss a"));
-        console.log("endTimeStamp: "+endTimeStamp);
-        console.log(endTimeStamp.format("dddd, MMMM Do YYYY, h:mm:ss a"));
         
     
         // Prepare the event entry form into a data object

@@ -76,6 +76,8 @@ jQuery(document).ready(function() {
         document.body.appendChild(s);
       */
         $("#sidemenu").removeClass("span4");
+        $("#description").remove();
+        $("#title").addClass("span2").removeClass("span6");
         
         //open the marker window on click
         $("#today-events li").live('click', function(){
@@ -95,6 +97,7 @@ jQuery(document).ready(function() {
 
   }
   else {
+    $("#title").addClass("span6").removeClass("span2");
     $("#jqueryMobileScript").remove();
     $("#sidemenu").addClass("span4");
   }

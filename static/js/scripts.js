@@ -362,10 +362,11 @@ function openWindow(id){
                         var timetext = moment(new Date(data.event.datetime.starttimestamp)).fromNow();
                     }
                     //descr = data.descr;
-                    var currentPos = localStorage.getItem("yourLocation").split(",");
-                    console.log(currentPos[0]);
+                    var currentPos = localStorage.getItem("yourLocation");
+                    //console.log(currentPos[0]);
                     
-                    if (currentPos[0] != ""){
+                    if (currentPos != null){
+                        currentPos = currentPos.split(",");
                         var text = calculateDistance(currentPos[0], currentPos[1], data.event.location.latitude, data.event.location.longitude)+"mi";
                     }else{
                         var text = "";
@@ -555,3 +556,7 @@ if (typeof(Number.prototype.toRad) === "undefined") {
     return this * Math.PI / 180;
   }
 }
+
+
+// -------------- Closest Train --------------
+//data = https://nycopendata.socrata.com/api/views/arq3-7z49/rows.xml?accessType=DOWNLOAD

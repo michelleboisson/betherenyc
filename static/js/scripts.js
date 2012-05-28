@@ -244,10 +244,11 @@ function getTodaysEvents(){
                                 <a modal-link='/api/event/"+events[p]._id+"'> \
                                     <h3>"+events[p].name+"</h3> \
                                     <p>"+events[p].location.placename+"<br/> \
-				    <span>"+moment(new Date(events[p].datetime.starttimestamp)).add('hours', 4).calendar()+"</span><br/> \
+				    <span>"+moment(new Date(events[p].datetime.starttimestamp)).calendar()+"</span><br/> \
 				</a> \
 				</li>" ;
                             }
+                            console.log("event log #"+ p + " "+ events[p].name);
                             todayEvents.push(events[p]);
 
                         }

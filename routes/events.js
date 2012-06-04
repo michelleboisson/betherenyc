@@ -43,6 +43,10 @@ module.exports = {
         var endTimeStamp = moment(thisDay);
         endTimeStamp.hours(thisEndTime.hours()).minutes(thisEndTime.minutes()).seconds(thisEndTime.seconds());
         
+        
+        //FIX!!! ugh
+        //startTimeStamp.add('hours', 4);
+        //endTimeStamp.add('hours', 4);
     
         // Prepare the event entry form into a data object
         var eventData = {

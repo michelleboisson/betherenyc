@@ -211,6 +211,12 @@ function getTodaysEvents(){
                     //loop and find events happening between now and the next 24hrs
                     //save to todaysEvents array
                     //events.forEach(function(element, index, array){
+                    
+                    events.sort(function(a, b){
+                    	var dateA=new Date(a.datetime.starttimestamp), dateB=new Date(b.datetime.starttimestamp)
+                    	return dateB-dateA //sort by date ascending
+	                });
+                    
                       for(var p=0; p< events.length; p++){  
                         if (moment(events[p].datetime.endtimestamp) >= today && moment(events[p].datetime.endtimestamp) <= tomorrow && events[p].datetime.endtimestamp != null){
                             
@@ -234,7 +240,7 @@ function getTodaysEvents(){
                             else{
                             
                             //build the html
-                            eventsHTML = eventsHTML + "\
+                            eventsHTML =  "\
                                 <li map-lat='"+events[p].location.latitude+"' \
                                 map-lng='"+events[p].location.longitude+"' \
                                 event-name='"+events[p].name+"' \
@@ -246,7 +252,7 @@ function getTodaysEvents(){
                                     <p>"+events[p].location.placename+"<br/> \
 				    <span>"+moment(new Date(events[p].datetime.starttimestamp)).calendar()+"</span><br/> \
 				</a> \
-				</li>" ;
+				</li>" +eventsHTML;
                             }
                             console.log("event log #"+ p + " "+ events[p].name);
                             todayEvents.push(events[p]);

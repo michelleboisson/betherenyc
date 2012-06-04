@@ -232,7 +232,7 @@ function getTodaysEvents(){
                                 event-id='"+events[p]._id+"'>\
                                 <a modal-link='/api/event/"+events[p]._id+"'> \
                                     <h3>"+events[p].name+"</h3> \
-                                    <p>"+events[p].place+"<br/> \
+                                    <p>"+events[p].location.placename+"<br/> \
 				    <span>happening now!</span><br/> \
 				</a> \
 				</li>" + eventsHTML;

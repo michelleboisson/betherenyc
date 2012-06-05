@@ -17,37 +17,38 @@
                 <p>
                 <pre>
 {
-    name: "Toca Tuesdays",
-    urlslug: "toca-tuesdays",
-    place: "Sutra Lounge",
-    desc: "Mixtape maestro Tony Touch, along with DJ June and the occasional brand-name guest, is on the wheels of steel at the intimate Sutra every Tuesday, spinning hip-hop, funk, reggae, house, Latin rhythms and more.",
-    link: "http://www.timeout.com/newyork/clubs-nightlife/toca-tuesdays",
-    _id: "4f962c9114f202a811000018",
-    datetime: {
-        timestamp: "2012-04-25T02:00:00.000Z"
-    },
-    location: {
-        latitude: 40.723361276822814,
-        longitude: -73.98831444061874,
-        placename: "Sutra Lounge"
-    }
-}
-</pre>
+	name: "Nathan's Hot Dog Eating Contest",
+	desc: "Stillwell Ave at Surf Ave, Coney Island, Brooklyn. One or two dogs are enough for you? That?s fine. You and an estimated 40,000 others can watch the professionals gorge on dozens more in the granddaddy of all pig-out contests. Last year?s winner and the defending champ, Joey Chestnut, holds the official world record with 68 dogs in ten minutes. Be glad it?s not you up on the podium",
+	link: "http://www.timeout.com/newyork/things-to-do/nathans-hot-dog-eating-contest",
+	_id: "4fce2409d998540100000045",
+	datetime: {
+		timestamp: "2012-07-04T00:00:00.000Z",
+		date: "2012-07-04T00:00:00.000Z",
+		starttimestamp: "2012-07-04T16:00:00.000Z",
+		endtimestamp: "2012-07-04T18:00:00.000Z"
+	},
+	location: {
+		latitude: 40.573348437766356,
+		longitude: -73.98030281066895,
+		placename: "Coney Island Beach & Boardwalk",
+		address: "at Surf & Stillwell Ave., Brooklyn"
+	}
+}</pre>
               
             
 		<h2>All Events</h2>
                 <p>
-                <code>http://betherenyc.herokuapp.com/api/search</code>
+                <code>http://betherenyc.com/api/search</code>
                 <br/>will return all the events in the database in ascending order by date (furthest event in the future is first)</p>
                 
 		 <h2>Query for a Date or an Event Name</h2>
-                <code>http://betherenyc.herokuapp.com/api/search?name=Toca Tuesday&date=2012-04-25</code>
+                <code>http://betherenyc.com/api/search?name=Hot Dog Eating Contest&date=2012-07-04</code>
                 <br/>both <code>date</code> and <code>name</code> are optional; and where <code>date</code> is a date in the format "YYYY-DD-MM". This will return an array of events happening that day.</p>
 		
                 <h2>One Event by Id</h2>
                 <p>
-                <code>http://betherenyc.herokuapp.com/api/event/:eventID</code>
-                <br/>will return one evnt with the id "eventID"</p>
+                <code>http://betherenyc.com/api/event/:eventID</code>
+                <br/>will return one event with the id "eventID"</p>
                 
                
 	</div>

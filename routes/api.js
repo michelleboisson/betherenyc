@@ -73,20 +73,21 @@ module.exports = {
      /*     if (splace!="" && splace!=undefined && splace!=null)
                conditions.location= { placename: { $regex: splace }};
      */        
-          var query = db.Event.find( conditions ,['id', 'name', 'place','desc','location', 'link', 'datetime'] );
+          var query = db.Event.find( conditions ,['id', 'name', 'desc','location', 'link', 'datetime'] );
           
           if(sdate!= "" && sdate!= undefined && sdate!=null){
                var convertedDate = moment(sdate, "YYYY-MM-DD");
                
                convertedDate.hours(0).minutes(0).seconds(0);
                var tomorrow = moment(convertedDate).add('hours',24);
-               query.where('datetime.timestamp').gte(convertedDate).lte(tomorrow);
+               console.log(convertedDate.calendar());
+               query.where('datetime.date').gt(convertedDate).lt(tomorrow);
           }
           
-          query.sort('datetime.timestamp',-1); //sort by date in descending order
+          query.sort('datetime.date',-1); //sort by date in descending order
                    	
           query.exec({}, function(err, allEvents){
-	       console.log(allEvents);
+	       //console.log(allEvents);
 	       // prepare template data
 	       if (err){
                     console.log("there was an error : "+err);

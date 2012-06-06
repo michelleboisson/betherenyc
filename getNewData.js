@@ -95,15 +95,15 @@ db.startup(process.env.MONGOLAB_URI); // start the db connection
                                 console.log("from JSON, end time: "+ String(element.eventEndTime));
                             
                             console.log("1");
-                                //var translatedStartTime = moment(thisStartTime, "h:m a");
-                                var translatedStartTime = moment(thisStartTime, "h:m a").add('hours',4);
+                                var translatedStartTime = moment(thisStartTime, "h:m a");
+                                //var translatedStartTime = moment(thisStartTime, "h:m a").add('hours',4);
                                 console.log("start time "+ translatedStartTime.hours());
                                  console.log("2");
                                  console.log("thisStartTime: " + thisStartTime);
                                  console.log("thisEndTime: " + thisEndTime);
                             
-                                //var translatedEndTime = moment(thisEndTime, "h:m a");
-                                var translatedEndTime = moment(thisEndTime, "h:m a").add('hours',4);
+                                var translatedEndTime = moment(thisEndTime, "h:m a");
+                                //var translatedEndTime = moment(thisEndTime, "h:m a").add('hours',4);
                                 console.log("end time "+ translatedEndTime.hours());
                                 if (translatedEndTime.hours() == 0){
                                    translatedEndTime = moment(translatedStartTime).add('hours', 2); //add 2 hours by default

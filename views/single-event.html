@@ -52,7 +52,7 @@
 		
 		var startTime = $("#datetime").html();
 		var endtime = $("#endtime").html();
-		$("#datetime").html(moment(new Date(startTime)).calendar() +" - "+moment(new Date(endtime)).format("h:mm a"));
+		$("#datetime").html(moment(new Date(startTime)).utc().calendar() +" - "+moment(new Date(endtime)).utc().format("h:mm a"));
 		$("#endtime").remove();
 	});
 		

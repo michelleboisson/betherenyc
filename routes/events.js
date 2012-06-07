@@ -33,9 +33,9 @@ module.exports = {
         console.log(request.body);
         
         //Prepare date data
-        var thisStartTime = moment.(request.body.eventStartTime, "h:mm a");
-        var thisEndTime = moment.(request.body.eventEndTime, "h:mm a");
-        var thisDay = moment.(request.body.eventDate, "M/D/YYYY");
+        var thisStartTime = moment(request.body.eventStartTime, "h:mm a");
+        var thisEndTime = moment(request.body.eventEndTime, "h:mm a");
+        var thisDay = moment(request.body.eventDate, "M/D/YYYY");
         
         var startTimeStamp = moment(thisDay);
         startTimeStamp.hours(thisStartTime.hours()).minutes(thisStartTime.minutes()).seconds(thisStartTime.seconds());

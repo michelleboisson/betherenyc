@@ -33,8 +33,8 @@ module.exports = {
         console.log(request.body);
         
         //Prepare date data
-        var thisStartTime = moment(request.body.eventStartTime, "h:mm a");
-        var thisEndTime = moment(request.body.eventEndTime, "h:mm a");
+        var thisStartTime = moment.utc(request.body.eventStartTime, "h:mm a");
+        var thisEndTime = moment.utc(request.body.eventEndTime, "h:mm a");
         var thisDay = moment(request.body.eventDate, "M/D/YYYY");
         
         var startTimeStamp = moment(thisDay);
@@ -45,8 +45,8 @@ module.exports = {
         
         
         //FIX!!! ugh
-        //startTimeStamp.add('hours', 4);
-        //endTimeStamp.add('hours', 4);
+        startTimeStamp.subtract('hours', 4);
+        endTimeStamp.subtract('hours', 4);
     
         // Prepare the event entry form into a data object
         var eventData = {
@@ -77,6 +77,7 @@ module.exports = {
 
         // create a new blog post
         var thisEvent = new db.Event(eventData);
+        console.log("event times: "+startTimeStamp+" = "+startTimeStamp.calendar()+" utc "+startTimeStamp.utc().calendar());
         
         // save the blog post
         thisEvent.save();

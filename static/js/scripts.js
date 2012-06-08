@@ -250,7 +250,7 @@ function getTodaysEvents(){
                                 <a modal-link='/api/event/"+events[p]._id+"'> \
                                     <h3>"+events[p].name+"</h3> \
                                     <p>"+events[p].location.placename+"<br/> \
-				    <span>"+moment(new Date(events[p].datetime.starttimestamp)).calendar()+"</span><br/> \
+				    <span>"+moment.utc(new Date(events[p].datetime.starttimestamp)).calendar()+"</span><br/> \
 				</a> \
 				</li>" +eventsHTML;
                             }
@@ -363,10 +363,10 @@ function openWindow(id){
                 if (data.status == "OK") {
                     
                     //if event started already
-                    if (moment(data.event.datetime.starttimestamp) < today){
-                        var timetext = "ends " +moment(new Date(data.event.datetime.endtimestamp)).fromNow();
+                    if (moment.utc(data.event.datetime.starttimestamp) < today){
+                        var timetext = "ends " +moment.utc(new Date(data.event.datetime.endtimestamp)).fromNow();
                     }else{
-                        var timetext = moment(new Date(data.event.datetime.starttimestamp)).fromNow();
+                        var timetext = moment.utc(new Date(data.event.datetime.starttimestamp)).fromNow();
                     }
                     //descr = data.descr;
                     var currentPos = localStorage.getItem("yourLocation");

@@ -187,7 +187,11 @@ function getTodaysEvents(){
     
     /* ----- Get Today's events ----*/
     todayEvents = [];
-    today = moment();
+    today = moment.utc(new Date());
+    
+    //FIX!!
+    //today.add('hours','4');
+    
     console.log("today", today.format());
     var tomorrow = moment(today).add('hours', 36);
     //jsonURL = "http://betherenyc.herokuapp.com/api/search";
@@ -213,14 +217,15 @@ function getTodaysEvents(){
                     //events.forEach(function(element, index, array){
                     
                     events.sort(function(a, b){
-                    	var dateA=new Date(a.datetime.starttimestamp), dateB=new Date(b.datetime.starttimestamp)
+                    	var dateA=moment.utc(new Date(a.datetime.starttimestamp)), dateB=moment.utc(new Date(b.datetime.starttimestamp))
                     	return dateB-dateA //sort by date ascending
 	                });
                     
                       for(var p=0; p< events.length; p++){  
-                        if (moment(events[p].datetime.endtimestamp) >= today && moment(events[p].datetime.endtimestamp) <= tomorrow && events[p].datetime.endtimestamp != null){
-                            
-                            if (moment(events[p].datetime.starttimestamp) < today ){
+                        if (moment.utc(new Date(events[p].datetime.endtimestamp)) >= today && moment.utc(events[p].datetime.endtimestamp) <= tomorrow && events[p].datetime.endtimestamp != null){
+                           
+                           //FIX!!! UGH 
+                            if (moment.utc(new Date(events[p].datetime.starttimestamp)).add('hours',4) < today){
                                 //it's happening now!
                                 //build the html
                             eventsHTML = "\

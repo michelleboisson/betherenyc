@@ -368,7 +368,8 @@ function openWindow(id){
                 if (data.status == "OK") {
                     
                     //if event started already
-                    if (moment.utc(data.event.datetime.starttimestamp) < today){
+                    //FIX!!!! UGH!
+                    if (moment.utc(data.event.datetime.starttimestamp).add('hours',4) < today){
                         var timetext = "ends " +moment.utc(new Date(data.event.datetime.endtimestamp)).fromNow();
                     }else{
                         var timetext = moment.utc(new Date(data.event.datetime.starttimestamp)).fromNow();

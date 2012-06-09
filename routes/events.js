@@ -45,8 +45,8 @@ module.exports = {
         
         
         //FIX!!! ugh
-        startTimeStamp.subtract('hours', 4);
-        endTimeStamp.subtract('hours', 4);
+        //startTimeStamp.subtract('hours', 4);
+        //endTimeStamp.subtract('hours', 4);
     
         // Prepare the event entry form into a data object
         var eventData = {

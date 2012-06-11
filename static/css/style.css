@@ -118,6 +118,8 @@ body {
 
 #sidemenu ul li:hover {
     background-color: #f0f0f0;
+    cursor: pointer;
+    cursor: hand;
 }
 
 #mapHome {

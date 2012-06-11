@@ -129,7 +129,7 @@ module.exports = {
                         user_is_owner : isOwner,
                         event_has_owner : hasOwner,
                         event : event,
-                        pageTitle : event.name+ " - BeThereNYC",
+                        pageTitle : event.name+ " - BeThereNYC - free and cheap events happening now",
                         add: false
                    };
                 }
@@ -189,7 +189,7 @@ module.exports = {
                         event_has_owner : hasOwner,
                         event : event,
                         add : request.query.add,
-                        pageTitle : event.name+ " - BeThereNYC"
+                        pageTitle : event.name+ " - BeThereNYC - free and cheap events happening now"
                    };
                 }
                 // render the card_form template with the data above

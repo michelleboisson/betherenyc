@@ -226,7 +226,7 @@ function getTodaysEvents(){
                         if (moment.utc(new Date(events[p].datetime.endtimestamp)) >= today && moment.utc(events[p].datetime.endtimestamp) <= tomorrow && events[p].datetime.endtimestamp != null){
                            
                            //FIX!!! UGH 
-                            if (moment.utc(new Date(events[p].datetime.starttimestamp)).add('hours',4) < today){
+                            if (moment.utc(new Date(events[p].datetime.starttimestamp)) < today){
                                 //it's happening now!
                                 //build the html
                             eventsHTML = "\

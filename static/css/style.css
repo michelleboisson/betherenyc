@@ -57,6 +57,9 @@ body {
     background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#8F14AE), to(#aa37c7));
 }
 
+.error {
+	color: #8F14AE;
+}
 
 #logo {
  /*   background: url('images/betherenyc_logo.png') no-repeat;*/

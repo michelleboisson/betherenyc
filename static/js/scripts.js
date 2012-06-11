@@ -26,12 +26,13 @@ jQuery(document).ready(function() {
 
     if ( $('#mapHome')[0] ){
         initializeHomeMap();
+        getPosition();
+        getTodaysEvents();
     }
     if ( $("#mapEvent")[0] ){
         initializeOneMap();
     }
-    getPosition();
-    getTodaysEvents();
+    
     
     infowindow= new google.maps.InfoWindow({
         maxWidth: 200

@@ -13,7 +13,7 @@
 <div class="control-group">
 	<label class="control-label" for="appendedPrependedInput">Event Name</label>
 	<div class="controls">
-		<input type="text" placeholder="Event Name" id="eventName" name="eventName" class="input-large" />
+		<input type="text" placeholder="Event Name" id="eventName" name="eventName" class="required input-large" />
 	</div>
 </div>
 <ul class="controls span8" id="possibleevents"></ul>
@@ -26,20 +26,20 @@
 <div class="control-group">
 	<label class="control-label" for="appendedPrependedInput">Event Date</label>
 	<div class="controls">
-		<input type="text" placeholder="Date" id="eventDate" name="eventDate" size="50" />
+		<input type="text" placeholder="Date" id="eventDate" name="eventDate" size="50" class="required"/>
 	</div>
 </div>
 <div class="control-group">
 	<label class="control-label" for="appendedPrependedInput">Start Time</label>
 	<div class="controls">
-		<input type="text" placeholder="Event starts at..." id="eventStartTime" name="eventStartTime" size="50" />
+		<input type="text" placeholder="Event starts at..." id="eventStartTime"  class="required" name="eventStartTime" size="50" />
 	</div>
 </div>
 <div class="control-group">
 	<label class="control-label" for="appendedPrependedInput">End Time</label>
 	<div class="controls">
-		<input type="text" placeholder="Event ends at..." id="eventEndTime" name="eventEndTime" size="50" />
-		<p class="help-block checkbox"><input type="checkbox" id="dunno" value="dunno">I'm not sure when it ends (default to 2 hours later)</p>
+		<input type="text" placeholder="Event ends at..." id="eventEndTime" name="eventEndTime"  class="required" size="50" />
+		<p class="help-block checkbox"><input type="checkbox" id="dunno" value="dunno" name="dunno">I'm not sure when it ends (default to 2 hours later)</p>
 	</div>
 </div>
 </fieldset>
@@ -50,7 +50,7 @@
 	<label class="control-label" for="appendedPrependedInput">Name of Venue</label>
 	<div class="controls">
 		<div class="input-append">
-			<input type="text" placeholder="Place Name" id="eventPlace" name="eventPlace" size="50" class="appendedPrependedInput"/>
+			<input type="text" placeholder="Place Name" id="eventPlace" name="eventPlace"  class="required" size="50" class="appendedPrependedInput"/>
 			
 			
 		</div>
@@ -63,7 +63,7 @@
 	<label class="control-label" for="appendedPrependedInput">Address</label>
 	<div class="controls">
 		<div class="input-append">
-			<input type="text" placeholder="(optional)" id="eventAddress" name="eventAddress" size="50" class="appendedPrependedInput"/>
+			<input type="text" placeholder="(optional)" id="eventAddress" name="eventAddress" size="50" class="appendedPrependedInput required"/>
 			
 			
 		</div>
@@ -77,13 +77,13 @@
 <div class="control-group">
 	<label class="control-label" for="appendedPrependedInput">Link to more info about this</label>
 	<div class="controls">
-		<input type="text" value="http://" id="eventLink" name="eventLink" size="50" />
+		<input type="text" placeholder="http://" id="eventLink" name="eventLink" size="50" class="required"/>
 	</div>
 </div>
 <div class="control-group">
 	<label class="control-label" for="appendedPrependedInput">Tell us a bit more</label>
 	<div class="controls">
-		<textarea id="eventDesc" name="eventDesc" rows="15" cols="35" placeholder="Description..."/></textarea>
+		<textarea id="eventDesc" name="eventDesc" rows="15" class="required" cols="35" placeholder="Description..."/></textarea>
 	</div>
 </div>
 	  </fieldset>
@@ -94,13 +94,13 @@
 <div class="control-group">
 	<label class="control-label" for="appendedPrependedInput">Your Name</label>
 	<div class="controls">
-		<input type="text" value="" id="eventAuthorName" name="eventAuthorName" size="50" />
+		<input type="text" value="" id="eventAuthorName" name="eventAuthorName" class="required" size="50" />
 	</div>
 </div>
 <div class="control-group">
 	<label class="control-label" for="appendedPrependedInput">Email</label>
 	<div class="controls">
-		<input type="text" placeholder="you@email.com" id="eventAuthorEmail" name="eventAuthorEmail" size="50" />
+		<input type="text" placeholder="you@email.com" id="eventAuthorEmail" class="required" name="eventAuthorEmail" size="50" />
 	</div>
 </div>
 	  </fieldset>
@@ -114,7 +114,7 @@
                                 
 				
 		</div>
-        
+        <script src="/js/jquery.validate.min.js" type="text/javascript"></script>
         
 <script type="text/javascript">
 
@@ -132,8 +132,41 @@ var universalLoader = " \
 
 	$(document).ready(function(){
 		    geocoder = new google.maps.Geocoder();
-		$("#EventForm").formToWizard({ submitButton: 'saveBtn' });
-		
+		//$("#EventForm").formToWizard({ submitButton: 'saveBtn' });
+		$("#EventForm").validate({/*debug: true*/});
+/*			$("#EventForm").validate({
+				debug: true,
+				rules: {
+					eventName: "required",
+					eventDate: "required",
+					eventStartTime: "required",
+					eventEndTime: "required"
+					eventPlace: "required",
+					eventAddress: "required",
+					eventPlaceLat: "required",
+					eventPlaceLng: "required",
+					eventLink: "required",
+					eventDesc: "required",
+					eventAuthorName:"required",
+					eventAuthorEmail:"required"
+					
+				},
+				messages: {
+					eventName: "What is this event called?",
+					eventDate: "What day is the event?",
+					eventStartTime: "When does it start?",
+					eventEndTime: "When does it end?",
+					eventPlace: "Enter a venue name and I'll try to locate it.",
+					eventAddress: "Where should we show up?",
+					eventPlaceLat: "Where should we show up?",
+					eventPlaceLng: "Where should we show up?",
+					eventLink: "Where'd you get this info from?",
+					eventDesc: "Tell us more about it.",
+					eventAuthorName:"Who are you?",
+					eventAuthorEmail:"We won't share this, we promise."
+				}
+			});//end validate form
+*/		
 		$("#eventName").change(function(){
 			//check database if event exists
 			//jsonURL = "http://localhost:5000/api/search?name="+$(this).val();
@@ -213,10 +246,11 @@ var universalLoader = " \
 				limit: 10,
 				format: "jsonp"
 			}, function(data){
-				console.log(data);
+				console.log("data", data);
 				var items = data.response.groups[0].items;
 				console.log(data.response.groups[0].items);
 				
+				if (items.length > 0){
 				var somehtml = "<pre><b>Do you mean?</b>";
 				for(i=0; i< items.length; i++){
 					var addItem = "<li place-name='"+items[i].name+"' place-lat="+items[i].location.lat+" place-lng="+items[i].location.lng+" place-addr='"+items[i].location.address+", "+items[i].location.city+"'>"+items[i].name+" <br/> "+items[i].location.address+" "+items[i].location.city+"</li>";
@@ -226,7 +260,12 @@ var universalLoader = " \
 				somehtml += "<a class='btn btn-warning' id='cancelsugg'>Nope, I'll type the address myself</a>";
 				$("#loadercircle").remove();
 				$("#locationjson").html(somehtml);
-
+				
+				}else{
+					$("#loadercircle").remove();
+					$("#eventAddress").val("").focus();
+					$("#eventAddress").attr("placeholder", "*required");
+				}
 				
 			}); 
 		});
@@ -293,10 +332,13 @@ function lookUpLatLong(address){
         console.log(results);
         $("#eventPlaceLat").val(results[0].geometry.location.lat());
         $("#eventPlaceLng").val(results[0].geometry.location.lng());
+        $("#addresspls").remove();
+        $("#loadercircle").remove();
 	console.log("new lat: "+ $("#eventPlaceLat").val());
 	$("#loadercircle").remove();
       } else {
-        alert("Geocode was not successful for the following reason: " + status);
+        //alert("Geocode was not successful for the following reason: " + status);
+        $("#eventAddress").after("<span id='addresspls'><br/>Please enter a valid address.</span>");
       }
     });
 }

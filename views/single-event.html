@@ -10,9 +10,8 @@
 <% } %>
                 <h1><%= event.name %></h1>
 		
-		<% if (event_has_owner) { %>
-		Submitted by <%= event.author.name %></a>
-		<% } %>
+		
+		<p>Submitted by <%= event.author.name %><p>
 			
 		<p id="event-desc"><%- event.desc %></p>
 		<p>More info: <a href="<%= event.link %>" target=new><%= event.linkname %></a></p>
@@ -31,10 +30,7 @@
 		<span class='st_email' displayText='Email'></span>
 		<span class='st_facebook' displayText='Facebook'></span>
 		<span class='st_twitter' displayText='Tweet'></span>
-                                    
-                <% if (user_is_owner) { %>
-		<p><a href="/update/<%= event._id %>" id="update">edit this event</a> | <a href="/delete/<%= event._id %>" id="update">delete this event</a> 
-		<% } %></p>
+  
 	</div>
 </div>
 

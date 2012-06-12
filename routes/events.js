@@ -14,8 +14,11 @@ var moment = require('moment'); //time library
 module.exports = {
     
     mainpage : function(request, response) {
-             
-            response.render('home.html');
+    		templateData = {
+            	now : moment()
+            }
+            
+            response.render('home.html', templateData);
 
     },
     
@@ -185,8 +188,8 @@ module.exports = {
                     
                 // prepare template data
                    var templateData = {
-                        user_is_owner : isOwner,
-                        event_has_owner : hasOwner,
+                        //user_is_owner : isOwner,
+                        //event_has_owner : hasOwner,
                         event : event,
                         add : request.query.add,
                         pageTitle : event.name+ " - BeThereNYC - free and cheap events happening now"

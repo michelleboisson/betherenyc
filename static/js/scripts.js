@@ -188,12 +188,14 @@ function getTodaysEvents(){
     
     /* ----- Get Today's events ----*/
     todayEvents = [];
-    today = moment.utc(new Date());
+    //today = new Date();
+    today = $("#today-events").attr("now");
+    today = moment.utc(new Date(today));
     
     //FIX!!
     //today.add('hours','4');
     
-    console.log("today", today.format());
+    console.log("today", today);
     var tomorrow = moment(today).add('hours', 36);
     //jsonURL = "http://betherenyc.herokuapp.com/api/search";
     jsonURL = "/api/search";
@@ -226,7 +228,7 @@ function getTodaysEvents(){
                         if (moment.utc(new Date(events[p].datetime.endtimestamp)) >= today && moment.utc(events[p].datetime.endtimestamp) <= tomorrow && events[p].datetime.endtimestamp != null){
                            
                            //FIX!!! UGH 
-                            if (moment.utc(new Date(events[p].datetime.starttimestamp)).add('hours',4) < today){
+                            if (moment.utc(new Date(events[p].datetime.starttimestamp)) < today){
                                 //it's happening now!
                                 //build the html
                             eventsHTML = "\

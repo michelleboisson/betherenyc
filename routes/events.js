@@ -169,13 +169,13 @@ module.exports = {
                     }else{
                         hasOwner = true;
                     }
-                    
+                /*    
                     if (hasOwner && typeof request.user != "undefined" && (request.user._id.toString() == event.author._id.toString()) ) {
                         isOwner = true;
                     } else {
                         isOwner = false;
                     }
-                    
+                    */
                     //if this is an admin
                     if (typeof request.user != "undefined" && request.user.accessLevel == "0")
                     {

@@ -16,3 +16,18 @@
 <p>Access Level: <%= currentUser.accessLevel %></p>
     
 <p><a href="/logout">Logout</a></p>
+
+<table>
+<tr>
+	<th>event start</th>
+	<th>Author</th>
+	<th>Title</th>
+</tr>
+<% for (var i=0; i< events.length; i++){ %>
+<tr>
+<td><%= events[i].datetime.starttimestamp %></td>
+<td><%= events[i].author.name %></td>
+<td><a href="/events/permalink/<%= events[i]._id %>"><%= events[i].name %></a></td>
+</tr>
+<% } %>
+</table>

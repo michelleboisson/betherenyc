@@ -68,11 +68,23 @@ module.exports = {
 
     // app.get('/account', ensureAuthenticated, ...
     getAccount: function(request, response) {
-        templateData = {
-            currentUser : request.user,
-            message : request.flash('message')[0] // get message is received from prior form submission like password change
-
-        }
+    
+    	// define the fields you want to include in your json data
+        includeFields = ['name','desc','urlslug','place', 'location', 'link', 'datetime.date', 'datetime.starttimestamp', 'datetime.endtimestamp', 'id', 'author.name'];
+        
+        // query for all events
+        queryConditions = {}; //empty conditions - return everything
+        var query = db.Event.find( queryConditions, includeFields);
+    
+        query.sort('lastEdited',-1); //sort by most recent
+        query.exec(function (err, eventPosts) {
+    
+            templateData = {
+            	currentUser : request.user,
+            	events: eventPosts,
+            	message : request.flash('message')[0] // get message is received from prior form submission like password change
+            }
+            });
     
         response.render('user/account.html', templateData );
     },

@@ -14,7 +14,7 @@ console.log("...........................................REMOVING OLD EVENTS.....
 var today = moment().subtract('days',1);
 console.log("today minus 1 day: "+today.calendar());
 
-var query = db.Event.find({}, ['id','name', 'datetime.starttimestamp']);
+var query = db.Event.remove({}, ['id','name', 'datetime.starttimestamp']);
     //query.where(this.time != undefined && this.time != '' );
     //query.where('name._keywords').in(['Yogi']);
     //query.where('name._keywords').in(['Yogi','Teen']);

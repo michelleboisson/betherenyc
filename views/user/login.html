@@ -1,4 +1,8 @@
-<h2>Login</h2>
+<div  class="container">
+<div id="maincontent" class="row-fluid">     
+
+<div class="span4">
+<h2>Oops! You must be logged in to do this</h2>
 <hr/>
 <% if (typeof(message) != "undefined") { %>
 <p><%= message %></p>
@@ -15,6 +19,7 @@
     <br>
     <input type="hidden" name="redirect" value="<%= redirect %>">
     <input type="submit" value="Log Me In">
-        <a href="/register">register here</a>
+       <!-- <a href="/register">register here</a> -->
     
 </form>
+</div>

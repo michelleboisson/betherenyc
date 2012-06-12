@@ -1,4 +1,8 @@
-<p>Hello <%= currentUser.name.first %></p>
+<div  class="container">
+<div id="maincontent" class="row-fluid">     
+
+<div class="span4">
+<h1>Hello <%= currentUser.name.first %></h1>
 
 <hr/>
 <% if (typeof(message) != "undefined") { %>
@@ -16,18 +20,33 @@
 <p>Access Level: <%= currentUser.accessLevel %></p>
     
 <p><a href="/logout">Logout</a></p>
+</div>
 
+<div class="span8">
+<h1>Latest entries</h1>
 <table>
 <tr>
-	<th>event start</th>
-	<th>Author</th>
+	<th width="200px">Event start</th>
+	<th width="200px">Author</th>
 	<th>Title</th>
 </tr>
 <% for (var i=0; i< events.length; i++){ %>
 <tr>
-<td><%= events[i].datetime.starttimestamp %></td>
+<td class="eventdate"><%= events[i].datetime.starttimestamp %></td>
 <td><%= events[i].author.name %></td>
 <td><a href="/events/permalink/<%= events[i]._id %>"><%= events[i].name %></a></td>
 </tr>
 <% } %>
 </table>
+</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	var mydate = new Date($(".eventdate").text());
+	moment.utc(mydate);
+	//mydate.calendar();
+	//$(".eventdate").text(mydate);
+	
+});
+</script>

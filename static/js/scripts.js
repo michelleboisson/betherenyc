@@ -22,6 +22,7 @@ jQuery(document).ready(function() {
     
     getWeatherData();    
     
+    
     geocoder = new google.maps.Geocoder();
 
     if ( $('#mapHome')[0] ){
@@ -149,6 +150,42 @@ function convertToSlug(Text)
 function initializeHomeMap() {
     console.log("Starting map");
     //setup map
+    
+    var mapstyles = [
+  {
+    featureType: "road",
+    elementType: "geometry.fill",
+    stylers: [
+      { visibility: "off" },
+      { color: "#ebeeca" },
+      { weight: 2.4 }
+    ]
+  },{
+    elementType: "labels.text.stroke",
+    stylers: [
+      { visibility: "simplified" }
+    ]
+  },{
+    featureType: "road.highway",
+    elementType: "geometry",
+    stylers: [
+      { visibility: "simplified" }
+    ]
+  },{
+    featureType: "water",
+    stylers: [
+      { visibility: "simplified" },
+      { color: "#6dc6d5" }
+    ]
+  },{
+    elementType: "geometry.fill",
+  }
+];
+
+var styledMap = new google.maps.StyledMapType(mapstyles,
+    {name: "Styled Map"});
+    
+    
     var myOptions = {
           center: new google.maps.LatLng(40.7746431, -73.9701962),
           zoom: 12,
@@ -174,7 +211,8 @@ function initializeHomeMap() {
       }
     };
     map = new google.maps.Map(document.getElementById("mapHome"), myOptions);
-    
+     map.mapTypes.set('map_style', styledMap);
+     map.setMapTypeId('map_style');
     markers = [];
     
     youAreHereMarker = new google.maps.Marker({

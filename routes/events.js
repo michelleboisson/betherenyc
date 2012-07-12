@@ -43,7 +43,13 @@ module.exports = {
         var startTimeStamp = moment(thisDay);
         startTimeStamp.hours(thisStartTime.hours()).minutes(thisStartTime.minutes()).seconds(thisStartTime.seconds());
         
-        var endTimeStamp = moment(thisDay);
+        //if the end time is the next day, meaning less than the start time
+        if (thisEndTime < thisStartTime){
+	        var endTimeStamp = moment(thisDay).add('days',1);
+        }
+        else{
+	        var endTimeStamp = moment(thisDay);
+	    }
         endTimeStamp.hours(thisEndTime.hours()).minutes(thisEndTime.minutes()).seconds(thisEndTime.seconds());
         
         

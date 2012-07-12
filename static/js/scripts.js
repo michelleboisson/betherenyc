@@ -217,7 +217,7 @@ var styledMap = new google.maps.StyledMapType(mapstyles,
     
     youAreHereMarker = new google.maps.Marker({
         map: map,
-        icon: "http://maps.google.com/mapfiles/marker_purple.png"
+        icon: "img/marker_purple.png"
     });
     
 }
@@ -226,6 +226,7 @@ function getTodaysEvents(){
     
     /* ----- Get Today's events ----*/
     todayEvents = [];
+    
     today = new Date();
     //today = $("#today-events").attr("now");
     today = moment.utc(new Date(today));
@@ -234,6 +235,9 @@ function getTodaysEvents(){
     //today.add('hours','4');
     
     console.log("today", today);
+    var soon = moment(today).add('hours',3);
+    var later = moment(today).add('hours', 6);
+    var muchlater = moment(today).add('hours', 12);
     var tomorrow = moment(today).add('hours', 36);
     //jsonURL = "http://betherenyc.herokuapp.com/api/search";
     jsonURL = "/api/search";
@@ -317,8 +321,9 @@ function getTodaysEvents(){
                         var thisLat = element.location.latitude;
                         var thisLng = element.location.longitude;
                         var thisName = element.name;
-                        var thisTime = element.datetime.timestamp;
+                        var thisTime = element.datetime.starttimestamp;
                         var thisId = element._id;
+                        
                         
                         
                         var thisLatlng = new google.maps.LatLng(thisLat,thisLng);
@@ -327,8 +332,22 @@ function getTodaysEvents(){
                             map: map,
                             animation: google.maps.Animation.DROP,
                             title: thisId
+                            
                         });
-                        
+                       thisTime = moment.utc(new Date(thisTime));
+                       //use different markers for time from now
+                       if (thisTime < soon){
+                        	marker.icon = "img/marker-now.png";
+                        }
+                        if (thisTime > soon && thisTime < later){
+	                        marker.icon = "img/marker-soon.png";
+                        }
+                        if (thisTime > later && thisTime < muchlater){
+	                        marker.icon = "img/marker-later.png";
+                        }
+                        if (thisTime > muchlater){
+	                        marker.icon = "img/marker-muchlater.png";
+                        } 
                         //add onclick event listener for the markers
                         google.maps.event.addListener(marker, 'click', function(){
                             openWindow(marker.title);

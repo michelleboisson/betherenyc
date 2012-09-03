@@ -37,7 +37,7 @@ module.exports.configureSchema = function(Schema, mongoose) {
 Event
 .virtual('linkname')
 .get(function () {
-  return this.link.substring(this.link.charAt(0),this.link.indexOf('/',7));
+  return this.link.substring(this.link.charAt(0),this.link.indexOf('/',8));
 });
 Event
 .virtual('datetime.moment')

@@ -323,31 +323,34 @@ function getTodaysEvents(){
                         var thisName = element.name;
                         var thisTime = element.datetime.starttimestamp;
                         var thisId = element._id;
-                        
+                        var thisIcon = "";
                         
                         
                         var thisLatlng = new google.maps.LatLng(thisLat,thisLng);
+                                               thisTime = moment.utc(new Date(thisTime));
+                       //use different markers for time from now
+                       if (thisTime < soon){
+                        	thisIcon = "img/marker-now.png";
+                        	console.log("happening now");
+                        }
+                        if (thisTime > soon && thisTime < later){
+	                        thisIcon = "img/marker-soon.png";
+                        }
+                        if (thisTime > later && thisTime < muchlater){
+	                        thisIcon = "img/marker-later.png";
+                        }
+                        if (thisTime > muchlater){
+	                        thisIcon = "img/marker-muchlater.png";
+                        } 
                         var marker = new google.maps.Marker({
                             position: thisLatlng, 
                             map: map,
                             animation: google.maps.Animation.DROP,
-                            title: thisId
+                            title: thisId,
+                            icon: thisIcon
                             
                         });
-                       thisTime = moment.utc(new Date(thisTime));
-                       //use different markers for time from now
-                       if (thisTime < soon){
-                        	marker.icon = "img/marker-now.png";
-                        }
-                        if (thisTime > soon && thisTime < later){
-	                        marker.icon = "img/marker-soon.png";
-                        }
-                        if (thisTime > later && thisTime < muchlater){
-	                        marker.icon = "img/marker-later.png";
-                        }
-                        if (thisTime > muchlater){
-	                        marker.icon = "img/marker-muchlater.png";
-                        } 
+
                         //add onclick event listener for the markers
                         google.maps.event.addListener(marker, 'click', function(){
                             openWindow(marker.title);

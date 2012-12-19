@@ -331,7 +331,6 @@ function getTodaysEvents(){
                        //use different markers for time from now
                        if (thisTime < soon){
                         	thisIcon = "img/marker-now.png";
-                        	console.log("happening now");
                         }
                         if (thisTime > soon && thisTime < later){
 	                        thisIcon = "img/marker-soon.png";

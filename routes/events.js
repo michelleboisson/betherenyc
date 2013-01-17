@@ -369,7 +369,8 @@ module.exports = {
     
     getNYCData : function(request, response){
 
-          // define the remote feed
+        var saved = 0;
+      // define the remote feed
         nycGovURL= "http://www.nycgovparks.org/xml/events_300_rss.xml";
 
         // make the request
@@ -398,22 +399,20 @@ module.exports = {
                 parser.parseString(data, function (err, result) {
                     //convert to JSON
                     JSON.stringify(result);
+                    console.log(result.channel.item[0]);
                     
                     var nycGovData = result.channel.item; //array of events from nycgovparks.org in JSON
                     console.log(nycGovData.length + " total events found");
                     
                     //get data from tomorrow
                     var tomorrow = moment().add('days', 1);
-                    //var today = now.toJSON().toString().substring(0,now.toJSON().toString().indexOf('T'));
-                    //var today = "2012-04-22";
                     console.log("Tomorrow is " +tomorrow);
                     var tomorrowStr = tomorrow.format("YYYY-MM-DD");
-                    //var convertedTomorrow = moment(today, "YYYY-MM-DD").add('days', 1);
                     
                     var nycGovDataToday = []; //variable to hold tomorrow's events
                 
                     var reslog ="";
-                    //find events that are happening today
+                    //find events that are happening tomorrow
                     for (i = 0; i < nycGovData.length; i++){
                         
                         if (nycGovData[i].eventStartDate == tomorrowStr){
@@ -431,30 +430,59 @@ module.exports = {
                         //visit the link to get the freaking latitude and longitude
                         //parse the html via jsdom!
                         var eventLink = element.link;
+                        var mydata = [];
+                        
                         jsdom.env(eventLink, ['http://code.jquery.com/jquery-1.7.min.js'], function(errors, window) {
-                            
+                            console.log("visiting "+ eventLink);
                             //look for event information in the html
                             var $ = window.$;
                             $(".map_locations").each(function () {
-                                var mydata = $(this).attr('id').split('__');
+                                mydata = $(this).attr('id').split('__');
                                 //console.log("place: "+ mydata[2]);
                                 //console.log("lat: "+mydata[0]);
                                 //console.log("lng: "+mydata[1]);
-                            var thisTime = element.eventStartTime;
-                            var thisDate = element.eventStartDate;
+           //                 }); // close each on window page
+           //             });// close visit link
+                                
+                                var thisStartTime, thisDate, thisEndTime = "";
+                                
+                                thisStartTime = element.eventStartTime;
+                                thisDate = element.eventStartDate;
+                                thisEndTime = String(element.eventEndTime);
+                                console.log("from JSON, end time: "+ String(element.eventEndTime));
                             
-                            var translatedTime = moment(thisTime, "h:m a");//.format("dddd, MMMM Do YYYY, h:mm:ss a");
-                            var translatedDate = moment(thisDate);//.format("dddd, MMMM Do YYYY, h:mm:ss a");
-                            translatedDate.hours(translatedTime.hours()).minutes(translatedTime.minutes()).seconds(translatedTime.seconds());
-            
+                            console.log("1");
+                                var translatedStartTime = moment(thisStartTime, "h:m a");
+                                //var translatedStartTime = moment(thisStartTime, "h:m a").add('hours',4);
+                                console.log("start time "+ translatedStartTime.hours());
+                                 console.log("2");
+                                 console.log("thisStartTime: " + thisStartTime);
+                                 console.log("thisEndTime: " + thisEndTime);
+                            
+                                var translatedEndTime = moment(thisEndTime, "h:m a");
+                                //var translatedEndTime = moment(thisEndTime, "h:m a").add('hours',4);
+                                console.log("end time "+ translatedEndTime.hours());
+                                if (translatedEndTime.hours() == 0){
+                                   translatedEndTime = moment(translatedStartTime).add('hours', 2); //add 2 hours by default
+                                }
+                               
+                                console.log("3");
+                                var translatedDate = moment(thisDate);//.format("dddd, MMMM Do YYYY, h:mm:ss a");
+                                
+                                var startTimeStamp = moment(translatedDate);
+                                startTimeStamp.hours(translatedStartTime.hours()).minutes(translatedStartTime.minutes());
+                                console.log("startTimeStamp: "+ moment(startTimeStamp).calendar());
+                                
+                                var endTimeStamp = moment(translatedDate);
+                                endTimeStamp.hours(translatedEndTime.hours()).minutes(translatedEndTime.minutes());
+                                console.log("endTimeStamp: "+ moment(endTimeStamp).calendar());
+                            
                             //not sure why I have to do this...
                             //translatedDate.add('days', 1);
 
                                 var eventData = {
                                     name : element.title,
                                     urlslug : convertToSlug(element.title),
-                                    date : element.eventStartDate,
-                                    time: element.eventStartTime,
                                     place: element.eventLocation,
                                     desc : element.description,
                                     link : element.link,
@@ -462,27 +490,47 @@ module.exports = {
                                          latitude : mydata[0]
                                         ,longitude : mydata[1]
                                         ,placename : mydata[2]
+                                        ,address: mydata[4]
                                     },
                                     datetime : {
-                                        timestamp: new Date(translatedDate)
+                                        timestamp: new Date(translatedDate),
+                                        date: new Date(thisDate),
+                                        starttimestamp: new Date(startTimeStamp),
+                                        endtimestamp: new Date(endTimeStamp)
+                                    },
+                                    lastEdited: new Date(),
+                                    author: {
+                                        name: "NYC Parks and Recreation"
                                     }
                                 };//end event data  
-                        
                                     console.log("eventData: "+eventData.name);
+                                    console.log("start: "+moment(eventData.datetime.starttimestamp).calendar());
+                                    console.log("end: "+moment(new Date(eventData.datetime.endtimestamp)).calendar());
                                     // create a new event 
                                     var thisEvent = new db.Event(eventData);
-    
+                                    
+
                                     // save the event to the database
-                                    thisEvent.save();
-                            
+                                      thisEvent.save(function (err, doc){
+                                        saved++;
+                                        console.error('--------------SAVED!'+ saved+ '-----------------------------');
+                                    });
+                                
                                 });
+                            console.log("Array: ", array.length);
+                            //when we've saved all the elements
+                             if (saved >= array.length){
+                            console.log("*******CLOSING DB - SCRIPT SHOULD TERMINATE AS EXPECTED ******");
+                            db.closeDB(); // <--- VERY IMPORTANT. MUST CLOSE DB WHEN FINISHED.
+                        }
+                       
                         });//end jsdom
                         
                     }); //end for each event found...
-                    response.redirect('/');
+                    //response.redirect('/');
                 }); //end parser
             }//end if httpResponse
-
+            
         }); // end of requestURL callback
     }//end nyc data route  
 }

@@ -33,7 +33,16 @@ module.exports.configureSchema = function(Schema, mongoose) {
     , lastEdited: { type: Date }
   
 });
-    
+Event
+.virtual('datetime.strDate')
+.get(function () {
+	var thisStrDate = moment(this.datetime.date);
+	var convertedDate = moment(thisStrDate, "YYYY-MM-DD");
+    return convertedDate;
+
+  return this.link.substring(this.link.charAt(0),this.link.indexOf('/',8));
+});
+
 Event
 .virtual('linkname')
 .get(function () {
